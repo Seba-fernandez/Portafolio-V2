@@ -1,0 +1,209 @@
+/* ════════════════════════════════════════════════
+   03 · COMPONENTES — piezas reutilizables
+   ════════════════════════════════════════════════ */
+
+/* ---------- Entradas de cine (toggles tema / idioma) ----------
+   Cuelgan del borde superior central, como tickets. */
+.tickets {
+  position: fixed; top: 0; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 0.6rem; z-index: 60;
+}
+.ticket {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.15rem;
+  min-width: 3rem; min-height: 3.4rem;
+  padding: 0.55rem 0.7rem 0.5rem;
+  border: var(--border) solid var(--tinta);
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 4px 4px 0 var(--shadow);
+  font-weight: 800; font-stretch: 90%;
+  font-size: var(--tiny); text-transform: uppercase; letter-spacing: 0.06em;
+  transition: transform 0.25s var(--ease-pop);
+  transform-origin: top center;
+}
+.ticket:hover, .ticket:focus-visible { transform: translateY(4px); }
+.ticket--theme { background: var(--amarillo); color: var(--tinta); }
+.ticket--lang  { background: var(--rojo);     color: var(--tinta); }
+.ticket__icon { font-size: 1.15rem; line-height: 1; }
+/* perforación del ticket */
+.ticket::after {
+  content: ""; width: 100%; border-top: 2px dashed rgba(19,18,16,0.5);
+  margin-top: 0.1rem; padding-top: 0.1rem;
+}
+
+/* ---------- Chips brutalist ---------- */
+.chip {
+  display: inline-flex; align-items: baseline; gap: 0.4em;
+  font-size: var(--small); font-weight: 800; font-stretch: 90%;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--tinta);
+  border: var(--border) solid var(--tinta);
+  box-shadow: 5px 5px 0 var(--shadow);
+  padding: 0.5rem 0.9rem;
+}
+.chip__n { font-size: 1.6em; font-weight: 900; font-stretch: 118%; line-height: 1; }
+.chip--amarillo { background: var(--amarillo); rotate: -2deg; }
+.chip--azul     { background: var(--azul); color: var(--hueso); rotate: 1.5deg; }
+.chip--rojo     { background: var(--rojo); rotate: -1deg; }
+
+/* ---------- Botones ---------- */
+.link-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 3rem; padding: 0.6rem 1.5rem;
+  font-weight: 800; text-decoration: none;
+  background: var(--blk-fg, var(--fg));
+  color: var(--blk-bg, var(--bg));
+  border: var(--border) solid var(--blk-fg, var(--fg));
+  box-shadow: 6px 6px 0 var(--shadow);
+  transition: translate 0.2s ease, box-shadow 0.2s ease;
+}
+.link-btn:hover, .link-btn:focus-visible { translate: -3px -3px; box-shadow: 9px 9px 0 var(--shadow); }
+.link-btn:active { translate: 2px 2px; box-shadow: 2px 2px 0 var(--shadow); }
+.link-btn--ghost { background: transparent; color: var(--blk-fg, var(--fg)); }
+
+/* ---------- Marco de captura (con leyenda tipo cine) ---------- */
+.frame {
+  border: var(--border) solid var(--tinta);
+  background: var(--tinta);
+  rotate: -2deg;
+  transition: rotate 0.45s var(--ease-pop), translate 0.45s var(--ease-pop);
+}
+.frame img { width: 100%; height: auto; }
+.frame__cap {
+  display: flex; justify-content: space-between; gap: var(--s-2);
+  background: var(--tinta); color: var(--hueso);
+  font-size: var(--tiny); font-weight: 700; font-stretch: 85%;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  padding: 0.55rem 0.8rem;
+}
+.frame--flip { rotate: 2deg; }
+.blk--tinta .frame { border-color: var(--hueso); }
+.frame--sh-rojo     { box-shadow: 14px 14px 0 var(--rojo); }
+.frame--sh-amarillo { box-shadow: 14px 14px 0 var(--amarillo); }
+.frame--sh-oscuro   { box-shadow: 14px 14px 0 var(--shadow); }
+.project__media:hover .frame { rotate: 0deg; translate: -4px -4px; }
+
+/* ---------- Stickers ---------- */
+.sticker {
+  position: absolute; top: -1.1rem; left: -0.9rem; z-index: 2;
+  font-size: var(--small); font-weight: 800; font-stretch: 90%;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.45rem 0.9rem;
+  border: var(--border) solid var(--tinta);
+  rotate: -6deg;
+}
+.sticker--tinta    { background: var(--tinta);    color: var(--hueso); }
+.sticker--rojo     { background: var(--rojo);     color: var(--tinta); }
+.sticker--amarillo { background: var(--amarillo); color: var(--tinta); }
+.sticker--azul     { background: var(--azul);     color: var(--hueso); }
+
+/* ---------- Badge circular giratorio ---------- */
+.badge { width: clamp(6.5rem, 12vw, 10rem); height: auto; animation: spin 16s linear infinite; }
+.badge__text { font-size: 17.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.badge__center { font-size: 42px; font-weight: 900; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Marquees ---------- */
+.marquee { overflow: hidden; }
+.marquee__track {
+  display: flex; width: max-content;
+  animation: marquee 22s linear infinite;
+  font-size: var(--display-md);
+  font-weight: 800; font-stretch: 118%;
+  text-transform: uppercase; letter-spacing: -0.01em;
+  white-space: nowrap;
+  will-change: transform;
+}
+.marquee__track--reverse { animation-direction: reverse; }
+.marquee__track i { font-style: normal; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+.marquee--tinta {
+  background: var(--tinta);
+  border-block: var(--border) solid var(--line);
+  padding: var(--s-2) 0;
+}
+.c-hueso { color: var(--hueso); } .c-amarillo { color: var(--amarillo); }
+.c-rojo { color: var(--rojo); }   .c-celeste { color: #8B97FF; }
+
+.marquee--outline { padding: var(--s-4) 0; }
+.marquee--outline .marquee__track {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fg);
+  font-size: var(--display-lg);
+  /* Peso liviano y tracking abierto: el trazo del contorno
+     no se autocruza dentro de las letras (efecto "rallado"). */
+  font-weight: 600;
+  font-stretch: 100%;
+  letter-spacing: 0.02em;
+}
+/* Fallback para navegadores sin text-stroke */
+@supports not (-webkit-text-stroke: 2px black) {
+  .marquee--outline .marquee__track { color: var(--muted); }
+}
+
+/* ---------- Divisor onda (guiño sonoro, decorativo) ---------- */
+.wave { padding: var(--s-6) var(--gutter) 0; max-width: var(--max-w); margin-inline: auto; }
+.wave svg { width: 100%; height: auto; color: var(--fg); }
+
+/* ---------- Cursor follower (solo puntero fino) ---------- */
+.cursor { display: none; }
+@media (pointer: fine) {
+  .js .cursor {
+    display: block; position: fixed; top: -8px; left: -8px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--hueso); mix-blend-mode: difference;
+    pointer-events: none; z-index: 200;
+  }
+}
+
+/* ---------- Ajustes responsive de componentes ---------- */
+@media (max-width: 700px) {
+  .frame--sh-rojo     { box-shadow: 8px 8px 0 var(--rojo); }
+  .frame--sh-amarillo { box-shadow: 8px 8px 0 var(--amarillo); }
+  .frame--sh-oscuro   { box-shadow: 8px 8px 0 var(--shadow); }
+}
+/* Mobile: entradas de cine compactas colgando del borde derecho, bajo la nav */
+@media (max-width: 700px) {
+  .tickets {
+    left: auto; right: 0; top: 4.4rem; transform: none;
+    flex-direction: column; gap: 0.5rem; align-items: flex-end;
+  }
+  .ticket {
+    flex-direction: row; align-items: center; gap: 0.45rem;
+    min-width: 0; min-height: 2.6rem;
+    padding: 0.4rem 0.5rem 0.4rem 0.7rem;
+    border: var(--border) solid var(--tinta);
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+    box-shadow: -3px 3px 0 var(--shadow);
+  }
+  /* Talón perforado vertical, como entrada real */
+  .ticket::after {
+    width: 0; align-self: stretch;
+    border-top: 0; margin: 0; padding: 0;
+    border-left: 2px dashed rgba(19, 18, 16, 0.5);
+  }
+  .ticket:hover, .ticket:focus-visible { transform: translateX(-4px); }
+}
+
+/* ---------- Fit-text ---------- */
+.fit-line { display: block; white-space: nowrap; width: 100%; }
+.js .fit-line { overflow: hidden; }
+.fit-line .char { display: inline-block; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 1.5rem;
+  transform: translate(-50%, 150%);
+  background: var(--tinta); color: var(--hueso);
+  border: var(--border) solid var(--amarillo);
+  font-size: var(--small); font-weight: 800; font-stretch: 90%;
+  letter-spacing: 0.04em;
+  padding: 0.7rem 1.2rem; z-index: 90;
+  transition: transform 0.35s var(--ease-pop);
+  pointer-events: none; max-width: min(92vw, 30rem); text-align: center;
+}
+.toast.is-visible { transform: translate(-50%, 0); }

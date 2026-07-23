@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juan Sebastián Fernandez · Web Developer</title>
+  <meta name="description" content="Juan Sebastián Fernandez — Web Developer en Córdoba, Argentina. Sitios rápidos, accesibles y con carácter. Lighthouse 90+ en cada entrega.">
+  <meta name="theme-color" content="#EFEDE6">
+  <link rel="canonical" href="https://juansebastian-dev.vercel.app/">
+  <meta property="og:title" content="Juan Sebastián Fernandez · Web Developer">
+  <meta property="og:description" content="Sitios rápidos, accesibles y con carácter — desde Córdoba, Argentina.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://juansebastian-dev.vercel.app/">
+  <meta property="og:image" content="https://juansebastian-dev.vercel.app/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://juansebastian-dev.vercel.app/og.png">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23131210'/%3E%3Ctext x='50' y='72' font-size='64' text-anchor='middle' fill='%23FFD600'%3E✳%3C/text%3E%3C/svg%3E">
+
+  <!-- Tema antes del primer paint: sin flash -->
+  <script>
+    (function () {
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+      try {
+        var t = localStorage.getItem('jsf-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+    })();
+  </script>
+
+  <!-- Tipografía: Archivo variable (Omnibus-Type, Argentina) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
+  <div class="cursor" aria-hidden="true"></div>
+
+  <!-- Defs SVG globales (path del texto circular de los badges) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs><path id="circ" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
+  </svg>
+
+  <!-- ════════ TICKETS · tema e idioma ════════ -->
+  <div class="tickets">
+    <button class="ticket ticket--theme" id="themeToggle" type="button"
+            aria-label="Cambiar a modo oscuro" data-i18n-aria="theme.toDark">
+      <span class="ticket__icon" aria-hidden="true">☾</span>
+      <span aria-hidden="true" data-i18n="theme.word">Modo</span>
+    </button>
+    <button class="ticket ticket--lang" id="langToggle" type="button"
+            aria-label="Switch to English" lang="en">
+      <span class="ticket__icon" aria-hidden="true">Aa</span>
+      <span aria-hidden="true" id="langLabel">EN</span>
+    </button>
+  </div>
+
+  <!-- ════════ NAV ════════ -->
+  <header class="nav" aria-label="Navegación principal">
+    <a class="nav__logo" href="#main" aria-label="Inicio — JSF" data-hover>JSF<sup>®</sup></a>
+    <nav class="nav__links">
+      <a href="#projects" data-hover data-i18n="nav.projects">Proyectos</a>
+      <a href="#skills" data-hover>Skills</a>
+      <a href="#contact" data-hover data-i18n="nav.contact">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ════════ HERO ════════ -->
+    <section class="hero" aria-label="Presentación">
+      <p class="hero__coords label" aria-hidden="true">31°25′S — 64°11′O · CBA / ARG</p>
+
+      <svg class="badge hero__badge" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="98"/>
+        <text class="badge__text"><textPath href="#circ" data-i18n="hero.badge">DISPONIBLE PARA PROYECTOS ✳ CÓRDOBA · ARGENTINA ✳ </textPath></text>
+        <text x="100" y="112" text-anchor="middle" class="badge__center">↓</text>
+      </svg>
+
+      <h1 class="hero__title display">
+        <span class="hero__line" data-split data-fit>Sebastián</span>
+        <span class="hero__strip" aria-hidden="true"><span class="hero__strip-inner" data-i18n="hero.strip">Web Developer ✳ Frontend ✳ Performance ✳ Web Developer ✳ Frontend ✳ Performance ✳&nbsp;</span></span>
+        <span class="sr-only">— Web Developer · Frontend · Performance —</span>
+        <span class="hero__line hero__line--azul" data-split data-fit>Fernandez</span>
+      </h1>
+
+      <div class="hero__bottom">
+        <p class="hero__intro" data-i18n-html="hero.intro">
+          +2 años construyendo sitios de producción desde <strong>Córdoba, Argentina</strong>:
+          responsivos, performantes y accesibles. Sin plantillas. Sin frameworks innecesarios.
+        </p>
+        <ul class="hero__stats" aria-label="Datos rápidos">
+          <li class="chip chip--amarillo"><span class="chip__n">+2</span> <span data-i18n="hero.years">años</span></li>
+          <li class="chip chip--azul"><span class="chip__n">90+</span> Lighthouse</li>
+          <li class="chip chip--rojo"><span class="chip__n">4</span> <span data-i18n="hero.live">proyectos live</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ════════ MARQUEE ════════ -->
+    <div class="marquee marquee--tinta" aria-hidden="true">
+      <div class="marquee__track" data-i18n-html="marquee">
+        <span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">Lighthouse 90+</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span><span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">Lighthouse 90+</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span>
+      </div>
+    </div>
+
+    <!-- ════════ MANIFIESTO ════════ -->
+    <section class="manifesto" aria-label="Manifiesto">
+      <p class="manifesto__text" data-words data-i18n-html="manifesto">
+        Construyo sitios que <mark class="mk mk--amarillo">cargan rápido</mark>, se entienden fácil y funcionan para <mark class="mk mk--azul">todas las personas</mark>. Performance, accesibilidad y semántica no son extras: son <mark class="mk mk--rojo">el estándar</mark>.
+      </p>
+    </section>
+
+    <!-- ════════ PROYECTOS ════════ -->
+    <div class="section-tag" id="projects"><p class="label"><span data-i18n="projects.tag">01 — Trabajo seleccionado</span> ↓</p></div>
+
+    <!-- 01 · Greenset · amarillo -->
+    <section class="project blk blk--amarillo" aria-labelledby="p1-title">
+      <span class="project__num" aria-hidden="true">01</span>
+      <div class="project__grid">
+        <div class="project__media">
+          <figure class="frame frame--sh-rojo" data-parallax>
+            <img src="img/greenset.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura del sitio Greenset Court" data-i18n-alt="p1.alt">
+            <figcaption class="frame__cap"><span>Greenset Court</span><span data-i18n="p1.cap">Landing · Cliente real</span></figcaption>
+          </figure>
+          <span class="sticker sticker--tinta" aria-hidden="true" data-i18n="p1.sticker">Cliente real ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p1-title" data-split data-fit>Greenset<br>Court</h2>
+          <p class="label project__meta" data-i18n="p1.meta">Landing · Leads por WhatsApp · Live</p>
+          <p class="project__desc" data-i18n="p1.desc">
+            Empresa de canchas de pádel sin presencia digital que necesitaba capturar leads calificados
+            antes de su lanzamiento. Formulario que califica por tipo de proyecto y envía directo a
+            WhatsApp — sin backend. Contadores animados con Intersection Observer, WebP, mobile-first.
+          </p>
+          <p class="project__result" data-i18n-html="p1.result"><strong>Hoy:</strong> en producción con mantenimiento continuo.</p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>WhatsApp API</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://greenset-landing.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/Greenset-Landing" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Oratoria · azul -->
+    <section class="project blk blk--azul" aria-labelledby="p2-title">
+      <span class="project__num" aria-hidden="true">02</span>
+      <div class="project__grid project__grid--flip">
+        <div class="project__media">
+          <figure class="frame frame--flip frame--sh-amarillo" data-parallax>
+            <img src="img/oratoria.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura de la app Checklist de Oratoria" data-i18n-alt="p2.alt">
+            <figcaption class="frame__cap"><span data-i18n="p2.name">Checklist de Oratoria</span><span data-i18n="p2.cap">App · JS puro</span></figcaption>
+          </figure>
+          <span class="sticker sticker--rojo" aria-hidden="true" data-i18n="p2.sticker">App propia ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p2-title" data-split data-fit data-i18n-html="p2.title">Checklist<br>de Oratoria</h2>
+          <p class="label project__meta" data-i18n="p2.meta">App JS · LocalStorage · Live</p>
+          <p class="project__desc" data-i18n="p2.desc">
+            Herramienta propia para registrar consistencia en ejercicios de hablar en público.
+            Estado que persiste entre sesiones sin backend, checklist interactiva, responsiva
+            y accesible — JavaScript puro, cero frameworks.
+          </p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>LocalStorage</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://checklist-para-oratoria.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/ChecklistOratoria" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · Blog de Café · rojo -->
+    <section class="project blk blk--rojo" aria-labelledby="p3-title">
+      <span class="project__num" aria-hidden="true">03</span>
+      <div class="project__grid">
+        <div class="project__media">
+          <figure class="frame frame--sh-oscuro" data-parallax>
+            <img src="img/cafe.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura del Blog de Café" data-i18n-alt="p3.alt">
+            <figcaption class="frame__cap"><span data-i18n="p3.name">Blog de Café</span><span data-i18n="p3.cap">Multi-página · 5 vistas</span></figcaption>
+          </figure>
+          <span class="sticker sticker--amarillo" aria-hidden="true" data-i18n="p3.sticker">5 páginas ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p3-title" data-split data-fit data-i18n-html="p3.title">Blog<br>de Café</h2>
+          <p class="label project__meta" data-i18n="p3.meta">Multi-página · JS DOM · Live</p>
+          <p class="project__desc" data-i18n="p3.desc">
+            Blog educativo de 5 páginas con listado de cursos, entradas y validación de formulario
+            en JS puro. Arquitectura multi-página y manipulación del DOM sin librerías externas.
+          </p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>DOM API</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://blog-cafe-beige.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/BlogCafe" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · Festival · tinta -->
+    <section class="project blk blk--tinta" aria-labelledby="p4-title">
+      <span class="project__num" aria-hidden="true">04</span>
+      <div class="project__grid project__grid--flip">
+        <div class="project__media">
+          <figure class="frame frame--flip frame--sh-rojo" data-parallax>
+            <img src="img/festival.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura del sitio Festival de Música" data-i18n-alt="p4.alt">
+            <figcaption class="frame__cap"><span data-i18n="p4.name">Festival de Música</span><span data-i18n="p4.cap">Landing · Video BG</span></figcaption>
+          </figure>
+          <span class="sticker sticker--azul" aria-hidden="true">Video BG ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p4-title" data-split data-fit data-i18n-html="p4.title">Festival<br>de Música</h2>
+          <p class="label project__meta" data-i18n="p4.meta">Landing · SASS · Video · Live</p>
+          <p class="project__desc" data-i18n="p4.desc">
+            Landing de alto impacto para un festival EDM en Argentina: video background, grilla de
+            lineup de 2 días y 2 escenarios, galería y tickets en cards. SASS en partials, WebP
+            y lazy loading.
+          </p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>SASS/SCSS</li><li>WebP</li><li>Lazy loading</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://festivalde-musica.vercel.app/" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/FestivaldeMusica" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ SKILLS + EXPERIENCIA ════════ -->
+    <section class="skills" id="skills" aria-labelledby="skills-title">
+      <div class="section-tag"><p class="label"><span data-i18n="skills.tag">02 — Con qué trabajo</span> ↓</p></div>
+      <h2 class="giant-title display" id="skills-title" data-split data-fit>Skills</h2>
+
+      <div class="marquee marquee--outline" aria-hidden="true">
+        <div class="marquee__track marquee__track--reverse">
+          <span>HTML5 — CSS3/SASS — JavaScript ES6+ — GSAP — React — Git — Vercel — Figma — WCAG 2.2 — Core Web Vitals —&nbsp;</span><span>HTML5 — CSS3/SASS — JavaScript ES6+ — GSAP — React — Git — Vercel — Figma — WCAG 2.2 — Core Web Vitals —&nbsp;</span>
+        </div>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skills-col"><h3 class="chip chip--amarillo" data-i18n="sk.lang">Lenguajes</h3>
+          <ul><li data-i18n="sk.semantic">HTML5 semántico</li><li>CSS3 / SASS</li><li>JavaScript ES6+</li><li>PHP</li><li>SQL</li></ul></div>
+        <div class="skills-col"><h3 class="chip chip--azul">JavaScript</h3>
+          <ul><li>DOM Manipulation</li><li>LocalStorage</li><li>Intersection Observer</li><li>WhatsApp API</li><li data-i18n="sk.forms">Validación de formularios</li></ul></div>
+        <div class="skills-col"><h3 class="chip chip--rojo">Performance</h3>
+          <ul><li>Core Web Vitals</li><li>Lighthouse audits</li><li data-i18n="sk.webp">WebP y compresión</li><li>Lazy loading</li><li>Mobile-first</li></ul></div>
+        <div class="skills-col"><h3 class="chip chip--amarillo" data-i18n="sk.a11y">Accesibilidad</h3>
+          <ul><li>WCAG 2.1 / 2.2 AA</li><li data-i18n="sk.aria">ARIA y semántica</li><li data-i18n="sk.kbd">Navegación por teclado</li><li>SEO On-Page</li><li>Meta tags</li></ul></div>
+        <div class="skills-col"><h3 class="chip chip--azul" data-i18n="sk.tools">Herramientas</h3>
+          <ul><li>Git · GitHub</li><li>Vercel / Netlify</li><li>Figma</li><li>Chrome DevTools</li><li>Responsively</li></ul></div>
+        <div class="skills-col"><h3 class="chip chip--rojo" data-i18n="sk.learning">En formación</h3>
+          <ul><li>React</li><li>Node.js</li><li>REST APIs</li><li>MongoDB</li><li data-i18n="sk.ai">Desarrollo con IA</li></ul></div>
+      </div>
+
+      <!-- Divisor onda (decorativo) -->
+      <div class="wave" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" fill="none" preserveAspectRatio="none">
+          <path class="wave__path" d="M0 30 L60 30 70 12 82 48 94 6 106 54 118 18 130 42 140 30 L340 30 350 22 360 38 370 14 380 46 390 26 400 34 410 30 L700 30 712 8 726 52 740 4 754 56 768 16 780 44 790 30 L1000 30 1010 24 1020 36 1030 20 1040 40 1050 28 1060 32 1070 30 L1200 30"
+                stroke="currentColor" stroke-width="2.5"/>
+        </svg>
+      </div>
+
+      <div class="xp">
+        <p class="xp__when label" data-i18n="xp.when">Dic. 2024 — Presente · Freelance</p>
+        <div class="xp__what">
+          <h3 class="xp__role" data-i18n="xp.role">Web Developer independiente</h3>
+          <ul class="xp__list">
+            <li data-i18n="xp.1">Sitios responsivos, landings y e-commerce deployados en producción.</li>
+            <li data-i18n="xp.2">WebP, lazy loading y auditorías Lighthouse en cada proyecto.</li>
+            <li data-i18n="xp.3">WCAG 2.1, ARIA, semántica HTML5 y cross-browser como estándar.</li>
+            <li data-i18n="xp.4">Git/GitHub con CI/CD en Vercel y Netlify; diseños desde Figma.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════ CONTACTO / FOOTER ════════ -->
+  <footer class="footer" id="contact" aria-labelledby="contact-title">
+    <svg class="badge footer__badge" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="98"/>
+      <text class="badge__text"><textPath href="#circ" data-i18n="footer.badge">RESPONDO RÁPIDO ✳ FREELANCE · REMOTO · EQUIPOS ✳ </textPath></text>
+      <text x="100" y="114" text-anchor="middle" class="badge__center">✉</text>
+    </svg>
+
+    <p class="label footer__eyebrow" data-i18n="footer.tag">03 — Contacto · Disponible para freelance, remoto y equipos</p>
+
+    <a class="footer__cta" href="mailto:jsebasferna@gmail.com?subject=Hola%20Sebasti%C3%A1n" data-hover>
+      <span class="footer__cta-text display" id="contact-title" data-split data-fit data-fit-ratio="0.82" data-i18n="footer.cta">Hablemos</span>
+      <span class="footer__cta-arrow" aria-hidden="true">↗</span>
+    </a>
+
+    <div class="footer__contact">
+      <a class="footer__mail" href="mailto:jsebasferna@gmail.com" data-hover>jsebasferna@gmail.com</a>
+      <button class="copy-btn" id="copyMail" type="button" data-hover data-i18n="footer.copy">Copiar email</button>
+    </div>
+
+    <div class="footer__links">
+      <!-- CV: soltá tu PDF en /cv/JuanSebastian-Fernandez-CV.pdf y descomentá esta línea
+      <a href="cv/JuanSebastian-Fernandez-CV.pdf" target="_blank" rel="noopener" data-hover data-i18n="footer.cv">Descargar CV ↓</a>
+      -->
+      <a href="https://www.linkedin.com/in/juansebastian-fernandez/" target="_blank" rel="noopener" data-hover>LinkedIn ↗</a>
+      <a href="https://github.com/Seba-fernandez" target="_blank" rel="noopener" data-hover>GitHub ↗</a>
+    </div>
+
+    <div class="footer__base">
+      <p data-i18n="footer.credit">Diseñado y desarrollado por Juan Sebastián Fernandez · Córdoba, AR · 2026</p>
+      <p data-i18n="footer.type">Tipografía: Archivo — Omnibus-Type, Argentina</p>
+    </div>
+    <p class="footer__fin" aria-hidden="true">— FIN —</p>
+    <span class="toast" id="mailToast" role="status" aria-live="polite"></span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer onerror="document.documentElement.classList.remove('js')"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer onerror="document.documentElement.classList.remove('js')"></script>
+  <script src="js/fit.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/motion.js" defer></script>
+</body>
+</html>
