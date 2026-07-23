@@ -207,3 +207,48 @@
   pointer-events: none; max-width: min(92vw, 30rem); text-align: center;
 }
 .toast.is-visible { transform: translate(-50%, 0); }
+
+
+/* ═══════════════════════════════════════════════════════
+   PARCHE — pegar tal cual AL FINAL de css/components.css
+   (las reglas de acá abajo pisan a las anteriores)
+   ═══════════════════════════════════════════════════════ */
+
+/* 1) Marquee outline: esqueleto liviano = contornos limpios, sin "rallado" */
+.marquee--outline .marquee__track {
+  -webkit-text-stroke: 1.5px var(--fg);
+  font-weight: 600;
+  font-stretch: 100%;
+  letter-spacing: 0.02em;
+}
+
+/* 2) Marco visible en el bloque oscuro (Festival) */
+.blk--tinta .frame { border-color: var(--hueso); }
+
+/* 3) Tickets en mobile: entradas de cine compactas, borde derecho, bajo la nav */
+@media (max-width: 700px) {
+  .tickets {
+    left: auto; right: 0; top: 4.4rem; transform: none;
+    flex-direction: column; gap: 0.5rem; align-items: flex-end;
+  }
+  .ticket {
+    flex-direction: row; align-items: center; gap: 0.45rem;
+    min-width: 0; min-height: 2.6rem;
+    padding: 0.4rem 0.5rem 0.4rem 0.7rem;
+    border: var(--border) solid var(--tinta);
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+    box-shadow: -3px 3px 0 var(--shadow);
+  }
+  .ticket::after {
+    display: block; width: 0; align-self: stretch;
+    border-top: 0; margin: 0; padding: 0;
+    border-left: 2px dashed rgba(19, 18, 16, 0.5);
+  }
+  .ticket:hover, .ticket:focus-visible { transform: translateX(-4px); }
+}
+
+/* Soporte del fit-text (lo usa js/fit.js) */
+.fit-line { display: block; white-space: nowrap; width: 100%; }
+.js .fit-line { overflow: hidden; }
+.fit-line .char { display: inline-block; }
