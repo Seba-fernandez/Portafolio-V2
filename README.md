@@ -3,7 +3,7 @@
 Personal portfolio of **Juan Sebastián Fernandez**, web developer based in Córdoba, Argentina.
 Brutalist editorial design, kinetic typography and saturated color blocks — built to score **Lighthouse 90+**.
 
-**Live:** https://juansebastian-dev.vercel.app
+**Live:** portafolio-v2-mauve.vercel.app
 
 ---
 
