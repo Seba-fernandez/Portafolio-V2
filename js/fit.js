@@ -31,27 +31,26 @@
   function fitLine(line) {
     const holder = line.closest(SEL) || line;
     const ratio = parseFloat(holder.dataset.fitRatio || '1');
-    // Caja de referencia: el holder si hay varias líneas; si no, el padre.
-    const box = holder === line ? line.parentElement : holder;
-    if (!box) return;
 
-    const pad = el => {
-      const cs = getComputedStyle(el);
-      return parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-    };
-    const avail = (box.clientWidth - pad(box) - pad(line)) * ratio;
+    // Caja real: el propio .fit-line (display:block y width:100% por CSS),
+    // cuyo clientWidth respeta max-width y el layout del contenedor en
+    // cualquier ancho de pantalla — medir al padre desborda en ultrawide.
+    line.style.fontSize = '';                       // volver a la base CSS primero
+    const cs = getComputedStyle(line);
+    const padSelf = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const avail = (line.clientWidth - padSelf) * ratio;
     if (avail <= 0) return;
 
-    line.style.fontSize = '';                       // volver a la base CSS
-    const base = parseFloat(getComputedStyle(line).fontSize);
+    const base = parseFloat(cs.fontSize);
     const cap = base * parseFloat(holder.dataset.fitMax || '1.45');
     if (!base) return;
 
-    // Medición REAL del texto: con width:max-content la caja abraza el
-    // contenido (scrollWidth de un block nunca baja del ancho de su caja).
+    // Medición del texto con la caja abrazando el contenido
+    // (se libera max-width durante la medición para no truncarla).
     line.style.width = 'max-content';
+    line.style.maxWidth = 'none';
     let w = line.getBoundingClientRect().width;
-    if (!w) { line.style.width = ''; return; }
+    if (!w) { line.style.width = ''; line.style.maxWidth = ''; return; }
 
     // Dos pasadas para converger con precisión (con tope en ultrawide)
     for (let i = 0; i < 2; i++) {
@@ -59,7 +58,17 @@
       line.style.fontSize = Math.min(raw, cap).toFixed(2) + 'px';
       w = line.getBoundingClientRect().width;
     }
+
+    // Validación final: si por cualquier motivo (fuente, idioma, navegador,
+    // zoom) el texto sigue más ancho que su caja, se reduce hasta entrar.
+    let guard = 14;
+    while (w > avail && guard--) {
+      line.style.fontSize = (parseFloat(getComputedStyle(line).fontSize) * 0.97).toFixed(2) + 'px';
+      w = line.getBoundingClientRect().width;
+    }
+
     line.style.width = '';
+    line.style.maxWidth = '';
   }
 
   function refit() {

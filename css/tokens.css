@@ -34,6 +34,7 @@
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max-w: 92rem;
   --border: 3px;
+  --nav-h: 3.4rem;   /* lo sobrescribe app.js con el alto real */
   --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Grano sutil (screen-tone) */

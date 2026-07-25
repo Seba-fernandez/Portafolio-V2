@@ -83,7 +83,11 @@
     .from('.hero__strip', { scaleX: 0, transformOrigin: 'left center', duration: 0.7, ease: 'power4.inOut' }, 0.35)
     .from('.hero__bottom > *', { opacity: 0, y: 30, duration: 0.7, stagger: 0.12, ease: 'power3.out' }, 0.7)
     .from('.hero__badge', { scale: 0, rotation: -120, duration: 0.9, ease: 'back.out(1.7)' }, 0.9)
-    .from('.hero__coords, .tickets', { opacity: 0, y: -16, duration: 0.6, ease: 'power3.out', stagger: 0.1 }, 1);
+    .from('.hero__coords', { opacity: 0, y: -16, duration: 0.6, ease: 'power3.out' }, 1)
+    // Los tickets se animan SOLO con opacidad: si GSAP les escribiera un
+    // transform inline, ese valor le ganaría al CSS responsive (el
+    // translateX(-50%) de desktop quedaba pegado al pasar a mobile).
+    .from('.tickets', { opacity: 0, duration: 0.6, ease: 'power3.out', clearProps: 'opacity' }, 1.1);
 
   /* ---------- Títulos: reveal al entrar en viewport ---------- */
 

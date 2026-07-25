@@ -17,20 +17,41 @@ no frameworks, no build step: clone and deploy.
 ## Structure
 
 ```
-├── index.html          # Semantic markup, one commented block per section
+├── index.html            # Semantic markup, one commented block per section
 ├── css/
-│   ├── tokens.css      # Design tokens: palette, themes, type scale, spacing
-│   ├── base.css        # Reset, utilities, accessibility helpers
-│   ├── components.css  # Tickets, chips, buttons, frames, badges, marquees
-│   └── sections.css    # Nav, hero, manifesto, projects, skills, footer
+│   ├── tokens.css        # Design tokens: palette, themes, type scale, spacing
+│   ├── base.css          # Reset, utilities, accessibility helpers
+│   ├── components.css    # Tickets, chips, buttons, frames, badges, marquees
+│   └── sections.css      # Nav, hero, manifesto, projects, skills, footer
 ├── js/
-│   ├── vendor/         # gsap + ScrollTrigger (local, no CDN)
-│   ├── fit.js          # Fit-text: display type always fills its container
-│   ├── app.js          # Theme toggle, ES/EN i18n, clipboard — zero deps
-│   └── motion.js       # GSAP layer: kinetic type, parallax, velocity skew
-├── img/                # Project screenshots (WebP, ~106 KB total)
-└── og.png              # 1200×630 social preview (LinkedIn / Twitter cards)
+│   ├── vendor/           # gsap + ScrollTrigger (local, no CDN)
+│   ├── data/
+│   │   └── projects.js   # Every project, both languages — the ONLY file to
+│   │                     # touch to add, remove or edit a project
+│   ├── render-projects.js # Builds the project sections from data/projects.js
+│   ├── fit.js            # Fit-text: display type always fills its container
+│   ├── store.js          # localStorage wrapper (private-mode safe)
+│   ├── nav.js             # Publishes the fixed nav's real height as --nav-h
+│   ├── i18n.js            # ES/EN dictionary, translation + language toggle
+│   ├── theme.js           # Light/dark toggle
+│   ├── contact.js         # Contact panel, clipboard copy + feedback
+│   └── motion.js          # GSAP layer: kinetic type, parallax, velocity skew
+├── img/                  # Project screenshots (WebP, ~106 KB total)
+└── og.png                # 1200×630 social preview (LinkedIn / Twitter cards)
 ```
+
+Scripts load in that order (`js/data/projects.js` → `render-projects.js` → vendor →
+`fit.js` → `store.js` → `nav.js` → `i18n.js` → `theme.js` → `contact.js` → `motion.js`),
+all as classic `defer` scripts — no bundler, so document order is what guarantees
+each file finds what the previous one set up.
+
+### Adding, removing or editing a project
+
+Everything about a project — colors, image, links, tags and copy in both
+languages — lives in one object inside `js/data/projects.js`. Add an object to
+the array for a new project, remove one to drop it, or edit fields to change
+copy; the visible number and internal IDs are derived from array position, so
+nothing else needs updating. No other file changes.
 
 ## Features
 
@@ -39,7 +60,8 @@ no frameworks, no build step: clone and deploy.
   (theme is applied by an inline snippet before first paint) and the
   preference persists via `localStorage`, falling back to `prefers-color-scheme`.
 - **ES / EN** — second ticket switches language. Spanish lives in the HTML;
-  English is a flat dictionary in `app.js` applied through `data-i18n` attributes.
+  English is a flat dictionary in `i18n.js` (plus per-project translations
+  sourced from `data/projects.js`) applied through `data-i18n` attributes.
   Updates `<html lang>` and persists.
 - **Native scroll** — no smooth-scroll library: wheel input maps 1:1 to movement.
   In-page anchors use CSS `scroll-behavior` + `scroll-margin-top` for the fixed nav.
@@ -51,7 +73,20 @@ no frameworks, no build step: clone and deploy.
 - **Fit-text titles** — display type is measured and sized at runtime so every
   line fills its container exactly, at any viewport width and in both languages.
   No hardcoded sizes per breakpoint; recalculates on resize, font load and
-  language switch. CSS `clamp()` remains as the no-JS fallback.
+  language switch, with a final guard pass that guarantees text never overflows
+  its box. CSS `clamp()` remains as the no-JS fallback.
+- **Contact panel that never dead-ends** — `mailto:` silently fails on systems
+  with no mail client configured, so the CTA opens a small panel offering real
+  destinations (Gmail, Outlook web, local mail app, copy address) as plain
+  anchors — no popup blocker or OS can refuse them. Keyboard accessible: focus
+  trap, Esc to close, focus restored on exit. Without JS the CTA stays a
+  standard `mailto:` link.
+- **Locked header controls** — the nav's real height is published as `--nav-h`
+  via `ResizeObserver`, so the theme/language tickets dock exactly beneath the
+  bar at every width, zoom level and font size. Below 900px the bar turns solid
+  for legibility over saturated blocks; above it, the blend-mode nav returns and
+  the tickets hang centered from the top edge. `viewport-fit=cover` plus
+  `env(safe-area-inset-right)` keeps them clear of notches on iOS.
 - **Responsive** — fluid `clamp()` scale plus breakpoints at 1100 / 900 / 768 / 700 / 560 / 480 / 400 px.
   On mobile, the theme/language tickets dock as side tabs below the nav.
 

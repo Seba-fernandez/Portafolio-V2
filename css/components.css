@@ -17,7 +17,7 @@
   border: var(--border) solid var(--tinta);
   border-top: 0;
   border-radius: 0 0 10px 10px;
-  box-shadow: 4px 4px 0 var(--shadow);
+  box-shadow: 4px 4px 0 var(--shadow), 0 0 0 3px var(--hueso);
   font-weight: 800; font-stretch: 90%;
   font-size: var(--tiny); text-transform: uppercase; letter-spacing: 0.06em;
   transition: transform 0.25s var(--ease-pop);
@@ -150,7 +150,7 @@
 
 /* ---------- Cursor follower (solo puntero fino) ---------- */
 .cursor { display: none; }
-@media (pointer: fine) {
+@media (pointer: fine) and (min-width: 901px) {
   .js .cursor {
     display: block; position: fixed; top: -8px; left: -8px;
     width: 16px; height: 16px; border-radius: 50%;
@@ -165,20 +165,28 @@
   .frame--sh-amarillo { box-shadow: 8px 8px 0 var(--amarillo); }
   .frame--sh-oscuro   { box-shadow: 8px 8px 0 var(--shadow); }
 }
-/* Mobile: entradas de cine compactas colgando del borde derecho, bajo la nav */
-@media (max-width: 700px) {
+/* ≤900px (mobile y tablet): entradas compactas pegadas al borde derecho,
+   bajo la nav. Arriba de 900px vuelven al centro superior (desktop). */
+@media (max-width: 900px) {
   .tickets {
-    left: auto; right: 0; top: 4.4rem; transform: none;
+    /* Anclados al borde inferior real de la barra: nunca la tapan
+       ni se despegan, sin importar el ancho de pantalla. */
+    left: auto; transform: none; margin: 0;
+    top: var(--nav-h);
+    right: 0; right: env(safe-area-inset-right, 0px);
     flex-direction: column; gap: 0.5rem; align-items: flex-end;
   }
   .ticket {
     flex-direction: row; align-items: center; gap: 0.45rem;
     min-width: 0; min-height: 2.6rem;
+    margin: 0;
     padding: 0.4rem 0.5rem 0.4rem 0.7rem;
     border: var(--border) solid var(--tinta);
     border-right: 0;
     border-radius: 10px 0 0 10px;
-    box-shadow: -3px 3px 0 var(--shadow);
+    /* Anillo hueso: separa el ticket de cualquier bloque de color
+       (rojo sobre rojo, etc.); invisible sobre fondo claro. */
+    box-shadow: -3px 3px 0 var(--shadow), 0 0 0 3px var(--hueso);
   }
   /* Talón perforado vertical, como entrada real */
   .ticket::after {
@@ -208,47 +216,53 @@
 }
 .toast.is-visible { transform: translate(-50%, 0); }
 
-
-/* ═══════════════════════════════════════════════════════
-   PARCHE — pegar tal cual AL FINAL de css/components.css
-   (las reglas de acá abajo pisan a las anteriores)
-   ═══════════════════════════════════════════════════════ */
-
-/* 1) Marquee outline: esqueleto liviano = contornos limpios, sin "rallado" */
-.marquee--outline .marquee__track {
-  -webkit-text-stroke: 1.5px var(--fg);
-  font-weight: 600;
-  font-stretch: 100%;
-  letter-spacing: 0.02em;
+/* ---------- Panel de contacto ----------
+   Abrir el correo no puede depender de que el sistema tenga cliente
+   configurado: se ofrecen destinos reales con <a>, que ningún SO
+   ni bloqueador de popups puede negar. */
+.mailsheet {
+  position: fixed; inset: 0; z-index: 300;
+  display: grid; place-items: center;
+  padding: var(--s-3);
 }
-
-/* 2) Marco visible en el bloque oscuro (Festival) */
-.blk--tinta .frame { border-color: var(--hueso); }
-
-/* 3) Tickets en mobile: entradas de cine compactas, borde derecho, bajo la nav */
-@media (max-width: 700px) {
-  .tickets {
-    left: auto; right: 0; top: 4.4rem; transform: none;
-    flex-direction: column; gap: 0.5rem; align-items: flex-end;
-  }
-  .ticket {
-    flex-direction: row; align-items: center; gap: 0.45rem;
-    min-width: 0; min-height: 2.6rem;
-    padding: 0.4rem 0.5rem 0.4rem 0.7rem;
-    border: var(--border) solid var(--tinta);
-    border-right: 0;
-    border-radius: 10px 0 0 10px;
-    box-shadow: -3px 3px 0 var(--shadow);
-  }
-  .ticket::after {
-    display: block; width: 0; align-self: stretch;
-    border-top: 0; margin: 0; padding: 0;
-    border-left: 2px dashed rgba(19, 18, 16, 0.5);
-  }
-  .ticket:hover, .ticket:focus-visible { transform: translateX(-4px); }
+.mailsheet[hidden] { display: none; }
+.mailsheet__backdrop {
+  position: absolute; inset: 0;
+  background: rgba(19, 18, 16, 0.72);
 }
+.mailsheet__panel {
+  position: relative;
+  width: 100%; max-width: 27rem;
+  background: var(--bg); color: var(--fg);
+  border: var(--border) solid var(--line);
+  box-shadow: 10px 10px 0 var(--shadow);
+  padding: var(--s-4) var(--s-3) var(--s-3);
+  animation: sheetIn 0.28s var(--ease-pop);
+}
+@keyframes sheetIn {
+  from { transform: translateY(14px) scale(0.97); opacity: 0; }
+}
+.mailsheet__eyebrow { color: var(--muted); margin-bottom: var(--s-1); }
+.mailsheet__mail {
+  font-weight: 900; font-stretch: 110%;
+  font-size: clamp(1.1rem, 4.6vw, 1.5rem);
+  letter-spacing: -0.01em; word-break: break-all;
+  margin-bottom: var(--s-3);
+}
+.mailsheet__actions { display: grid; gap: var(--s-1); }
+.mailsheet__actions .link-btn { width: 100%; justify-content: space-between; }
+.mailsheet__close {
+  position: absolute; top: 0; right: 0;
+  width: 2.75rem; height: 2.75rem;
+  display: grid; place-items: center;
+  font-size: 1.1rem; font-weight: 900;
+  border-left: var(--border) solid var(--line);
+  border-bottom: var(--border) solid var(--line);
+}
+.mailsheet__close:hover, .mailsheet__close:focus-visible { background: var(--amarillo); color: var(--tinta); }
+/* Bloqueo de scroll del fondo mientras el panel está abierto */
+html.is-locked, html.is-locked body { overflow: hidden; }
 
-/* Soporte del fit-text (lo usa js/fit.js) */
-.fit-line { display: block; white-space: nowrap; width: 100%; }
-.js .fit-line { overflow: hidden; }
-.fit-line .char { display: inline-block; }
+@media (prefers-reduced-motion: reduce) {
+  .mailsheet__panel { animation: none; }
+}
