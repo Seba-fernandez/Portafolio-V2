@@ -3,7 +3,7 @@
 Personal portfolio of **Juan Sebastián Fernandez**, web developer based in Córdoba, Argentina.
 Brutalist editorial design, kinetic typography and saturated color blocks — built to score **Lighthouse 90+**.
 
-**Live:** portafolio-v2-mauve.vercel.app
+**Live:** https://juansebastian-dev.vercel.app
 
 ---
 
@@ -17,41 +17,24 @@ no frameworks, no build step: clone and deploy.
 ## Structure
 
 ```
-├── index.html            # Semantic markup, one commented block per section
+├── index.html          # Semantic markup, one commented block per section
 ├── css/
-│   ├── tokens.css        # Design tokens: palette, themes, type scale, spacing
-│   ├── base.css          # Reset, utilities, accessibility helpers
-│   ├── components.css    # Tickets, chips, buttons, frames, badges, marquees
-│   └── sections.css      # Nav, hero, manifesto, projects, skills, footer
+│   ├── tokens.css      # Design tokens: palette, themes, type scale, spacing
+│   ├── base.css        # Reset, utilities, accessibility helpers
+│   ├── components.css  # Tickets, chips, buttons, frames, badges, marquees
+│   └── sections.css    # Nav, hero, manifesto, projects, skills, footer
 ├── js/
-│   ├── vendor/           # gsap + ScrollTrigger (local, no CDN)
-│   ├── data/
-│   │   └── projects.js   # Every project, both languages — the ONLY file to
-│   │                     # touch to add, remove or edit a project
-│   ├── render-projects.js # Builds the project sections from data/projects.js
-│   ├── fit.js            # Fit-text: display type always fills its container
-│   ├── store.js          # localStorage wrapper (private-mode safe)
-│   ├── nav.js             # Publishes the fixed nav's real height as --nav-h
-│   ├── i18n.js            # ES/EN dictionary, translation + language toggle
-│   ├── theme.js           # Light/dark toggle
-│   ├── contact.js         # Contact panel, clipboard copy + feedback
-│   └── motion.js          # GSAP layer: kinetic type, parallax, velocity skew
-├── img/                  # Project screenshots (WebP, ~106 KB total)
-└── og.png                # 1200×630 social preview (LinkedIn / Twitter cards)
+│   ├── vendor/         # gsap + ScrollTrigger (local, no CDN)
+│   ├── fit.js          # Fit-text: display type always fills its container
+│   ├── app.js          # Theme toggle, ES/EN i18n, clipboard — zero deps
+│   └── motion.js       # GSAP layer: kinetic type, parallax, velocity skew
+├── img/                # Project screenshots (WebP, ~106 KB total)
+└── og.png              # 1200×630 social preview (LinkedIn / Twitter cards)
+
+Five live projects are featured, opening with the Grupo CESPAD redesign — a second
+engagement for the same client that expanded a single-sport landing into a five-sport
+site with structured data and technical SEO.
 ```
-
-Scripts load in that order (`js/data/projects.js` → `render-projects.js` → vendor →
-`fit.js` → `store.js` → `nav.js` → `i18n.js` → `theme.js` → `contact.js` → `motion.js`),
-all as classic `defer` scripts — no bundler, so document order is what guarantees
-each file finds what the previous one set up.
-
-### Adding, removing or editing a project
-
-Everything about a project — colors, image, links, tags and copy in both
-languages — lives in one object inside `js/data/projects.js`. Add an object to
-the array for a new project, remove one to drop it, or edit fields to change
-copy; the visible number and internal IDs are derived from array position, so
-nothing else needs updating. No other file changes.
 
 ## Features
 
@@ -60,8 +43,7 @@ nothing else needs updating. No other file changes.
   (theme is applied by an inline snippet before first paint) and the
   preference persists via `localStorage`, falling back to `prefers-color-scheme`.
 - **ES / EN** — second ticket switches language. Spanish lives in the HTML;
-  English is a flat dictionary in `i18n.js` (plus per-project translations
-  sourced from `data/projects.js`) applied through `data-i18n` attributes.
+  English is a flat dictionary in `app.js` applied through `data-i18n` attributes.
   Updates `<html lang>` and persists.
 - **Native scroll** — no smooth-scroll library: wheel input maps 1:1 to movement.
   In-page anchors use CSS `scroll-behavior` + `scroll-margin-top` for the fixed nav.

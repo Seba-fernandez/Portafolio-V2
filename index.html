@@ -16,7 +16,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://juansebastian-dev.vercel.app/og.png">
-  <link rel="icon" href="img/favicon.png">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23131210'/%3E%3Ctext x='50' y='72' font-size='64' text-anchor='middle' fill='%23FFD600'%3E✳%3C/text%3E%3C/svg%3E">
 
   <!-- Tema antes del primer paint: sin flash -->
   <script>
@@ -102,7 +102,7 @@
         <ul class="hero__stats" aria-label="Datos rápidos">
           <li class="chip chip--amarillo"><span class="chip__n">+2</span> <span data-i18n="hero.years">años</span></li>
           <li class="chip chip--azul"><span class="chip__n">90+</span> Lighthouse</li>
-          <li class="chip chip--rojo"><span class="chip__n">4</span> <span data-i18n="hero.live">proyectos live</span></li>
+          <li class="chip chip--rojo"><span class="chip__n">5</span> <span data-i18n="hero.live">proyectos live</span></li>
         </ul>
       </div>
     </section>
@@ -124,8 +124,162 @@
     <!-- ════════ PROYECTOS ════════ -->
     <div class="section-tag" id="projects"><p class="label"><span data-i18n="projects.tag">01 — Trabajo seleccionado</span> ↓</p></div>
 
-    <!-- Proyectos: renderizados por js/render-projects.js desde js/data/projects.js -->
-    <div id="projects-list"></div>
+    <!-- 01 · Grupo CESPAD · amarillo -->
+    <section class="project blk blk--amarillo" aria-labelledby="p0-title">
+      <span class="project__num" aria-hidden="true">01</span>
+      <div class="project__grid">
+        <div class="project__media">
+          <figure class="frame frame--sh-rojo" data-parallax>
+            <img src="img/cespad.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura del sitio Grupo CESPAD" data-i18n-alt="p0.alt">
+            <figcaption class="frame__cap"><span>Grupo CESPAD</span><span data-i18n="p0.cap">Rediseño · Cliente recurrente</span></figcaption>
+          </figure>
+          <span class="sticker sticker--tinta" aria-hidden="true" data-i18n="p0.sticker">Rediseño 2.0 ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p0-title" data-split data-fit data-i18n-html="p0.title">Grupo<br>CESPAD</h2>
+          <p class="label project__meta" data-i18n="p0.meta">Rediseño completo · SEO técnico · Live</p>
+          <p class="project__desc" data-i18n="p0.desc">
+            Segunda etapa con el mismo cliente. El negocio dejó de vender solo canchas de pádel
+            y pasó a cinco deportes más parquización, así que la landing anterior ya no representaba
+            lo que ofrecían. Rehice el sitio entero alrededor de esa expansión: cada disciplina con
+            su propio espacio y su propio recorrido, en vez de competir por un mismo bloque.
+          </p>
+          <p class="project__result" data-i18n-html="p0.result"><strong>La decisión de fondo:</strong> no migrarlo a un framework. Es un sitio informativo — React habría sumado peso sin resolver ningún problema real. El esfuerzo se fue a que Google lo lea como negocio local: datos estructurados con rubro, dirección y zona de cobertura.</p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>Schema.org</li><li>SEO técnico</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Greenset · el sitio anterior del mismo cliente -->
+    <section class="project blk blk--tinta" aria-labelledby="p1-title">
+      <span class="project__num" aria-hidden="true">02</span>
+      <div class="project__grid project__grid--flip">
+        <div class="project__media">
+          <figure class="frame frame--flip frame--sh-amarillo" data-parallax>
+            <img src="img/greenset.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura del sitio Greenset Court" data-i18n-alt="p1.alt">
+            <figcaption class="frame__cap"><span>Greenset Court</span><span data-i18n="p1.cap">Landing · Versión anterior</span></figcaption>
+          </figure>
+          <span class="sticker sticker--amarillo" aria-hidden="true" data-i18n="p1.sticker">Versión 1.0 ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p1-title" data-split data-fit>Greenset<br>Court</h2>
+          <p class="label project__meta" data-i18n="p1.meta">Landing · Primer entrega al mismo cliente · Live</p>
+          <p class="project__desc" data-i18n="p1.desc">
+            Empresa de canchas de pádel sin presencia digital que necesitaba capturar leads calificados
+            antes de su lanzamiento. Formulario que califica por tipo de proyecto y envía directo a
+            WhatsApp — sin backend. Contadores animados con Intersection Observer, WebP, mobile-first.
+          </p>
+          <p class="project__result" data-i18n-html="p1.result"><strong>Hoy:</strong> reemplazada por el rediseño de arriba, tras validar el modelo de captación con el cliente.</p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>WhatsApp API</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://greenset-landing.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/Greenset-Landing" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Oratoria · azul -->
+    <section class="project blk blk--azul" aria-labelledby="p2-title">
+      <span class="project__num" aria-hidden="true">03</span>
+      <div class="project__grid">
+        <div class="project__media">
+          <figure class="frame frame--sh-amarillo" data-parallax>
+            <img src="img/oratoria.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura de la app Checklist de Oratoria" data-i18n-alt="p2.alt">
+            <figcaption class="frame__cap"><span data-i18n="p2.name">Checklist de Oratoria</span><span data-i18n="p2.cap">App · JS puro</span></figcaption>
+          </figure>
+          <span class="sticker sticker--rojo" aria-hidden="true" data-i18n="p2.sticker">App propia ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p2-title" data-split data-fit data-i18n-html="p2.title">Checklist<br>de Oratoria</h2>
+          <p class="label project__meta" data-i18n="p2.meta">App JS · LocalStorage · Live</p>
+          <p class="project__desc" data-i18n="p2.desc">
+            Herramienta propia para registrar consistencia en ejercicios de hablar en público.
+            Estado que persiste entre sesiones sin backend, checklist interactiva, responsiva
+            y accesible — JavaScript puro, cero frameworks.
+          </p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>LocalStorage</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://checklist-para-oratoria.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/ChecklistOratoria" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · Blog de Café · rojo -->
+    <section class="project blk blk--rojo" aria-labelledby="p3-title">
+      <span class="project__num" aria-hidden="true">04</span>
+      <div class="project__grid project__grid--flip">
+        <div class="project__media">
+          <figure class="frame frame--flip frame--sh-oscuro" data-parallax>
+            <img src="img/cafe.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura del Blog de Café" data-i18n-alt="p3.alt">
+            <figcaption class="frame__cap"><span data-i18n="p3.name">Blog de Café</span><span data-i18n="p3.cap">Multi-página · 5 vistas</span></figcaption>
+          </figure>
+          <span class="sticker sticker--amarillo" aria-hidden="true" data-i18n="p3.sticker">5 páginas ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p3-title" data-split data-fit data-i18n-html="p3.title">Blog<br>de Café</h2>
+          <p class="label project__meta" data-i18n="p3.meta">Multi-página · JS DOM · Live</p>
+          <p class="project__desc" data-i18n="p3.desc">
+            Blog educativo de 5 páginas con listado de cursos, entradas y validación de formulario
+            en JS puro. Arquitectura multi-página y manipulación del DOM sin librerías externas.
+          </p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>DOM API</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://blog-cafe-beige.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/BlogCafe" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · Festival · tinta -->
+    <section class="project blk blk--tinta" aria-labelledby="p4-title">
+      <span class="project__num" aria-hidden="true">05</span>
+      <div class="project__grid">
+        <div class="project__media">
+          <figure class="frame frame--sh-rojo" data-parallax>
+            <img src="img/festival.webp" width="960" height="600" loading="lazy" decoding="async"
+                 alt="Captura del sitio Festival de Música" data-i18n-alt="p4.alt">
+            <figcaption class="frame__cap"><span data-i18n="p4.name">Festival de Música</span><span data-i18n="p4.cap">Landing · Video BG</span></figcaption>
+          </figure>
+          <span class="sticker sticker--azul" aria-hidden="true">Video BG ✦</span>
+        </div>
+        <div class="project__body">
+          <h2 class="project__title display" id="p4-title" data-split data-fit data-i18n-html="p4.title">Festival<br>de Música</h2>
+          <p class="label project__meta" data-i18n="p4.meta">Landing · SASS · Video · Live</p>
+          <p class="project__desc" data-i18n="p4.desc">
+            Landing de alto impacto para un festival EDM en Argentina: video background, grilla de
+            lineup de 2 días y 2 escenarios, galería y tickets en cards. SASS en partials, WebP
+            y lazy loading.
+          </p>
+          <ul class="tags" aria-label="Tecnologías">
+            <li>HTML5</li><li>SASS/SCSS</li><li>WebP</li><li>Lazy loading</li><li>Vercel</li>
+          </ul>
+          <div class="project__links">
+            <a class="link-btn" href="https://festivalde-musica.vercel.app/" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/FestivaldeMusica" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ════════ SKILLS + EXPERIENCIA ════════ -->
     <section class="skills" id="skills" aria-labelledby="skills-title">
@@ -228,16 +382,10 @@
     </div>
   </div>
 
-  <script src="js/data/projects.js" defer></script>
-  <script src="js/render-projects.js" defer></script>
   <script src="js/vendor/gsap.min.js" defer onerror="document.documentElement.classList.remove('js')"></script>
   <script src="js/vendor/ScrollTrigger.min.js" defer onerror="document.documentElement.classList.remove('js')"></script>
   <script src="js/fit.js" defer></script>
-  <script src="js/store.js" defer></script>
-  <script src="js/nav.js" defer></script>
-  <script src="js/i18n.js" defer></script>
-  <script src="js/theme.js" defer></script>
-  <script src="js/contact.js" defer></script>
+  <script src="js/app.js" defer></script>
   <script src="js/motion.js" defer></script>
 </body>
 </html>
