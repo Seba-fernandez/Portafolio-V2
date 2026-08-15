@@ -131,11 +131,18 @@
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
-      // Cuando la fuente carga, re-fitear solo lo visible (evita reflow global)
-      requestAnimationFrame(fitVisible);
+      // La fuente variable cambia las métricas. Refit + aviso permite que
+      // ScrollTrigger vuelva a medir después de que el layout sea definitivo.
+      requestAnimationFrame(() => {
+        fitVisible();
+        window.dispatchEvent(new Event('jsf:layout-settled'));
+      });
     });
   }
-  window.addEventListener('load', () => requestAnimationFrame(fitVisible), { once: true });
+  window.addEventListener('load', () => requestAnimationFrame(() => {
+    fitVisible();
+    window.dispatchEvent(new Event('jsf:layout-settled'));
+  }), { once: true });
   window.addEventListener('resize', onResize, { passive: true });
   window.addEventListener('orientationchange', onResize, { passive: true });
 

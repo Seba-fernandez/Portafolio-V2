@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Juan Sebastián Fernandez · Web Developer</title>
-  <meta name="description" content="Juan Sebastián Fernandez — Web Developer en Córdoba, Argentina. Sitios rápidos, accesibles y con carácter. Lighthouse 90+ en cada entrega.">
+  <meta name="description" content="Juan Sebastián Fernandez — Frontend Developer en Córdoba, Argentina. Experiencias web rápidas, claras y accesibles, desde el problema hasta el deploy.">
   <meta name="author" content="Juan Sebastián Fernandez">
   <meta name="keywords" content="web developer, frontend, Córdoba, Argentina, HTML, CSS, JavaScript, GSAP, performance, accesibilidad, Vercel">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -55,8 +55,7 @@
 
   <!-- Tipografía: Archivo variable (Omnibus-Type, Argentina) — preload directo del WOFF2 -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap"></noscript>
 
   <!-- CSS combinado (tokens + base + components + sections) — 1 request en vez de 4 -->
@@ -151,19 +150,19 @@
 
       <h1 class="hero__title display">
         <span class="hero__line" data-split data-fit>Sebastián</span>
-        <span class="hero__strip" aria-hidden="true"><span class="hero__strip-inner" data-i18n="hero.strip">Web Developer ✳ Frontend ✳ Performance ✳ Web Developer ✳ Frontend ✳ Performance ✳&nbsp;</span></span>
-        <span class="sr-only">— Web Developer · Frontend · Performance —</span>
+        <span class="hero__strip" aria-hidden="true"><span class="hero__strip-inner" data-i18n="hero.strip">Frontend Developer ✳ Mentalidad de producto ✳ UX · Performance · Accesibilidad ✳&nbsp;</span></span>
+        <span class="sr-only">— Frontend Developer con mentalidad de producto —</span>
         <span class="hero__line hero__line--azul" data-split data-fit>Fernandez</span>
       </h1>
 
       <div class="hero__bottom">
         <p class="hero__intro" data-i18n-html="hero.intro">
-          +2 años construyendo sitios de producción desde <strong>Córdoba, Argentina</strong>:
-          responsivos, performantes y accesibles. Sin plantillas. Sin frameworks innecesarios.
+          <strong>Frontend Developer con mentalidad de producto.</strong> Convierto necesidades de negocio en
+          experiencias web rápidas, claras y accesibles — desde el flujo de usuario hasta el deploy.
         </p>
         <ul class="hero__stats" aria-label="Datos rápidos">
           <li class="chip chip--amarillo"><span class="chip__n">+2</span> <span data-i18n="hero.years">años</span></li>
-          <li class="chip chip--azul"><span class="chip__n">90+</span> Lighthouse</li>
+          <li class="chip chip--azul"><span class="chip__n">UX</span> y performance</li>
           <li class="chip chip--rojo"><span class="chip__n">5</span> <span data-i18n="hero.live">proyectos live</span></li>
         </ul>
       </div>
@@ -172,7 +171,7 @@
     <!-- ════════ MARQUEE ════════ -->
     <div class="marquee marquee--tinta" aria-hidden="true">
       <div class="marquee__track" data-i18n-html="marquee">
-        <span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">Lighthouse 90+</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span><span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">Lighthouse 90+</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span>
+        <span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">UX con propósito</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span><span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">UX con propósito</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span>
       </div>
     </div>
 
@@ -184,7 +183,7 @@
     </section>
 
     <!-- ════════ PROYECTOS ════════ -->
-    <div class="section-tag" id="projects"><p class="label"><span data-i18n="projects.tag">01 — Trabajo seleccionado</span> ↓</p></div>
+    <div class="section-tag" id="projects"><p class="label"><span data-i18n="projects.tag">01 — Casos y trabajo seleccionado</span> ↓</p></div>
 
     <!-- 01 · Grupo CESPAD · amarillo -->
     <section class="project blk blk--amarillo" aria-labelledby="p0-title">
@@ -192,25 +191,22 @@
       <div class="project__grid">
         <div class="project__media">
           <figure class="frame frame--sh-rojo" data-parallax>
-            <img src="img/cespad-720.webp"
-                 srcset="img/cespad-480.webp 480w, img/cespad-720.webp 720w, img/cespad.webp 960w"
-                 sizes="(max-width: 900px) 100vw, 480px"
+            <img src="img/cespad.webp"
                  width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del sitio Grupo CESPAD" data-i18n-alt="p0.alt">
-            <figcaption class="frame__cap"><span>Grupo CESPAD</span><span data-i18n="p0.cap">Rediseño · Cliente recurrente</span></figcaption>
+            <figcaption class="frame__cap"><span>Grupo CESPAD</span><span data-i18n="p0.cap">Cliente recurrente · Evolución de producto</span></figcaption>
           </figure>
           <span class="sticker sticker--tinta" aria-hidden="true" data-i18n="p0.sticker">Rediseño 2.0 ✦</span>
         </div>
         <div class="project__body">
           <h2 class="project__title display" id="p0-title" data-split data-fit data-i18n-html="p0.title">Grupo<br>CESPAD</h2>
-          <p class="label project__meta" data-i18n="p0.meta">Rediseño completo · SEO técnico · Live</p>
+          <p class="label project__meta" data-i18n="p0.meta">Presencia digital · UX de conversión · SEO técnico · Live</p>
           <p class="project__desc" data-i18n="p0.desc">
-            Segunda etapa con el mismo cliente. El negocio dejó de vender solo canchas de pádel
-            y pasó a cinco deportes más parquización, así que la landing anterior ya no representaba
-            lo que ofrecían. Rehice el sitio entero alrededor de esa expansión: cada disciplina con
-            su propio espacio y su propio recorrido, en vez de competir por un mismo bloque.
+            Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la
+            primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio
+            y llegar al canal de contacto adecuado sin obligar al usuario a buscar de más.
           </p>
-          <p class="project__result" data-i18n-html="p0.result"><strong>La decisión de fondo:</strong> no migrarlo a un framework. Es un sitio informativo — React habría sumado peso sin resolver ningún problema real. El esfuerzo se fue a que Google lo lea como negocio local: datos estructurados con rubro, dirección y zona de cobertura.</p>
+          <p class="project__result" data-i18n-html="p0.result"><strong>Decisiones de producto y frontend:</strong> arquitectura por deporte, CTAs directos a WhatsApp para contactos con intención alta, formulario con validación de datos esenciales, imágenes optimizadas, HTML semántico y datos estructurados para reforzar su encontrabilidad local.</p>
           <ul class="tags" aria-label="Tecnologías">
             <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>Schema.org</li><li>SEO técnico</li><li>Vercel</li>
           </ul>
@@ -228,24 +224,22 @@
       <div class="project__grid project__grid--flip">
         <div class="project__media">
           <figure class="frame frame--flip frame--sh-amarillo" data-parallax>
-            <img src="img/greenset-720.webp"
-                 srcset="img/greenset-480.webp 480w, img/greenset-720.webp 720w, img/greenset.webp 960w"
-                 sizes="(max-width: 900px) 100vw, 480px"
+            <img src="img/greenset.webp"
                  width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del sitio Greenset Court" data-i18n-alt="p1.alt">
-            <figcaption class="frame__cap"><span>Greenset Court</span><span data-i18n="p1.cap">Landing · Versión anterior</span></figcaption>
+            <figcaption class="frame__cap"><span>Greenset Court</span><span data-i18n="p1.cap">Primera entrega · Punto de partida</span></figcaption>
           </figure>
           <span class="sticker sticker--amarillo" aria-hidden="true" data-i18n="p1.sticker">Versión 1.0 ✦</span>
         </div>
         <div class="project__body">
           <h2 class="project__title display" id="p1-title" data-split data-fit>Greenset<br>Court</h2>
-          <p class="label project__meta" data-i18n="p1.meta">Landing · Primer entrega al mismo cliente · Live</p>
+          <p class="label project__meta" data-i18n="p1.meta">Landing de pádel · Primer proyecto con el cliente · Live</p>
           <p class="project__desc" data-i18n="p1.desc">
-            Empresa de canchas de pádel sin presencia digital que necesitaba capturar leads calificados
-            antes de su lanzamiento. Formulario que califica por tipo de proyecto y envía directo a
-            WhatsApp — sin backend. Contadores animados con Intersection Observer, WebP, mobile-first.
+            Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto:
+            explicar el servicio, verse confiable en móvil y abrir un camino de contacto claro sin sumar
+            complejidad técnica innecesaria.
           </p>
-          <p class="project__result" data-i18n-html="p1.result"><strong>Hoy:</strong> reemplazada por el rediseño de arriba, tras validar el modelo de captación con el cliente.</p>
+          <p class="project__result" data-i18n-html="p1.result"><strong>Evolución:</strong> la expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD: una solución más amplia, con nueva arquitectura de contenido y mejores recorridos de conversión.</p>
           <ul class="tags" aria-label="Tecnologías">
             <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>WhatsApp API</li><li>Vercel</li>
           </ul>
@@ -263,9 +257,7 @@
       <div class="project__grid">
         <div class="project__media">
           <figure class="frame frame--sh-amarillo" data-parallax>
-            <img src="img/oratoria-720.webp"
-                 srcset="img/oratoria-480.webp 480w, img/oratoria-720.webp 720w, img/oratoria.webp 960w"
-                 sizes="(max-width: 900px) 100vw, 480px"
+            <img src="img/oratoria.webp"
                  width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura de la app Checklist de Oratoria" data-i18n-alt="p2.alt">
             <figcaption class="frame__cap"><span data-i18n="p2.name">Checklist de Oratoria</span><span data-i18n="p2.cap">App · JS puro</span></figcaption>
@@ -274,14 +266,14 @@
         </div>
         <div class="project__body">
           <h2 class="project__title display" id="p2-title" data-split data-fit data-i18n-html="p2.title">Checklist<br>de Oratoria</h2>
-          <p class="label project__meta" data-i18n="p2.meta">App JS · LocalStorage · Live</p>
+          <p class="label project__meta" data-i18n="p2.meta">Producto personal · JS · Persistencia local · IA aplicada</p>
           <p class="project__desc" data-i18n="p2.desc">
-            Herramienta propia para registrar consistencia en ejercicios de hablar en público.
-            Estado que persiste entre sesiones sin backend, checklist interactiva, responsiva
-            y accesible — JavaScript puro, cero frameworks.
+            Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir
+            diagnósticos manuales. Construí una interfaz de checklist, iteré sobre la persistencia local
+            entre sesiones y sumé asistencia de IA para acelerar el feedback.
           </p>
           <ul class="tags" aria-label="Tecnologías">
-            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>LocalStorage</li><li>Vercel</li>
+            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>LocalStorage</li><li>Claude API</li><li>Vercel</li>
           </ul>
           <div class="project__links">
             <a class="link-btn" href="https://checklist-para-oratoria.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
@@ -297,9 +289,7 @@
       <div class="project__grid project__grid--flip">
         <div class="project__media">
           <figure class="frame frame--flip frame--sh-oscuro" data-parallax>
-            <img src="img/cafe-720.webp"
-                 srcset="img/cafe-480.webp 480w, img/cafe-720.webp 720w, img/cafe.webp 960w"
-                 sizes="(max-width: 900px) 100vw, 480px"
+            <img src="img/cafe.webp"
                  width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del Blog de Café" data-i18n-alt="p3.alt">
             <figcaption class="frame__cap"><span data-i18n="p3.name">Blog de Café</span><span data-i18n="p3.cap">Multi-página · 5 vistas</span></figcaption>
@@ -330,9 +320,7 @@
       <div class="project__grid">
         <div class="project__media">
           <figure class="frame frame--sh-rojo" data-parallax>
-            <img src="img/festival-720.webp"
-                 srcset="img/festival-480.webp 480w, img/festival-720.webp 720w, img/festival.webp 960w"
-                 sizes="(max-width: 900px) 100vw, 480px"
+            <img src="img/festival.webp"
                  width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del sitio Festival de Música" data-i18n-alt="p4.alt">
             <figcaption class="frame__cap"><span data-i18n="p4.name">Festival de Música</span><span data-i18n="p4.cap">Landing · Video BG</span></figcaption>
@@ -395,12 +383,12 @@
       <div class="xp">
         <p class="xp__when label" data-i18n="xp.when">Dic. 2024 — Presente · Freelance</p>
         <div class="xp__what">
-          <h3 class="xp__role" data-i18n="xp.role">Web Developer independiente</h3>
+          <h3 class="xp__role" data-i18n="xp.role">Frontend Developer independiente</h3>
           <ul class="xp__list">
-            <li data-i18n="xp.1">Sitios responsivos, landings y e-commerce deployados en producción.</li>
-            <li data-i18n="xp.2">WebP, lazy loading y auditorías Lighthouse en cada proyecto.</li>
-            <li data-i18n="xp.3">WCAG 2.1, ARIA, semántica HTML5 y cross-browser como estándar.</li>
-            <li data-i18n="xp.4">Git/GitHub con CI/CD en Vercel y Netlify; diseños desde Figma.</li>
+            <li data-i18n="xp.1">Convierto necesidades de negocio en sitios y experiencias web desplegadas en producción.</li>
+            <li data-i18n="xp.2">Diseño recorridos de usuario, priorizo fricción baja y aplico optimización de recursos cuando aporta al producto.</li>
+            <li data-i18n="xp.3">Responsive, HTML semántico, accesibilidad y compatibilidad cross-browser como criterios de implementación.</li>
+            <li data-i18n="xp.4">Git/GitHub, Vercel y Netlify para iterar, versionar y desplegar; trabajo a partir de Figma cuando el proyecto lo requiere.</li>
           </ul>
         </div>
       </div>
@@ -415,7 +403,7 @@
       <text x="100" y="114" text-anchor="middle" class="badge__center">✉</text>
     </svg>
 
-    <p class="label footer__eyebrow" data-i18n="footer.tag">03 — Contacto · Disponible para freelance, remoto y equipos</p>
+    <p class="label footer__eyebrow" data-i18n="footer.tag">03 — Contacto · Disponible para freelance y oportunidades frontend junior · remoto o Córdoba</p>
 
     <a class="footer__cta" href="mailto:jsebasferna@gmail.com?subject=Hola%20Sebasti%C3%A1n" data-hover>
       <span class="footer__cta-text display" id="contact-title" data-split data-fit data-fit-ratio="0.82" data-i18n="footer.cta">Hablemos</span>
@@ -428,9 +416,8 @@
     </div>
 
     <div class="footer__links">
-      <!-- CV: soltá tu PDF en /cv/JuanSebastian-Fernandez-CV.pdf y descomentá esta línea
-      <a href="cv/JuanSebastian-Fernandez-CV.pdf" target="_blank" rel="noopener" data-hover data-i18n="footer.cv">Descargar CV ↓</a>
-      -->
+      <a href="cv/JuanSebastianFernandez_CV_2026.pdf" target="_blank" rel="noopener" data-hover data-i18n="footer.cvEs">CV español ↓</a>
+      <a href="cv/CV_ENG_Juansebastianfernandez.pdf" target="_blank" rel="noopener" data-hover data-i18n="footer.cvEn">CV English ↓</a>
       <a href="https://www.linkedin.com/in/juansebastian-fernandez/" target="_blank" rel="noopener" data-hover>LinkedIn ↗</a>
       <a href="https://github.com/Seba-fernandez" target="_blank" rel="noopener" data-hover>GitHub ↗</a>
     </div>

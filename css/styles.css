@@ -232,7 +232,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .badge { width: clamp(6.5rem, 12vw, 10rem); height: auto; animation: spin 16s linear infinite; }
 .badge__text { font-size: 17.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
 .badge__center { font-size: 42px; font-weight: 900; }
-@keyframes spin { to { transform: rotate(360deg); } }
+/* rotate es una propiedad independiente: no compite con GSAP, que anima transform. */
+@keyframes spin { to { rotate: 1turn; } }
 
 /* ---------- Marquees ---------- */
 .marquee { overflow: hidden; }
@@ -324,6 +325,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     border-left: 2px dashed rgba(19, 18, 16, 0.5);
   }
   .ticket:hover, .ticket:focus-visible { transform: translateX(-4px); }
+
 }
 
 /* ---------- Fit-text ---------- */
@@ -511,13 +513,15 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .hero {
     min-height: 0;
     justify-content: flex-start;
-    padding-top: calc(var(--nav-h) + var(--s-5));
+    /* Reserva una franja real para los dos tickets antes del título.
+       Así siguen a mano, pero jamás invaden el nombre al cargar o rotar. */
+    padding-top: calc(var(--nav-h) + 6.5rem);
     padding-bottom: var(--s-6);
   }
 }
 @media (max-width: 560px) {
   .hero {
-    padding-top: calc(var(--nav-h) + var(--s-4));
+    padding-top: calc(var(--nav-h) + 6.5rem);
     padding-bottom: var(--s-5);
   }
   .hero__badge { display: none; }

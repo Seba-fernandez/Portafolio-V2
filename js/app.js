@@ -130,6 +130,33 @@
     'footer.type': 'Typeface: Archivo — Omnibus-Type, Argentina',
   };
 
+  // Keep the English story aligned with the evidence presented in Spanish.
+  Object.assign(EN, {
+    'hero.strip': 'Frontend Developer ✳ Product-minded ✳ UX · Performance · Accessibility ✳\u00A0',
+    'hero.intro': '<strong>Frontend Developer with a product mindset.</strong> I turn business needs into fast, clear and accessible web experiences — from user flow to deployment.',
+    'marquee': '<span><i class="c-hueso">Fast websites</i> ✳ <i class="c-amarillo">Accessible</i> ✳ <i class="c-rojo">Purposeful UX</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Made in Córdoba</i> ✳\u00A0</span><span><i class="c-hueso">Fast websites</i> ✳ <i class="c-amarillo">Accessible</i> ✳ <i class="c-rojo">Purposeful UX</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Made in Córdoba</i> ✳\u00A0</span>',
+    'projects.tag': '01 — Cases & selected work',
+    'p0.cap': 'Returning client · Product evolution',
+    'p0.meta': 'Digital presence · Conversion UX · Technical SEO · Live',
+    'p0.desc': 'Grupo CESPAD had no independent online presence and its offer had outgrown padel. I turned the first landing into an experience built to discover its sports, understand each service and reach the right contact channel without making people search for it.',
+    'p0.result': '<strong>Product and frontend decisions:</strong> sport-based information architecture, direct WhatsApp CTAs for high-intent contacts, a form that validates essential data, optimized images, semantic HTML and structured data to strengthen local discoverability.',
+    'p1.cap': 'First delivery · Starting point',
+    'p1.meta': 'Padel landing · First project for this client · Live',
+    'p1.desc': 'The first digital presence for a padel offering. The goal was direct: explain the service, feel trustworthy on mobile and open a clear contact path without unnecessary technical complexity.',
+    'p1.result': '<strong>Evolution:</strong> the business expansion outgrew this first version. That learning led to Grupo CESPAD: a broader solution with new content architecture and better conversion flows.',
+    'p2.cap': 'Personal product · Vanilla JS',
+    'p2.meta': 'Personal product · JS · Local persistence · Applied AI',
+    'p2.desc': 'Built to solve a personal workflow problem: tracking practice and getting feedback without repeating manual diagnostics. I created the checklist interface, iterated on local persistence between sessions and added AI assistance to speed up feedback.',
+    'xp.role': 'Independent Frontend Developer',
+    'xp.1': 'I turn business needs into websites and web experiences shipped to production.',
+    'xp.2': 'I design user flows, prioritize low friction and optimize resources when it benefits the product.',
+    'xp.3': 'Responsive design, semantic HTML, accessibility and cross-browser compatibility as implementation criteria.',
+    'xp.4': 'Git/GitHub, Vercel and Netlify to iterate, version and deploy; I work from Figma when the project calls for it.',
+    'footer.cvEs': 'Spanish CV ↓',
+    'footer.cvEn': 'English CV ↓',
+    'footer.tag': '03 — Contact · Available for freelance and junior frontend opportunities · remote or Córdoba',
+  });
+
   // El español vive en el HTML: lo capturamos como diccionario base al cargar.
   const ES = {};
   let lang = store.get('jsf-lang') === 'en' ? 'en' : 'es';

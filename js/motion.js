@@ -15,6 +15,12 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // fit.js termina de ajustar al cargar Archivo y al completar la página.
+  // Sin este refresh los triggers conservaban medidas de la fuente de fallback.
+  window.addEventListener('jsf:layout-settled', () => {
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  });
+
   /* ---------- Split accesible: copia sr-only + chars aria-hidden ---------- */
 
   function splitChars(el) {

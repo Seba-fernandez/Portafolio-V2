@@ -1,7 +1,8 @@
 # JSF® — Portfolio
 
 Personal portfolio of **Juan Sebastián Fernandez**, web developer based in Córdoba, Argentina.
-Brutalist editorial design, kinetic typography and saturated color blocks — built to score **Lighthouse 90+**.
+Brutalist editorial design, kinetic typography and saturated color blocks — built with performance,
+accessibility and clear user flows as implementation criteria.
 
 **Live:** https://juansebastianfernandez-dev.vercel.app
 
@@ -11,8 +12,8 @@ Brutalist editorial design, kinetic typography and saturated color blocks — bu
 
 Vanilla **HTML5 · CSS3 · JavaScript ES6+**, with [GSAP](https://gsap.com) + ScrollTrigger
 for motion over **native scrolling** (no scroll hijacking — input latency is zero).
-Libraries are **vendored locally** (`js/vendor/`) — zero CDN dependencies,
-no frameworks, no build step: clone and deploy.
+Animation libraries are **vendored locally** (`js/vendor/`); Archivo is loaded from Google Fonts.
+No framework or build step is required: clone and deploy.
 
 ## Structure
 
@@ -28,12 +29,12 @@ no frameworks, no build step: clone and deploy.
 │   ├── fit.js          # Fit-text: display type always fills its container
 │   ├── app.js          # Theme toggle, ES/EN i18n, clipboard — zero deps
 │   └── motion.js       # GSAP layer: kinetic type, parallax, velocity skew
-├── img/                # Project screenshots (WebP, ~106 KB total)
+├── img/                # Project screenshots (WebP, ~267 KB total)
 └── og.png              # 1200×630 social preview (LinkedIn / Twitter cards)
 
-Five live projects are featured, opening with the Grupo CESPAD redesign — a second
-engagement for the same client that expanded a single-sport landing into a five-sport
-site with structured data and technical SEO.
+Five live projects are featured, opening with Grupo CESPAD: a returning-client project
+that evolved an initial padel landing into a broader digital presence, with sport-based
+information architecture, conversion paths and technical SEO.
 ```
 
 ## Features
@@ -50,8 +51,8 @@ site with structured data and technical SEO.
 - **Motion with guardrails** — GSAP loads deferred; if it fails, the page
   works fully static. `prefers-reduced-motion` disables everything kinetic.
   Split text keeps an `sr-only` copy so screen readers are unaffected.
-- **Performance** — LCP is text; images are lazy WebP with explicit dimensions
-  (zero CLS); only `transform`/`opacity` are animated.
+- **Performance** — LCP is text; images have explicit dimensions and load lazily;
+  motion is limited to composited properties where possible.
 - **Fit-text titles** — display type is measured and sized at runtime so every
   line fills its container exactly, at any viewport width and in both languages.
   No hardcoded sizes per breakpoint; recalculates on resize, font load and
@@ -82,8 +83,7 @@ site with structured data and technical SEO.
 
 - **Social preview**: `og:image` points to `https://juansebastianfernandez-dev.vercel.app/og.png` —
   update the absolute URLs in `<head>` if your domain differs.
-- **CV**: drop your PDF at `cv/JuanSebastian-Fernandez-CV.pdf` and uncomment the
-  "Descargar CV" link in the footer (`index.html`).
+- **CV**: Spanish and English PDFs live in `/cv` and are linked from the footer.
 
 ## Run locally
 
@@ -105,8 +105,8 @@ Static output — push to GitHub and import in [Vercel](https://vercel.com), or 
 Portfolio personal de Juan Sebastián Fernandez (Córdoba, AR). Diseño editorial
 brutalist con tipografía cinética y bloques de color saturados, construido en
 HTML/CSS/JS vanilla + GSAP, sin build step. Incluye modo oscuro sin flash,
-idioma ES/EN persistente, motion con `prefers-reduced-motion` respetado y
-objetivo Lighthouse 90+. Para correrlo local: `npx serve .` — para publicar:
+idioma ES/EN persistente y motion con `prefers-reduced-motion` respetado.
+Para correrlo local: `npx serve .` — para publicar:
 importar el repo en Vercel.
 
 </details>
