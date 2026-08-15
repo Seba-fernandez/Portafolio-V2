@@ -5,18 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Juan Sebastián Fernandez · Web Developer</title>
   <meta name="description" content="Juan Sebastián Fernandez — Web Developer en Córdoba, Argentina. Sitios rápidos, accesibles y con carácter. Lighthouse 90+ en cada entrega.">
-  <meta name="theme-color" content="#EFEDE6">
+  <meta name="author" content="Juan Sebastián Fernandez">
+  <meta name="keywords" content="web developer, frontend, Córdoba, Argentina, HTML, CSS, JavaScript, GSAP, performance, accesibilidad, Vercel">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#EFEDE6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
   <link rel="canonical" href="https://juansebastianfernandez-dev.vercel.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="JSF® Portfolio">
   <meta property="og:title" content="Juan Sebastián Fernandez · Web Developer">
   <meta property="og:description" content="Sitios rápidos, accesibles y con carácter — desde Córdoba, Argentina.">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:locale:alternate" content="en_US">
   <meta property="og:url" content="https://juansebastianfernandez-dev.vercel.app/">
   <meta property="og:image" content="https://juansebastianfernandez-dev.vercel.app/og.png">
+  <meta property="og:image:secure_url" content="https://juansebastianfernandez-dev.vercel.app/og.png">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="JSF® — Juan Sebastián Fernandez, Web Developer · Córdoba, Argentina">
+
+  <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Juan Sebastián Fernandez · Web Developer">
+  <meta name="twitter:description" content="Sitios rápidos, accesibles y con carácter — desde Córdoba, Argentina.">
   <meta name="twitter:image" content="https://juansebastianfernandez-dev.vercel.app/og.png">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23131210'/%3E%3Ctext x='50' y='72' font-size='64' text-anchor='middle' fill='%23FFD600'%3E✳%3C/text%3E%3C/svg%3E">
+  <meta name="twitter:image:alt" content="JSF® — Juan Sebastián Fernandez, Web Developer">
+
+  <!-- Favicon: SF propio (fuente Archivo, S rojo-naranja + F bone sobre ink) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
   <!-- Tema antes del primer paint: sin flash -->
   <script>
@@ -31,15 +53,55 @@
     })();
   </script>
 
-  <!-- Tipografía: Archivo variable (Omnibus-Type, Argentina) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- Tipografía: Archivo variable (Omnibus-Type, Argentina) — preload directo del WOFF2 -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap"></noscript>
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/sections.css">
+  <!-- CSS combinado (tokens + base + components + sections) — 1 request en vez de 4 -->
+  <link rel="preload" as="style" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- JSON-LD: Person + WebSite para SEO/rich results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://juansebastianfernandez-dev.vercel.app/#person",
+        "name": "Juan Sebastián Fernandez",
+        "alternateName": "Sebas Fernandez",
+        "url": "https://juansebastianfernandez-dev.vercel.app/",
+        "image": "https://juansebastianfernandez-dev.vercel.app/og.png",
+        "jobTitle": "Web Developer",
+        "description": "Web Developer frontend en Córdoba, Argentina. Sitios rápidos, accesibles y con carácter.",
+        "email": "mailto:jsebasferna@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Córdoba",
+          "addressRegion": "Córdoba",
+          "addressCountry": "AR"
+        },
+        "sameAs": [
+          "https://github.com/Seba-fernandez",
+          "https://www.linkedin.com/in/juansebastian-fernandez/"
+        ],
+        "knowsAbout": ["HTML5", "CSS3", "JavaScript", "GSAP", "Performance web", "Accesibilidad", "SEO técnico"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://juansebastianfernandez-dev.vercel.app/#website",
+        "url": "https://juansebastianfernandez-dev.vercel.app/",
+        "name": "JSF® Portfolio",
+        "inLanguage": "es-AR",
+        "author": { "@id": "https://juansebastianfernandez-dev.vercel.app/#person" },
+        "publisher": { "@id": "https://juansebastianfernandez-dev.vercel.app/#person" }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -130,7 +192,10 @@
       <div class="project__grid">
         <div class="project__media">
           <figure class="frame frame--sh-rojo" data-parallax>
-            <img src="img/cespad.webp" width="960" height="600" loading="lazy" decoding="async"
+            <img src="img/cespad-720.webp"
+                 srcset="img/cespad-480.webp 480w, img/cespad-720.webp 720w, img/cespad.webp 960w"
+                 sizes="(max-width: 900px) 100vw, 480px"
+                 width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del sitio Grupo CESPAD" data-i18n-alt="p0.alt">
             <figcaption class="frame__cap"><span>Grupo CESPAD</span><span data-i18n="p0.cap">Rediseño · Cliente recurrente</span></figcaption>
           </figure>
@@ -163,7 +228,10 @@
       <div class="project__grid project__grid--flip">
         <div class="project__media">
           <figure class="frame frame--flip frame--sh-amarillo" data-parallax>
-            <img src="img/greenset.webp" width="960" height="600" loading="lazy" decoding="async"
+            <img src="img/greenset-720.webp"
+                 srcset="img/greenset-480.webp 480w, img/greenset-720.webp 720w, img/greenset.webp 960w"
+                 sizes="(max-width: 900px) 100vw, 480px"
+                 width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del sitio Greenset Court" data-i18n-alt="p1.alt">
             <figcaption class="frame__cap"><span>Greenset Court</span><span data-i18n="p1.cap">Landing · Versión anterior</span></figcaption>
           </figure>
@@ -195,7 +263,10 @@
       <div class="project__grid">
         <div class="project__media">
           <figure class="frame frame--sh-amarillo" data-parallax>
-            <img src="img/oratoria.webp" width="960" height="600" loading="lazy" decoding="async"
+            <img src="img/oratoria-720.webp"
+                 srcset="img/oratoria-480.webp 480w, img/oratoria-720.webp 720w, img/oratoria.webp 960w"
+                 sizes="(max-width: 900px) 100vw, 480px"
+                 width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura de la app Checklist de Oratoria" data-i18n-alt="p2.alt">
             <figcaption class="frame__cap"><span data-i18n="p2.name">Checklist de Oratoria</span><span data-i18n="p2.cap">App · JS puro</span></figcaption>
           </figure>
@@ -226,7 +297,10 @@
       <div class="project__grid project__grid--flip">
         <div class="project__media">
           <figure class="frame frame--flip frame--sh-oscuro" data-parallax>
-            <img src="img/cafe.webp" width="960" height="600" loading="lazy" decoding="async"
+            <img src="img/cafe-720.webp"
+                 srcset="img/cafe-480.webp 480w, img/cafe-720.webp 720w, img/cafe.webp 960w"
+                 sizes="(max-width: 900px) 100vw, 480px"
+                 width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del Blog de Café" data-i18n-alt="p3.alt">
             <figcaption class="frame__cap"><span data-i18n="p3.name">Blog de Café</span><span data-i18n="p3.cap">Multi-página · 5 vistas</span></figcaption>
           </figure>
@@ -256,7 +330,10 @@
       <div class="project__grid">
         <div class="project__media">
           <figure class="frame frame--sh-rojo" data-parallax>
-            <img src="img/festival.webp" width="960" height="600" loading="lazy" decoding="async"
+            <img src="img/festival-720.webp"
+                 srcset="img/festival-480.webp 480w, img/festival-720.webp 720w, img/festival.webp 960w"
+                 sizes="(max-width: 900px) 100vw, 480px"
+                 width="960" height="600" loading="lazy" decoding="async"
                  alt="Captura del sitio Festival de Música" data-i18n-alt="p4.alt">
             <figcaption class="frame__cap"><span data-i18n="p4.name">Festival de Música</span><span data-i18n="p4.cap">Landing · Video BG</span></figcaption>
           </figure>

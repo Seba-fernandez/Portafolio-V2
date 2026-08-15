@@ -5,6 +5,11 @@
    sin importar pantalla, idioma o fuente.
    Elementos: [data-fit]. Multilínea: separar con <br>.
    Opcional: data-fit-ratio="0.85" (porción del ancho).
+
+   Perf: refit se agenda dentro de requestAnimationFrame
+   (no bloquea input), y la primera pasada solo procesa
+   elementos visibles en viewport — el resto se difiere
+   a IntersectionObserver (evita layout thrashing).
    ════════════════════════════════════════════════ */
 
 (() => {
@@ -71,8 +76,40 @@
     line.style.maxWidth = '';
   }
 
+  // Perf: separa "arriba del fold" (fit inmediato para el LCP) del resto
+  // (fit diferido cuando entra a viewport). Menos trabajo síncrono en la
+  // primera pantalla → menos long tasks → LCP y TBT bajan.
+  function inViewport(el) {
+    const r = el.getBoundingClientRect();
+    return r.top < (innerHeight || 0) && r.bottom > 0;
+  }
+
+  function fitVisible() {
+    document.querySelectorAll('.fit-line').forEach(l => {
+      if (inViewport(l)) fitLine(l);
+    });
+  }
+
   function refit() {
     document.querySelectorAll('.fit-line').forEach(fitLine);
+  }
+
+  // Difiere los que están fuera del viewport hasta que scrollee cerca de ellos.
+  let io;
+  function observeOffscreen() {
+    if (!('IntersectionObserver' in window)) { refit(); return; }
+    io && io.disconnect();
+    io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          fitLine(e.target);
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    document.querySelectorAll('.fit-line').forEach(l => {
+      if (!inViewport(l)) io.observe(l);
+    });
   }
 
   let raf;
@@ -84,11 +121,23 @@
   // Ejecutar de inmediato: los scripts defer corren con el DOM ya parseado,
   // y fit.js va ANTES que motion.js, así el split de letras respeta las líneas.
   prepare();
-  refit();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
-  window.addEventListener('load', refit);
-  window.addEventListener('resize', onResize);
-  window.addEventListener('orientationchange', onResize);
+
+  // 1ª pasada: solo lo visible (LCP-crítico)
+  requestAnimationFrame(() => {
+    fitVisible();
+    // 2ª pasada: el resto, diferido a viewport
+    observeOffscreen();
+  });
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      // Cuando la fuente carga, re-fitear solo lo visible (evita reflow global)
+      requestAnimationFrame(fitVisible);
+    });
+  }
+  window.addEventListener('load', () => requestAnimationFrame(fitVisible), { once: true });
+  window.addEventListener('resize', onResize, { passive: true });
+  window.addEventListener('orientationchange', onResize, { passive: true });
 
   window.JSFfit = { prepare, refit };
 })();

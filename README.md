@@ -3,7 +3,7 @@
 Personal portfolio of **Juan Sebastián Fernandez**, web developer based in Córdoba, Argentina.
 Brutalist editorial design, kinetic typography and saturated color blocks — built to score **Lighthouse 90+**.
 
-**Live:** https://juansebastian-dev.vercel.app
+**Live:** https://juansebastianfernandez-dev.vercel.app
 
 ---
 
@@ -80,7 +80,7 @@ site with structured data and technical SEO.
 
 ## Before publishing
 
-- **Social preview**: `og:image` points to `https://juansebastian-dev.vercel.app/og.png` —
+- **Social preview**: `og:image` points to `https://juansebastianfernandez-dev.vercel.app/og.png` —
   update the absolute URLs in `<head>` if your domain differs.
 - **CV**: drop your PDF at `cv/JuanSebastian-Fernandez-CV.pdf` and uncomment the
   "Descargar CV" link in the footer (`index.html`).
