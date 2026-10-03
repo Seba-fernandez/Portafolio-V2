@@ -1,0 +1,227 @@
+{
+  "_info": "Fuente única de los proyectos. Editá este archivo y corré: node scripts/build-projects.mjs — regenera los destacados, el archivo y los datos del modal dentro de index.html. Imágenes: img/p/<id>-d-{480,960,1440,2160,2880}.webp y img/p/<id>-m-{390,780,1170}.webp.",
+  "types": {
+    "tienda":  { "es": "Tienda",  "en": "Store" },
+    "sitio":   { "es": "Sitio",   "en": "Website" },
+    "landing": { "es": "Landing", "en": "Landing" },
+    "app":     { "es": "App",     "en": "App" },
+    "sistema": { "es": "Sistema", "en": "System" }
+  },
+  "origins": {
+    "familia": { "es": "Negocio familiar", "en": "Family business" },
+    "cliente": { "es": "Cliente real",     "en": "Real client" },
+    "propio":  { "es": "Producto propio",  "en": "Own product" },
+    "estudio": { "es": "Estudio",          "en": "Study project" }
+  },
+  "focus": {
+    "conversion": { "es": "Conversión",    "en": "Conversion" },
+    "seo":        { "es": "SEO",           "en": "SEO" },
+    "perf":       { "es": "Performance",   "en": "Performance" },
+    "db":         { "es": "Base de datos", "en": "Database" },
+    "ia":         { "es": "IA aplicada",   "en": "Applied AI" },
+    "js":         { "es": "JS puro",       "en": "Vanilla JS" },
+    "diseno":     { "es": "Diseño visual", "en": "Visual design" }
+  },
+  "projects": [
+    {
+      "id": "bagues",
+      "featured": true,
+      "accent": "coral",
+      "placeholder": "#613928",
+      "name": { "es": "Bagués Grupo Wolf", "en": "Bagués Grupo Wolf" },
+      "type": "tienda",
+      "origin": "familia",
+      "focus": ["conversion", "db", "perf"],
+      "badge": { "es": "Proyecto insignia", "en": "Flagship project" },
+      "kicker": { "es": "Tienda por pedido · En producción", "en": "Order-based store · In production" },
+      "context": {
+        "es": "Grupo Wolf, el emprendimiento familiar, revende perfumes de la casa Bagués de persona a persona en Córdoba. Construí una tienda por pedido donde cada cliente explora el catálogo del ciclo, arma su pedido y lo confirma por WhatsApp.",
+        "en": "Grupo Wolf, our family business, resells Bagués perfumes person to person in Córdoba. I built an order-based store where each customer browses the current cycle's catalog, builds an order and confirms it over WhatsApp."
+      },
+      "solved": {
+        "es": [
+          "Catálogo de 100 aromas por ciclo, con familia olfativa y precio en cada ficha",
+          "Carrito que arma el pedido y lo envía listo por WhatsApp",
+          "Datos en Supabase y un panel propio para gestionar el catálogo",
+          "Carga rápida: conexión anticipada a la base, imágenes responsive y fuentes diferidas"
+        ],
+        "en": [
+          "A 100-scent catalog per cycle, with scent family and price on every card",
+          "A cart that builds the order and sends it ready over WhatsApp",
+          "Data in Supabase and a custom panel to manage the catalog",
+          "Fast loading: early database connection, responsive images and deferred fonts"
+        ]
+      },
+      "stack": ["React", "Vite", "Supabase", "WhatsApp", "Vercel"],
+      "live": "https://baguesfraganciaswolf.vercel.app/",
+      "code": "",
+      "alt": { "es": "la tienda Bagués Grupo Wolf", "en": "the Bagués Grupo Wolf store" }
+    },
+    {
+      "id": "cespad",
+      "featured": true,
+      "accent": "sage",
+      "placeholder": "#303530",
+      "name": { "es": "Grupo CESPAD", "en": "Grupo CESPAD" },
+      "type": "sitio",
+      "origin": "cliente",
+      "focus": ["conversion", "seo", "js"],
+      "badge": { "es": "Rediseño 2.0", "en": "Redesign 2.0" },
+      "kicker": { "es": "Cliente recurrente · Evolución de producto", "en": "Returning client · Product evolution" },
+      "context": {
+        "es": "Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.",
+        "en": "Grupo CESPAD had no online presence of its own and its offer had outgrown padel. I turned the first landing into an experience built to discover its sports, understand each service and reach the right contact channel."
+      },
+      "solved": {
+        "es": [
+          "Arquitectura de contenido por deporte",
+          "CTAs directos a WhatsApp para contactos con intención alta",
+          "Formulario con validación de los datos esenciales",
+          "HTML semántico y datos estructurados para la búsqueda local"
+        ],
+        "en": [
+          "Sport-based content architecture",
+          "Direct WhatsApp CTAs for high-intent contacts",
+          "A form that validates the essential data",
+          "Semantic HTML and structured data for local search"
+        ]
+      },
+      "stack": ["HTML5", "CSS3", "JS ES6+", "Schema.org", "SEO técnico", "Vercel"],
+      "live": "https://grupo-cespad-actualizacion.vercel.app/",
+      "code": "https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion",
+      "alt": { "es": "el sitio Grupo CESPAD", "en": "the Grupo CESPAD website" }
+    },
+    {
+      "id": "greenset",
+      "featured": true,
+      "accent": "peach",
+      "placeholder": "#45554c",
+      "name": { "es": "Greenset Court", "en": "Greenset Court" },
+      "type": "landing",
+      "origin": "cliente",
+      "focus": ["conversion", "js"],
+      "badge": { "es": "Versión 1.0", "en": "Version 1.0" },
+      "kicker": { "es": "Primera entrega · Punto de partida", "en": "First delivery · Starting point" },
+      "context": {
+        "es": "Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto, sin sumar complejidad técnica innecesaria.",
+        "en": "The first digital presence for a padel offering. The goal was simple and concrete, without adding unnecessary technical complexity."
+      },
+      "solved": {
+        "es": [
+          "Explicar el servicio de un vistazo",
+          "Verse confiable en el celular",
+          "Abrir un camino de contacto claro por WhatsApp"
+        ],
+        "en": [
+          "Explain the service at a glance",
+          "Look trustworthy on a phone",
+          "Open a clear contact path over WhatsApp"
+        ]
+      },
+      "note": {
+        "es": "La expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD.",
+        "en": "The business expansion outgrew this first version. That learning led to Grupo CESPAD."
+      },
+      "stack": ["HTML5", "CSS3", "JS ES6+", "WhatsApp API", "Vercel"],
+      "live": "https://greenset-landing.vercel.app/",
+      "code": "https://github.com/Seba-fernandez/Greenset-Landing",
+      "alt": { "es": "el sitio Greenset Court", "en": "the Greenset Court website" }
+    },
+    {
+      "id": "oratoria",
+      "featured": true,
+      "accent": "sage",
+      "placeholder": "#151515",
+      "name": { "es": "Checklist de Oratoria", "en": "Speaking Checklist" },
+      "type": "app",
+      "origin": "propio",
+      "focus": ["ia", "js"],
+      "badge": { "es": "App propia", "en": "Own app" },
+      "kicker": { "es": "Producto personal · Persistencia local", "en": "Personal product · Local persistence" },
+      "context": {
+        "es": "Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir diagnósticos manuales.",
+        "en": "Built to solve a problem of my own: tracking practice and getting feedback without repeating manual diagnostics."
+      },
+      "solved": {
+        "es": [
+          "Interfaz de checklist para registrar cada práctica",
+          "Persistencia local entre sesiones",
+          "Asistencia de IA para acelerar el feedback"
+        ],
+        "en": [
+          "A checklist interface to log every practice",
+          "Local persistence between sessions",
+          "AI assistance to speed up feedback"
+        ]
+      },
+      "stack": ["HTML5", "CSS3", "JS ES6+", "LocalStorage", "Claude API", "Vercel"],
+      "live": "https://checklist-para-oratoria.vercel.app/",
+      "code": "https://github.com/Seba-fernandez/ChecklistOratoria",
+      "alt": { "es": "la app Checklist de Oratoria", "en": "the Speaking Checklist app" }
+    },
+    {
+      "id": "cafe",
+      "featured": false,
+      "accent": "peach",
+      "placeholder": "#5e5b5a",
+      "name": { "es": "Blog de Café", "en": "Coffee Blog" },
+      "type": "sitio",
+      "origin": "estudio",
+      "focus": ["js"],
+      "kicker": { "es": "Proyecto de estudio · Multipágina", "en": "Study project · Multi-page" },
+      "context": {
+        "es": "Proyecto de estudio para practicar la estructura de un sitio multipágina en HTML: blog, listado de cursos y contacto con validación de formulario.",
+        "en": "A study project to practice the structure of a multi-page HTML site: blog, course listing and a contact form with validation."
+      },
+      "solved": {
+        "es": [
+          "Navegación entre 5 páginas con una estructura compartida",
+          "Listado de cursos y entradas del blog",
+          "Validación de formulario en JS puro"
+        ],
+        "en": [
+          "Navigation across 5 pages with a shared structure",
+          "Course listing and blog posts",
+          "Form validation in vanilla JS"
+        ]
+      },
+      "stack": ["HTML5", "CSS3", "JS ES6+", "DOM API", "Vercel"],
+      "live": "https://blog-cafe-beige.vercel.app/",
+      "code": "https://github.com/Seba-fernandez/BlogCafe",
+      "alt": { "es": "el Blog de Café", "en": "the Coffee Blog" }
+    },
+    {
+      "id": "festival",
+      "featured": false,
+      "accent": "coral",
+      "placeholder": "#755f90",
+      "name": { "es": "Festival de Música", "en": "Music Festival" },
+      "type": "landing",
+      "origin": "estudio",
+      "focus": ["perf", "diseno"],
+      "kicker": { "es": "Proyecto de estudio · Imágenes y diseño", "en": "Study project · Images and design" },
+      "context": {
+        "es": "Proyecto de estudio enfocado en compresión de imágenes y diseño: una landing de alto impacto para un festival EDM, con video de fondo, lineup y tickets.",
+        "en": "A study project focused on image compression and design: a high-impact landing for an EDM festival, with a background video, lineup and tickets."
+      },
+      "solved": {
+        "es": [
+          "Imágenes en WebP con carga diferida",
+          "Video de fondo sin bloquear la carga",
+          "Lineup de 2 días y 2 escenarios en grilla",
+          "SASS organizado en partials"
+        ],
+        "en": [
+          "WebP images with lazy loading",
+          "A background video that doesn't block loading",
+          "A 2-day, 2-stage lineup grid",
+          "SASS organized in partials"
+        ]
+      },
+      "stack": ["HTML5", "SASS/SCSS", "WebP", "Lazy loading", "Vercel"],
+      "live": "https://festivalde-musica.vercel.app/",
+      "code": "https://github.com/Seba-fernandez/FestivaldeMusica",
+      "alt": { "es": "el sitio Festival de Música", "en": "the Music Festival website" }
+    }
+  ]
+}
