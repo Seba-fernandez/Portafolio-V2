@@ -417,15 +417,12 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   display: flex; justify-content: flex-start; align-items: center; gap: 0.75rem 1.5rem; flex-wrap: wrap;
 }
 .avail {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  padding: 0.55rem 1rem 0.55rem 0.85rem;
-  border-radius: 999px;
-  background: var(--surface);
-  box-shadow: inset 0 0 0 2px var(--line);
-  font-size: var(--tiny); font-weight: 800; font-stretch: 90%;
-  text-transform: uppercase; letter-spacing: 0.06em;
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  background: var(--slate); color: var(--naples);
+  rotate: -1.5deg;
 }
-.avail .dot { color: var(--coral); width: 0.7em; height: 0.7em; box-shadow: 0 0 0 2px var(--slate); }
+[data-theme="dark"] .avail { background: var(--naples); color: var(--slate); }
 .hero__coords { color: var(--muted); }
 
 .hero__badge { position: absolute; right: var(--gutter); top: calc(var(--nav-h) + 0.75rem); z-index: 2; width: clamp(6.5rem, 10vw, 8.5rem); }
@@ -642,26 +639,33 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .case__info { grid-row: 2; }
 }
 
-/* ≤700px: el bloque muestra el diseño mobile del proyecto dentro de un teléfono.
+/* ≤700px: la captura mobile del proyecto ocupa el bloque completo.
    La versión desktop queda a un toque, en "Ver capturas". */
 @media (max-width: 700px) {
   .case { padding-top: var(--s-5); row-gap: 2rem; }
   .case__media {
-    height: 25rem; padding: 2.5rem 0 0;
+    padding: 0;
     overflow: hidden;
-    background: var(--accent);
+    border: 3px solid var(--line);
     border-radius: var(--r-lg);
-    box-shadow: inset 0 0 0 2px var(--slate);
+    background: var(--ph, var(--slate));
+    box-shadow: 6px 6px 0 var(--accent);
   }
   .case__media::before { display: none; }
   .shot-d { display: none; }
   .shot-m, .case:nth-of-type(even) .shot-m {
     position: relative; left: auto; right: auto; bottom: auto;
-    width: min(14rem, 62%); margin-inline: auto;
+    width: 100%; margin: 0;
   }
-  .shot-m .phone { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-  .shot-m .shot-label { left: -1.25rem; }
+  .shot-m .phone, [data-theme="dark"] .shot-m .phone {
+    border: 0; border-radius: 0; box-shadow: none;
+  }
+  .shot-m .phone img { aspect-ratio: 4 / 5; border-radius: 0; }
+  .shot-m .shot-label { top: 0.85rem; left: 0.85rem; }
   .case__actions .btn { flex: 1 1 auto; }
+  /* Modal: la captura mobile llena el ancho */
+  .pd .pd__m { width: 100%; height: auto; max-height: none; aspect-ratio: auto; border: 0; border-radius: var(--r-sm); }
+  .pd .pd__m img { width: 100%; height: auto; aspect-ratio: 4 / 5; border-radius: var(--r-sm); }
 }
 
 /* ---------- Archivo ---------- */
@@ -910,7 +914,8 @@ html.is-locked, html.is-locked body { overflow: hidden; }
     border: 0; border-radius: 0; box-shadow: none;
   }
   .pd__inner { display: block; height: 100dvh; overflow-y: auto; overscroll-behavior: contain; }
-  .pd__gallery { padding: 1rem var(--gutter) 1.25rem; padding-top: max(1rem, env(safe-area-inset-top)); padding-right: calc(var(--gutter) + 3.5rem); }
+  .pd__gallery { padding: 1rem var(--gutter) 1.25rem; padding-top: max(1rem, env(safe-area-inset-top)); }
+  .pd__switch { padding-right: 3.5rem; }
   .pd__stage { flex: none; min-height: 0; }
   .pd__close { position: absolute; top: max(0.85rem, env(safe-area-inset-top)); right: var(--gutter); color: var(--naples); background: #0A1F1D; z-index: 2; }
   .pd__m { height: min(56vh, 30rem); }

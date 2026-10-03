@@ -56,7 +56,7 @@ function featured(p, i) {
             <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
             <div class="phone" style="--ph: ${p.placeholder}">
               <img src="img/p/${p.id}-m-780.webp" srcset="${srcset(p.id, 'm', M_W)}"
-                   sizes="(min-width: 1024px) 210px, 220px" width="1170" height="2532"
+                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
                    loading="lazy" decoding="async" alt="Captura mobile de ${esc(p.alt.es)}" data-pa="${p.id}:m">
             </div>
           </figure>
