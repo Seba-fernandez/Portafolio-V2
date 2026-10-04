@@ -6,10 +6,10 @@
   <title>Juan Sebastián Fernandez · Web Developer</title>
   <meta name="description" content="Juan Sebastián Fernandez — Frontend Developer en Córdoba, Argentina. Experiencias web rápidas, claras y accesibles, desde el problema hasta el deploy.">
   <meta name="author" content="Juan Sebastián Fernandez">
-  <meta name="keywords" content="web developer, frontend, Córdoba, Argentina, HTML, CSS, JavaScript, GSAP, performance, accesibilidad, Vercel">
+  <meta name="keywords" content="web developer, frontend, Córdoba, Argentina, HTML, CSS, JavaScript, React, Supabase, GSAP, performance, accesibilidad, Vercel">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#EFEDE6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FBE6A0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#112F2C" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
   <link rel="canonical" href="https://juansebastianfernandez-dev.vercel.app/">
 
@@ -35,7 +35,7 @@
   <meta name="twitter:image" content="https://juansebastianfernandez-dev.vercel.app/og.png">
   <meta name="twitter:image:alt" content="JSF® — Juan Sebastián Fernandez, Web Developer">
 
-  <!-- Favicon: SF propio (fuente Archivo, S rojo-naranja + F bone sobre ink) -->
+  <!-- Favicon: SF propio -->
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -44,7 +44,7 @@
   <script>
     (function () {
       document.documentElement.classList.remove('no-js');
-      document.documentElement.classList.add('js');
+      document.documentElement.classList.add('js', 'has-js');
       try {
         var t = localStorage.getItem('jsf-theme');
         if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -53,12 +53,11 @@
     })();
   </script>
 
-  <!-- Tipografía: Archivo variable (Omnibus-Type, Argentina) — preload directo del WOFF2 -->
+  <!-- Tipografía: Archivo variable (Omnibus-Type, Argentina) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap"></noscript>
 
-  <!-- CSS combinado (tokens + base + components + sections) — 1 request en vez de 4 -->
   <link rel="preload" as="style" href="css/styles.css">
   <link rel="stylesheet" href="css/styles.css">
 
@@ -87,7 +86,7 @@
           "https://github.com/Seba-fernandez",
           "https://www.linkedin.com/in/juansebastian-fernandez/"
         ],
-        "knowsAbout": ["HTML5", "CSS3", "JavaScript", "GSAP", "Performance web", "Accesibilidad", "SEO técnico"]
+        "knowsAbout": ["HTML5", "CSS3", "JavaScript", "React", "Supabase", "GSAP", "Performance web", "Accesibilidad", "SEO técnico"]
       },
       {
         "@type": "WebSite",
@@ -112,47 +111,46 @@
     <defs><path id="circ" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
   </svg>
 
-  <!-- ════════ TICKETS · tema e idioma ════════ -->
-  <div class="tickets">
-    <button class="ticket ticket--theme" id="themeToggle" type="button"
-            aria-label="Cambiar a modo oscuro" data-i18n-aria="theme.toDark">
-      <span class="ticket__icon" aria-hidden="true">☾</span>
-      <span aria-hidden="true" data-i18n="theme.word">Modo</span>
-    </button>
-    <button class="ticket ticket--lang" id="langToggle" type="button"
-            aria-label="Switch to English" lang="en">
-      <span class="ticket__icon" aria-hidden="true">Aa</span>
-      <span aria-hidden="true" id="langLabel">EN</span>
-    </button>
-  </div>
-
-  <!-- ════════ NAV ════════ -->
-  <header class="nav" aria-label="Navegación principal">
-    <a class="nav__logo" href="#main" aria-label="Inicio — JSF" data-hover>JSF<sup>®</sup></a>
-    <nav class="nav__links">
-      <a href="#projects" data-hover data-i18n="nav.projects">Proyectos</a>
-      <a href="#skills" data-hover>Skills</a>
-      <a href="#contact" data-hover data-i18n="nav.contact">Contacto</a>
+  <!-- ════════ NAV · barra flotante con tema e idioma ════════ -->
+  <header class="nav" aria-label="Navegación principal" data-i18n-aria="aria.nav">
+    <a class="nav__logo" href="#main" aria-label="Inicio — JSF" data-i18n-aria="aria.home">JSF<sup>®</sup></a>
+    <nav class="nav__links" aria-label="Secciones" data-i18n-aria="aria.sections">
+      <a class="nav__link nav__link--hide-xs" href="#projects" data-i18n="nav.projects">Proyectos</a>
+      <a class="nav__link nav__link--hide-xs" href="#skills">Skills</a>
+      <a class="nav__link" href="#contact" data-i18n="nav.contact">Contacto</a>
     </nav>
+    <div class="nav__tools">
+      <button class="tool tool--theme" id="themeToggle" type="button"
+              aria-label="Cambiar a modo oscuro" data-i18n-aria="theme.toDark">
+        <span class="tool__icon" aria-hidden="true">☾</span>
+      </button>
+      <button class="tool tool--lang" id="langToggle" type="button"
+              aria-label="Switch to English" lang="en">
+        <span class="tool__word" aria-hidden="true" id="langLabel">EN</span>
+      </button>
+    </div>
   </header>
 
   <main id="main">
 
     <!-- ════════ HERO ════════ -->
-    <section class="hero" aria-label="Presentación">
-      <p class="hero__coords label" aria-hidden="true">31°25′S — 64°11′O · CBA / ARG</p>
+    <section class="hero" aria-label="Presentación" data-i18n-aria="aria.hero">
+      <div class="hero__top">
+        <p class="avail label" data-i18n="hero.avail">Disponible para proyectos</p>
+        <p class="hero__coords label" aria-hidden="true">31°25′S — 64°11′O · CBA / ARG</p>
+      </div>
 
       <svg class="badge hero__badge" viewBox="0 0 200 200" aria-hidden="true">
         <circle cx="100" cy="100" r="98"/>
-        <text class="badge__text"><textPath href="#circ" data-i18n="hero.badge">DISPONIBLE PARA PROYECTOS ✳ CÓRDOBA · ARGENTINA ✳ </textPath></text>
+        <text class="badge__text"><textPath href="#circ" data-i18n="hero.badge">VER PROYECTOS ✳ HECHO EN CÓRDOBA, ARGENTINA ✳ </textPath></text>
         <text x="100" y="112" text-anchor="middle" class="badge__center">↓</text>
       </svg>
 
       <h1 class="hero__title display">
         <span class="hero__line" data-split data-fit>Sebastián</span>
         <span class="hero__strip" aria-hidden="true"><span class="hero__strip-inner" data-i18n="hero.strip">Frontend Developer ✳ Mentalidad de producto ✳ UX · Performance · Accesibilidad ✳&nbsp;</span></span>
-        <span class="sr-only">— Frontend Developer con mentalidad de producto —</span>
-        <span class="hero__line hero__line--azul" data-split data-fit>Fernandez</span>
+        <span class="sr-only" data-i18n="hero.sr">— Frontend Developer con mentalidad de producto —</span>
+        <span class="hero__line hero__line--alt" data-split data-fit>Fernandez</span>
       </h1>
 
       <div class="hero__bottom">
@@ -160,216 +158,289 @@
           <strong>Frontend Developer con mentalidad de producto.</strong> Convierto necesidades de negocio en
           experiencias web rápidas, claras y accesibles — desde el flujo de usuario hasta el deploy.
         </p>
-        <ul class="hero__stats" aria-label="Datos rápidos">
-          <li class="chip chip--amarillo"><span class="chip__n">+2</span> <span data-i18n="hero.years">años</span></li>
-          <li class="chip chip--azul"><span class="chip__n">UX</span> y performance</li>
-          <li class="chip chip--rojo"><span class="chip__n">5</span> <span data-i18n="hero.live">proyectos live</span></li>
+        <ul class="hero__stats" aria-label="Datos rápidos" data-i18n-aria="aria.stats">
+          <li class="stat stat--sage"><span class="stat__n">+2</span> <span data-i18n="hero.years">años</span></li>
+          <li class="stat stat--peach"><span class="stat__n">UX</span> <span data-i18n="hero.ux">y performance</span></li>
+          <li class="stat stat--coral"><span class="stat__n" data-count="live">6</span> <span data-i18n="hero.live">proyectos live</span></li>
         </ul>
       </div>
     </section>
 
     <!-- ════════ MARQUEE ════════ -->
-    <div class="marquee marquee--tinta" aria-hidden="true">
+    <div class="marquee marquee--ink" aria-hidden="true">
       <div class="marquee__track" data-i18n-html="marquee">
-        <span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">UX con propósito</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span><span><i class="c-hueso">Sitios rápidos</i> ✳ <i class="c-amarillo">Accesibles</i> ✳ <i class="c-rojo">UX con propósito</i> ✳ <i class="c-celeste">HTML · CSS · JS</i> ✳ <i class="c-hueso">Hecho en Córdoba</i> ✳&nbsp;</span>
+        <span><i class="c-naples">Sitios rápidos</i> ✳ <i class="c-coral">Accesibles</i> ✳ <i class="c-sage">UX con propósito</i> ✳ <i class="c-peach">HTML · CSS · JS · React</i> ✳ <i class="c-naples">Hecho en Córdoba</i> ✳&nbsp;</span><span><i class="c-naples">Sitios rápidos</i> ✳ <i class="c-coral">Accesibles</i> ✳ <i class="c-sage">UX con propósito</i> ✳ <i class="c-peach">HTML · CSS · JS · React</i> ✳ <i class="c-naples">Hecho en Córdoba</i> ✳&nbsp;</span>
       </div>
     </div>
 
     <!-- ════════ MANIFIESTO ════════ -->
-    <section class="manifesto" aria-label="Manifiesto">
+    <section class="manifesto" aria-label="Manifiesto" data-i18n-aria="aria.manifesto">
       <p class="manifesto__text" data-words data-i18n-html="manifesto">
-        Construyo sitios que <mark class="mk mk--amarillo">cargan rápido</mark>, se entienden fácil y funcionan para <mark class="mk mk--azul">todas las personas</mark>. Performance, accesibilidad y semántica no son extras: son <mark class="mk mk--rojo">el estándar</mark>.
+        Construyo sitios que <mark class="mk mk--coral">cargan rápido</mark>, se entienden fácil y funcionan para <mark class="mk mk--sage">todas las personas</mark>. Performance, accesibilidad y semántica no son extras: son <mark class="mk mk--peach">el estándar</mark>.
       </p>
     </section>
 
-    <!-- ════════ PROYECTOS ════════ -->
-    <div class="section-tag" id="projects"><p class="label"><span data-i18n="projects.tag">01 — Casos y trabajo seleccionado</span> ↓</p></div>
-
-    <!-- 01 · Grupo CESPAD · amarillo -->
-    <section class="project blk blk--amarillo" aria-labelledby="p0-title">
-      <span class="project__num" aria-hidden="true">01</span>
-      <div class="project__grid">
-        <div class="project__media">
-          <figure class="frame frame--sh-rojo" data-parallax>
-            <img src="img/cespad.webp"
-                 width="960" height="600" loading="lazy" decoding="async"
-                 alt="Captura del sitio Grupo CESPAD" data-i18n-alt="p0.alt">
-            <figcaption class="frame__cap"><span>Grupo CESPAD</span><span data-i18n="p0.cap">Cliente recurrente · Evolución de producto</span></figcaption>
+    <!-- ════════ PROYECTOS DESTACADOS ════════
+         Generados desde data/projects.json → node scripts/build-projects.mjs -->
+    <section class="work" id="projects" aria-labelledby="work-title">
+      <div class="section-head">
+        <p class="label section-head__tag"><span data-i18n="projects.tag">01 — Casos y trabajo seleccionado</span> ↓</p>
+        <ul class="section-head__tags" aria-hidden="true">
+          <li class="tag tag--ink"><span data-count="featured">3</span>&nbsp;<span data-i18n="projects.featured">destacados</span></li>
+          <li class="tag tag--coral"><span class="dot"></span><span data-count="live">6</span>&nbsp;live</li>
+          <li class="tag tag--sage">Desktop + mobile</li>
+        </ul>
+      </div>
+      <h2 class="giant-title display" id="work-title" data-split data-fit data-i18n="projects.title">Proyectos</h2>
+      <!-- build:featured:start -->
+      <article class="case" id="p-cespad" style="--accent: var(--sage)" aria-labelledby="t-cespad">
+        <div class="case__media">
+          <figure class="shot-d" style="--ph: #303530">
+            <img src="img/p/cespad-d-1440.webp" srcset="img/p/cespad-d-960.webp 960w, img/p/cespad-d-1440.webp 1440w, img/p/cespad-d-2160.webp 2160w, img/p/cespad-d-2880.webp 2880w"
+                 sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
+                 loading="lazy" decoding="async" alt="Captura desktop de el sitio Grupo CESPAD" data-pa="cespad:d">
+            <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
           </figure>
-          <span class="sticker sticker--tinta" aria-hidden="true" data-i18n="p0.sticker">Rediseño 2.0 ✦</span>
+          <figure class="shot-m">
+            <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
+            <div class="phone" style="--ph: #303530">
+              <img src="img/p/cespad-m-780.webp" srcset="img/p/cespad-m-390.webp 390w, img/p/cespad-m-780.webp 780w, img/p/cespad-m-1170.webp 1170w"
+                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
+                   loading="lazy" decoding="async" alt="Captura mobile de el sitio Grupo CESPAD" data-pa="cespad:m">
+            </div>
+          </figure>
         </div>
-        <div class="project__body">
-          <h2 class="project__title display" id="p0-title" data-split data-fit data-i18n-html="p0.title">Grupo<br>CESPAD</h2>
-          <p class="label project__meta" data-i18n="p0.meta">Presencia digital · UX de conversión · SEO técnico · Live</p>
-          <p class="project__desc" data-i18n="p0.desc">
-            Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la
-            primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio
-            y llegar al canal de contacto adecuado sin obligar al usuario a buscar de más.
-          </p>
-          <p class="project__result" data-i18n-html="p0.result"><strong>Decisiones de producto y frontend:</strong> arquitectura por deporte, CTAs directos a WhatsApp para contactos con intención alta, formulario con validación de datos esenciales, imágenes optimizadas, HTML semántico y datos estructurados para reforzar su encontrabilidad local.</p>
-          <ul class="tags" aria-label="Tecnologías">
-            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>Schema.org</li><li>SEO técnico</li><li>Vercel</li>
-          </ul>
-          <div class="project__links">
-            <a class="link-btn" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+        <div class="case__info">
+          <div class="case__head">
+            <span class="case__num" aria-hidden="true">01</span>
+            <span class="tag tag--coral tag--lg"><span data-pf="cespad:badge">Rediseño 2.0</span> ✦</span>
+          </div>
+          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:cliente">Cliente real</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:sitio">Sitio</li><li class="tag tag--sage" data-pt="focus:conversion">Conversión</li><li class="tag tag--sage" data-pt="focus:seo">SEO</li><li class="tag tag--sage" data-pt="focus:js">JS puro</li></ul>
+          <p class="label case__kicker" data-pf="cespad:kicker">Cliente recurrente · Evolución de producto</p>
+          <h3 class="case__title" id="t-cespad" data-pf="cespad:name">Grupo CESPAD</h3>
+          <p class="case__context" data-pf="cespad:context">Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.</p>
+          <div class="case__solved">
+            <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· 4</p>
+            <ol>
+              <li><span class="case__n" aria-hidden="true">01</span><span data-pf="cespad:solved:0">Arquitectura de contenido por deporte</span></li>
+              <li><span class="case__n" aria-hidden="true">02</span><span data-pf="cespad:solved:1">CTAs directos a WhatsApp para contactos con intención alta</span></li>
+              <li><span class="case__n" aria-hidden="true">03</span><span data-pf="cespad:solved:2">Formulario con validación de los datos esenciales</span></li>
+              <li><span class="case__n" aria-hidden="true">04</span><span data-pf="cespad:solved:3">HTML semántico y datos estructurados para la búsqueda local</span></li>
+            </ol>
+          </div>
+          <div class="case__stack">
+            <span class="label" aria-hidden="true">Stack</span>
+            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>Schema.org</li><li>WhatsApp API</li><li>Vercel</li></ul>
+          </div>
+          <div class="case__actions">
+            <a class="btn" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
+            <button class="btn btn--ghost" type="button" data-open="cespad" data-i18n="btn.shots">Ver capturas</button>
           </div>
         </div>
-      </div>
+      </article>
+
+      <article class="case" id="p-bagues" style="--accent: var(--coral)" aria-labelledby="t-bagues">
+        <div class="case__media">
+          <figure class="shot-d" style="--ph: #613928">
+            <img src="img/p/bagues-d-1440.webp" srcset="img/p/bagues-d-960.webp 960w, img/p/bagues-d-1440.webp 1440w, img/p/bagues-d-2160.webp 2160w, img/p/bagues-d-2880.webp 2880w"
+                 sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
+                 loading="lazy" decoding="async" alt="Captura desktop de la tienda Bagués Grupo Wolf" data-pa="bagues:d">
+            <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
+          </figure>
+          <figure class="shot-m">
+            <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
+            <div class="phone" style="--ph: #613928">
+              <img src="img/p/bagues-m-780.webp" srcset="img/p/bagues-m-390.webp 390w, img/p/bagues-m-780.webp 780w, img/p/bagues-m-1170.webp 1170w"
+                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
+                   loading="lazy" decoding="async" alt="Captura mobile de la tienda Bagués Grupo Wolf" data-pa="bagues:m">
+            </div>
+          </figure>
+        </div>
+        <div class="case__info">
+          <div class="case__head">
+            <span class="case__num" aria-hidden="true">02</span>
+            <span class="tag tag--coral tag--lg"><span data-pf="bagues:badge">Tienda + panel propio</span> ✦</span>
+          </div>
+          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:familia">Negocio familiar</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:tienda">Tienda</li><li class="tag tag--sage" data-pt="focus:conversion">Conversión</li><li class="tag tag--sage" data-pt="focus:db">Base de datos</li><li class="tag tag--sage" data-pt="focus:perf">Performance</li></ul>
+          <p class="label case__kicker" data-pf="bagues:kicker">Tienda por pedido · En producción</p>
+          <h3 class="case__title" id="t-bagues" data-pf="bagues:name">Bagués Grupo Wolf</h3>
+          <p class="case__context" data-pf="bagues:context">Grupo Wolf, el emprendimiento familiar, revende perfumes de la casa Bagués de persona a persona en Córdoba. Construí una tienda por pedido donde cada cliente explora el catálogo del ciclo, arma su pedido y lo confirma por WhatsApp.</p>
+          <div class="case__solved">
+            <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· 4</p>
+            <ol>
+              <li><span class="case__n" aria-hidden="true">01</span><span data-pf="bagues:solved:0">Catálogo de 100 aromas por ciclo, con familia olfativa y precio en cada ficha</span></li>
+              <li><span class="case__n" aria-hidden="true">02</span><span data-pf="bagues:solved:1">Carrito que arma el pedido y lo envía listo por WhatsApp</span></li>
+              <li><span class="case__n" aria-hidden="true">03</span><span data-pf="bagues:solved:2">Datos en Supabase y un panel propio para gestionar el catálogo</span></li>
+              <li><span class="case__n" aria-hidden="true">04</span><span data-pf="bagues:solved:3">Carga rápida: conexión anticipada a la base, imágenes responsive y fuentes diferidas</span></li>
+            </ol>
+          </div>
+          <div class="case__stack">
+            <span class="label" aria-hidden="true">Stack</span>
+            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>React</li><li>Vite</li><li>Supabase</li><li>WhatsApp</li><li>Vercel</li></ul>
+          </div>
+          <div class="case__actions">
+            <a class="btn" href="https://baguesfraganciaswolf.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
+            <button class="btn btn--ghost" type="button" data-open="bagues" data-i18n="btn.shots">Ver capturas</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="case" id="p-oratoria" style="--accent: var(--peach)" aria-labelledby="t-oratoria">
+        <div class="case__media">
+          <figure class="shot-d" style="--ph: #151515">
+            <img src="img/p/oratoria-d-1440.webp" srcset="img/p/oratoria-d-960.webp 960w, img/p/oratoria-d-1440.webp 1440w, img/p/oratoria-d-2160.webp 2160w, img/p/oratoria-d-2880.webp 2880w"
+                 sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
+                 loading="lazy" decoding="async" alt="Captura desktop de la app Checklist de Oratoria" data-pa="oratoria:d">
+            <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
+          </figure>
+          <figure class="shot-m">
+            <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
+            <div class="phone" style="--ph: #151515">
+              <img src="img/p/oratoria-m-780.webp" srcset="img/p/oratoria-m-390.webp 390w, img/p/oratoria-m-780.webp 780w, img/p/oratoria-m-1170.webp 1170w"
+                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
+                   loading="lazy" decoding="async" alt="Captura mobile de la app Checklist de Oratoria" data-pa="oratoria:m">
+            </div>
+          </figure>
+        </div>
+        <div class="case__info">
+          <div class="case__head">
+            <span class="case__num" aria-hidden="true">03</span>
+            <span class="tag tag--coral tag--lg"><span data-pf="oratoria:badge">App propia</span> ✦</span>
+          </div>
+          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:propio">Producto propio</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:app">App</li><li class="tag tag--sage" data-pt="focus:ia">IA aplicada</li></ul>
+          <p class="label case__kicker" data-pf="oratoria:kicker">Producto personal · React + IA</p>
+          <h3 class="case__title" id="t-oratoria" data-pf="oratoria:name">Checklist de Oratoria</h3>
+          <p class="case__context" data-pf="oratoria:context">Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir diagnósticos manuales.</p>
+          <div class="case__solved">
+            <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· 3</p>
+            <ol>
+              <li><span class="case__n" aria-hidden="true">01</span><span data-pf="oratoria:solved:0">Interfaz de checklist para registrar cada práctica</span></li>
+              <li><span class="case__n" aria-hidden="true">02</span><span data-pf="oratoria:solved:1">Persistencia local entre sesiones</span></li>
+              <li><span class="case__n" aria-hidden="true">03</span><span data-pf="oratoria:solved:2">Asistencia de IA para acelerar el feedback</span></li>
+            </ol>
+          </div>
+          <div class="case__stack">
+            <span class="label" aria-hidden="true">Stack</span>
+            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>React</li><li>Vite</li><li>LocalStorage</li><li>Claude API</li><li>Vercel</li></ul>
+          </div>
+          <div class="case__actions">
+            <a class="btn" href="https://checklist-para-oratoria.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/ChecklistOratoria" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
+            <button class="btn btn--ghost" type="button" data-open="oratoria" data-i18n="btn.shots">Ver capturas</button>
+          </div>
+        </div>
+      </article>
+      <!-- build:featured:end -->
     </section>
 
-    <!-- 02 · Greenset · el sitio anterior del mismo cliente -->
-    <section class="project blk blk--tinta" aria-labelledby="p1-title">
-      <span class="project__num" aria-hidden="true">02</span>
-      <div class="project__grid project__grid--flip">
-        <div class="project__media">
-          <figure class="frame frame--flip frame--sh-amarillo" data-parallax>
-            <img src="img/greenset.webp"
-                 width="960" height="600" loading="lazy" decoding="async"
-                 alt="Captura del sitio Greenset Court" data-i18n-alt="p1.alt">
-            <figcaption class="frame__cap"><span>Greenset Court</span><span data-i18n="p1.cap">Primera entrega · Punto de partida</span></figcaption>
-          </figure>
-          <span class="sticker sticker--amarillo" aria-hidden="true" data-i18n="p1.sticker">Versión 1.0 ✦</span>
-        </div>
-        <div class="project__body">
-          <h2 class="project__title display" id="p1-title" data-split data-fit>Greenset<br>Court</h2>
-          <p class="label project__meta" data-i18n="p1.meta">Landing de pádel · Primer proyecto con el cliente · Live</p>
-          <p class="project__desc" data-i18n="p1.desc">
-            Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto:
-            explicar el servicio, verse confiable en móvil y abrir un camino de contacto claro sin sumar
-            complejidad técnica innecesaria.
-          </p>
-          <p class="project__result" data-i18n-html="p1.result"><strong>Evolución:</strong> la expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD: una solución más amplia, con nueva arquitectura de contenido y mejores recorridos de conversión.</p>
-          <ul class="tags" aria-label="Tecnologías">
-            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>WhatsApp API</li><li>Vercel</li>
-          </ul>
-          <div class="project__links">
-            <a class="link-btn" href="https://greenset-landing.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/Greenset-Landing" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
-          </div>
-        </div>
+    <!-- Franja: tipos de trabajo -->
+    <div class="band" aria-hidden="true">
+      <div class="band__track" data-i18n-html="band">
+        <span><b class="tag tag--ink">✳ Tiendas</b><b class="tag tag--naples">Landings</b><b class="tag tag--peach">Sitios</b><b class="tag tag--sage">✳ Apps</b><b class="tag tag--ink">SEO local</b><b class="tag tag--naples">Performance</b><b class="tag tag--peach">✳ Accesibilidad</b><b class="tag tag--sage">GSAP</b><b class="tag tag--ink">Mobile first</b><b class="tag tag--naples">✳ Hecho en Córdoba</b></span><span><b class="tag tag--ink">✳ Tiendas</b><b class="tag tag--naples">Landings</b><b class="tag tag--peach">Sitios</b><b class="tag tag--sage">✳ Apps</b><b class="tag tag--ink">SEO local</b><b class="tag tag--naples">Performance</b><b class="tag tag--peach">✳ Accesibilidad</b><b class="tag tag--sage">GSAP</b><b class="tag tag--ink">Mobile first</b><b class="tag tag--naples">✳ Hecho en Córdoba</b></span>
       </div>
-    </section>
+    </div>
 
-    <!-- 02 · Oratoria · azul -->
-    <section class="project blk blk--azul" aria-labelledby="p2-title">
-      <span class="project__num" aria-hidden="true">03</span>
-      <div class="project__grid">
-        <div class="project__media">
-          <figure class="frame frame--sh-amarillo" data-parallax>
-            <img src="img/oratoria.webp"
-                 width="960" height="600" loading="lazy" decoding="async"
-                 alt="Captura de la app Checklist de Oratoria" data-i18n-alt="p2.alt">
-            <figcaption class="frame__cap"><span data-i18n="p2.name">Checklist de Oratoria</span><span data-i18n="p2.cap">App · JS puro</span></figcaption>
-          </figure>
-          <span class="sticker sticker--rojo" aria-hidden="true" data-i18n="p2.sticker">App propia ✦</span>
-        </div>
-        <div class="project__body">
-          <h2 class="project__title display" id="p2-title" data-split data-fit data-i18n-html="p2.title">Checklist<br>de Oratoria</h2>
-          <p class="label project__meta" data-i18n="p2.meta">Producto personal · JS · Persistencia local · IA aplicada</p>
-          <p class="project__desc" data-i18n="p2.desc">
-            Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir
-            diagnósticos manuales. Construí una interfaz de checklist, iteré sobre la persistencia local
-            entre sesiones y sumé asistencia de IA para acelerar el feedback.
-          </p>
-          <ul class="tags" aria-label="Tecnologías">
-            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>LocalStorage</li><li>Claude API</li><li>Vercel</li>
-          </ul>
-          <div class="project__links">
-            <a class="link-btn" href="https://checklist-para-oratoria.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/ChecklistOratoria" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+    <!-- ════════ ARCHIVO ════════ -->
+    <section class="archive" id="archive" aria-labelledby="arc-title">
+      <div class="archive__inner">
+        <p class="label archive__eyebrow" data-i18n="archive.tag">02 — Otros trabajos</p>
+        <div class="archive__head">
+          <h2 class="archive__title display" id="arc-title" data-i18n="archive.title">Más proyectos</h2>
+          <div class="view-switch js-only" role="group" aria-label="Vista" data-i18n-aria="aria.view">
+            <button class="pill-btn is-on" type="button" data-view="list" aria-pressed="true"><span aria-hidden="true">☰</span>&nbsp;<span data-i18n="archive.list">Lista</span></button>
+            <button class="pill-btn" type="button" data-view="grid" aria-pressed="false"><span aria-hidden="true">▦</span>&nbsp;<span data-i18n="archive.grid">Grilla</span></button>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- 03 · Blog de Café · rojo -->
-    <section class="project blk blk--rojo" aria-labelledby="p3-title">
-      <span class="project__num" aria-hidden="true">04</span>
-      <div class="project__grid project__grid--flip">
-        <div class="project__media">
-          <figure class="frame frame--flip frame--sh-oscuro" data-parallax>
-            <img src="img/cafe.webp"
-                 width="960" height="600" loading="lazy" decoding="async"
-                 alt="Captura del Blog de Café" data-i18n-alt="p3.alt">
-            <figcaption class="frame__cap"><span data-i18n="p3.name">Blog de Café</span><span data-i18n="p3.cap">Multi-página · 5 vistas</span></figcaption>
-          </figure>
-          <span class="sticker sticker--amarillo" aria-hidden="true" data-i18n="p3.sticker">5 páginas ✦</span>
-        </div>
-        <div class="project__body">
-          <h2 class="project__title display" id="p3-title" data-split data-fit data-i18n-html="p3.title">Blog<br>de Café</h2>
-          <p class="label project__meta" data-i18n="p3.meta">Multi-página · JS DOM · Live</p>
-          <p class="project__desc" data-i18n="p3.desc">
-            Blog educativo de 5 páginas con listado de cursos, entradas y validación de formulario
-            en JS puro. Arquitectura multi-página y manipulación del DOM sin librerías externas.
-          </p>
-          <ul class="tags" aria-label="Tecnologías">
-            <li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>DOM API</li><li>Vercel</li>
-          </ul>
-          <div class="project__links">
-            <a class="link-btn" href="https://blog-cafe-beige.vercel.app" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/BlogCafe" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
+        <div class="filters js-only">
+          <div class="filters__row">
+            <span class="label filters__label" data-i18n="archive.byType">Tipo</span>
+            <div class="filters__chips" id="fType" role="group" aria-label="Filtrar por tipo de web" data-i18n-aria="aria.byType"></div>
           </div>
+          <div class="filters__row">
+            <span class="label filters__label" data-i18n="archive.byFocus">Enfoque</span>
+            <div class="filters__chips" id="fFocus" role="group" aria-label="Filtrar por enfoque" data-i18n-aria="aria.byFocus"></div>
+          </div>
+          <p class="filters__count" id="fCount" aria-live="polite"></p>
         </div>
-      </div>
-    </section>
 
-    <!-- 04 · Festival · tinta -->
-    <section class="project blk blk--tinta" aria-labelledby="p4-title">
-      <span class="project__num" aria-hidden="true">05</span>
-      <div class="project__grid">
-        <div class="project__media">
-          <figure class="frame frame--sh-rojo" data-parallax>
-            <img src="img/festival.webp"
-                 width="960" height="600" loading="lazy" decoding="async"
-                 alt="Captura del sitio Festival de Música" data-i18n-alt="p4.alt">
-            <figcaption class="frame__cap"><span data-i18n="p4.name">Festival de Música</span><span data-i18n="p4.cap">Landing · Video BG</span></figcaption>
-          </figure>
-          <span class="sticker sticker--azul" aria-hidden="true">Video BG ✦</span>
-        </div>
-        <div class="project__body">
-          <h2 class="project__title display" id="p4-title" data-split data-fit data-i18n-html="p4.title">Festival<br>de Música</h2>
-          <p class="label project__meta" data-i18n="p4.meta">Landing · SASS · Video · Live</p>
-          <p class="project__desc" data-i18n="p4.desc">
-            Landing de alto impacto para un festival EDM en Argentina: video background, grilla de
-            lineup de 2 días y 2 escenarios, galería y tickets en cards. SASS en partials, WebP
-            y lazy loading.
-          </p>
-          <ul class="tags" aria-label="Tecnologías">
-            <li>HTML5</li><li>SASS/SCSS</li><li>WebP</li><li>Lazy loading</li><li>Vercel</li>
-          </ul>
-          <div class="project__links">
-            <a class="link-btn" href="https://festivalde-musica.vercel.app/" target="_blank" rel="noopener" data-hover data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="link-btn link-btn--ghost" href="https://github.com/Seba-fernandez/FestivaldeMusica" target="_blank" rel="noopener" data-hover data-i18n="btn.code">Código</a>
-          </div>
-        </div>
+        <ul class="arc-list" id="arcList"><!-- build:archive:start -->
+          <li class="arc-item" data-type="landing" data-focus="conversion js">
+            <a class="arc-row" href="https://greenset-landing.vercel.app/" target="_blank" rel="noopener" data-open="greenset">
+              <span class="arc-row__num">04</span>
+              <span class="arc-row__main">
+                <span class="arc-row__name" data-pf="greenset:name">Greenset Court</span>
+                <span class="arc-row__tags"><span class="tag tag--ink" data-pt="origin:cliente">Cliente real</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:conversion">Conversión</span><span class="tag tag--sage" data-pt="focus:js">JS puro</span></span>
+              </span>
+              <span class="arc-row__type"><span class="tag tag--line" data-pt="type:landing">Landing</span></span>
+              <span class="arc-row__thumbs" aria-hidden="true" style="--ph: #45554c">
+                <img class="arc-row__d" src="img/p/greenset-d-480.webp" srcset="img/p/greenset-d-480.webp 480w, img/p/greenset-d-960.webp 960w" sizes="(min-width: 900px) 30vw, 60vw" width="480" height="300" loading="lazy" decoding="async" alt="">
+                <img class="arc-row__m" src="img/p/greenset-m-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="">
+              </span>
+              <span class="arc-row__go" aria-hidden="true">↗</span>
+            </a>
+          </li>
+
+          <li class="arc-item" data-type="sitio" data-focus="js">
+            <a class="arc-row" href="https://blog-cafe-beige.vercel.app/" target="_blank" rel="noopener" data-open="cafe">
+              <span class="arc-row__num">05</span>
+              <span class="arc-row__main">
+                <span class="arc-row__name" data-pf="cafe:name">Blog de Café</span>
+                <span class="arc-row__tags"><span class="tag tag--ink" data-pt="origin:estudio">Estudio</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:js">JS puro</span></span>
+              </span>
+              <span class="arc-row__type"><span class="tag tag--line" data-pt="type:sitio">Sitio</span></span>
+              <span class="arc-row__thumbs" aria-hidden="true" style="--ph: #5e5b5a">
+                <img class="arc-row__d" src="img/p/cafe-d-480.webp" srcset="img/p/cafe-d-480.webp 480w, img/p/cafe-d-960.webp 960w" sizes="(min-width: 900px) 30vw, 60vw" width="480" height="300" loading="lazy" decoding="async" alt="">
+                <img class="arc-row__m" src="img/p/cafe-m-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="">
+              </span>
+              <span class="arc-row__go" aria-hidden="true">↗</span>
+            </a>
+          </li>
+
+          <li class="arc-item" data-type="landing" data-focus="perf diseno">
+            <a class="arc-row" href="https://festivalde-musica.vercel.app/" target="_blank" rel="noopener" data-open="festival">
+              <span class="arc-row__num">06</span>
+              <span class="arc-row__main">
+                <span class="arc-row__name" data-pf="festival:name">Festival de Música</span>
+                <span class="arc-row__tags"><span class="tag tag--ink" data-pt="origin:estudio">Estudio</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:perf">Performance</span><span class="tag tag--sage" data-pt="focus:diseno">Diseño visual</span></span>
+              </span>
+              <span class="arc-row__type"><span class="tag tag--line" data-pt="type:landing">Landing</span></span>
+              <span class="arc-row__thumbs" aria-hidden="true" style="--ph: #755f90">
+                <img class="arc-row__d" src="img/p/festival-d-480.webp" srcset="img/p/festival-d-480.webp 480w, img/p/festival-d-960.webp 960w" sizes="(min-width: 900px) 30vw, 60vw" width="480" height="300" loading="lazy" decoding="async" alt="">
+                <img class="arc-row__m" src="img/p/festival-m-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="">
+              </span>
+              <span class="arc-row__go" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <!-- build:archive:end --></ul>
       </div>
     </section>
 
     <!-- ════════ SKILLS + EXPERIENCIA ════════ -->
     <section class="skills" id="skills" aria-labelledby="skills-title">
-      <div class="section-tag"><p class="label"><span data-i18n="skills.tag">02 — Con qué trabajo</span> ↓</p></div>
+      <div class="section-head"><p class="label section-head__tag"><span data-i18n="skills.tag">03 — Con qué trabajo</span> ↓</p></div>
       <h2 class="giant-title display" id="skills-title" data-split data-fit>Skills</h2>
 
       <div class="marquee marquee--outline" aria-hidden="true">
         <div class="marquee__track marquee__track--reverse">
-          <span>HTML5 — CSS3/SASS — JavaScript ES6+ — GSAP — React — Git — Vercel — Figma — WCAG 2.2 — Core Web Vitals —&nbsp;</span><span>HTML5 — CSS3/SASS — JavaScript ES6+ — GSAP — React — Git — Vercel — Figma — WCAG 2.2 — Core Web Vitals —&nbsp;</span>
+          <span>HTML5 — CSS3/SASS — JavaScript ES6+ — React — Supabase — GSAP — Git — Vercel — Figma — WCAG 2.2 — Core Web Vitals —&nbsp;</span><span>HTML5 — CSS3/SASS — JavaScript ES6+ — React — Supabase — GSAP — Git — Vercel — Figma — WCAG 2.2 — Core Web Vitals —&nbsp;</span>
         </div>
       </div>
 
       <div class="skills-grid">
-        <div class="skills-col"><h3 class="chip chip--amarillo" data-i18n="sk.lang">Lenguajes</h3>
+        <div class="skills-col"><h3 class="tag tag--sage tag--lg" data-i18n="sk.lang">Lenguajes</h3>
           <ul><li data-i18n="sk.semantic">HTML5 semántico</li><li>CSS3 / SASS</li><li>JavaScript ES6+</li><li>PHP</li><li>SQL</li></ul></div>
-        <div class="skills-col"><h3 class="chip chip--azul">JavaScript</h3>
-          <ul><li>DOM Manipulation</li><li>LocalStorage</li><li>Intersection Observer</li><li>WhatsApp API</li><li data-i18n="sk.forms">Validación de formularios</li></ul></div>
-        <div class="skills-col"><h3 class="chip chip--rojo">Performance</h3>
+        <div class="skills-col"><h3 class="tag tag--coral tag--lg">JavaScript</h3>
+          <ul><li>React + Vite</li><li>DOM Manipulation</li><li>LocalStorage</li><li>Intersection Observer</li><li>WhatsApp API</li><li data-i18n="sk.forms">Validación de formularios</li></ul></div>
+        <div class="skills-col"><h3 class="tag tag--peach tag--lg">Performance</h3>
           <ul><li>Core Web Vitals</li><li>Lighthouse audits</li><li data-i18n="sk.webp">WebP y compresión</li><li>Lazy loading</li><li>Mobile-first</li></ul></div>
-        <div class="skills-col"><h3 class="chip chip--amarillo" data-i18n="sk.a11y">Accesibilidad</h3>
+        <div class="skills-col"><h3 class="tag tag--sage tag--lg" data-i18n="sk.a11y">Accesibilidad</h3>
           <ul><li>WCAG 2.1 / 2.2 AA</li><li data-i18n="sk.aria">ARIA y semántica</li><li data-i18n="sk.kbd">Navegación por teclado</li><li>SEO On-Page</li><li>Meta tags</li></ul></div>
-        <div class="skills-col"><h3 class="chip chip--azul" data-i18n="sk.tools">Herramientas</h3>
-          <ul><li>Git · GitHub</li><li>Vercel / Netlify</li><li>Figma</li><li>Chrome DevTools</li><li>Responsively</li></ul></div>
-        <div class="skills-col"><h3 class="chip chip--rojo" data-i18n="sk.learning">En formación</h3>
-          <ul><li>React</li><li>Node.js</li><li>REST APIs</li><li>MongoDB</li><li data-i18n="sk.ai">Desarrollo con IA</li></ul></div>
+        <div class="skills-col"><h3 class="tag tag--coral tag--lg" data-i18n="sk.tools">Herramientas</h3>
+          <ul><li>Git · GitHub</li><li>Vercel / Netlify</li><li>Supabase</li><li>Figma</li><li>Chrome DevTools</li></ul></div>
+        <div class="skills-col"><h3 class="tag tag--peach tag--lg" data-i18n="sk.learning">En formación</h3>
+          <ul><li>TypeScript</li><li>Next.js</li><li>Node.js</li><li>REST APIs</li><li data-i18n="sk.ai">Desarrollo con IA</li></ul></div>
       </div>
 
       <!-- Divisor onda (decorativo) -->
@@ -403,30 +474,30 @@
       <text x="100" y="114" text-anchor="middle" class="badge__center">✉</text>
     </svg>
 
-    <p class="label footer__eyebrow" data-i18n="footer.tag">03 — Contacto · Disponible para freelance y oportunidades frontend junior · remoto o Córdoba</p>
+    <p class="label footer__eyebrow" data-i18n="footer.tag">04 — Contacto · Disponible para freelance y oportunidades frontend junior · remoto o Córdoba</p>
 
-    <a class="footer__cta" href="mailto:jsebasferna@gmail.com?subject=Hola%20Sebasti%C3%A1n" data-hover>
+    <a class="footer__cta" href="mailto:jsebasferna@gmail.com?subject=Hola%20Sebasti%C3%A1n">
       <span class="footer__cta-text display" id="contact-title" data-split data-fit data-fit-ratio="0.82" data-i18n="footer.cta">Hablemos</span>
       <span class="footer__cta-arrow" aria-hidden="true">↗</span>
     </a>
 
     <div class="footer__contact">
-      <a class="footer__mail" href="mailto:jsebasferna@gmail.com" data-hover>jsebasferna@gmail.com</a>
-      <button class="copy-btn" id="copyMail" type="button" data-hover data-i18n="footer.copy">Copiar email</button>
+      <a class="footer__mail" href="mailto:jsebasferna@gmail.com">jsebasferna@gmail.com</a>
+      <button class="pill-btn pill-btn--ink" id="copyMail" type="button" data-i18n="footer.copy">Copiar email</button>
     </div>
 
     <div class="footer__links">
-      <a href="cv/JuanSebastianFernandez_CV_2026.pdf" target="_blank" rel="noopener" data-hover data-i18n="footer.cvEs">CV español ↓</a>
-      <a href="cv/CV_ENG_Juansebastianfernandez.pdf" target="_blank" rel="noopener" data-hover data-i18n="footer.cvEn">CV English ↓</a>
-      <a href="https://www.linkedin.com/in/juansebastian-fernandez/" target="_blank" rel="noopener" data-hover>LinkedIn ↗</a>
-      <a href="https://github.com/Seba-fernandez" target="_blank" rel="noopener" data-hover>GitHub ↗</a>
+      <a href="cv/JuanSebastianFernandez_CV_2026.pdf" target="_blank" rel="noopener" data-i18n="footer.cvEs">CV español ↓</a>
+      <a href="cv/CV_ENG_Juansebastianfernandez.pdf" target="_blank" rel="noopener" data-i18n="footer.cvEn">CV English ↓</a>
+      <a href="https://www.linkedin.com/in/juansebastian-fernandez/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://github.com/Seba-fernandez" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
 
     <div class="footer__base">
       <p data-i18n="footer.credit">Diseñado y desarrollado por Juan Sebastián Fernandez · Córdoba, AR · 2026</p>
-      <p data-i18n="footer.type">Tipografía: Archivo — Omnibus-Type, Argentina</p>
+      <p data-i18n="footer.type">Tipografía: Archivo — Omnibus-Type, Argentina · Color: Sanzo Wada, combinación Nº 166</p>
     </div>
-    <p class="footer__fin" aria-hidden="true">— FIN —</p>
+    <p class="footer__fin" aria-hidden="true" data-i18n="footer.fin">— FIN —</p>
     <span class="toast" id="mailToast" role="status" aria-live="polite"></span>
   </footer>
 
@@ -437,19 +508,66 @@
       <p class="label mailsheet__eyebrow" id="sheetTitle" data-i18n="mail.title">Escribime por donde te sirva</p>
       <p class="mailsheet__mail">jsebasferna@gmail.com</p>
       <div class="mailsheet__actions">
-        <a class="link-btn" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jsebasferna@gmail.com&amp;su=Hola%20Sebasti%C3%A1n" target="_blank" rel="noopener" data-i18n="mail.gmail">Abrir en Gmail ↗</a>
-        <a class="link-btn link-btn--ghost" href="https://outlook.live.com/mail/0/deeplink/compose?to=jsebasferna@gmail.com&amp;subject=Hola%20Sebasti%C3%A1n" target="_blank" rel="noopener" data-i18n="mail.outlook">Abrir en Outlook ↗</a>
-        <a class="link-btn link-btn--ghost" href="mailto:jsebasferna@gmail.com?subject=Hola%20Sebasti%C3%A1n" data-i18n="mail.app">Mi app de correo</a>
-        <button class="link-btn link-btn--ghost" type="button" id="sheetCopy" data-i18n="mail.copy">Copiar dirección</button>
+        <a class="btn" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jsebasferna@gmail.com&amp;su=Hola%20Sebasti%C3%A1n" target="_blank" rel="noopener" data-i18n="mail.gmail">Abrir en Gmail ↗</a>
+        <a class="btn btn--ghost" href="https://outlook.live.com/mail/0/deeplink/compose?to=jsebasferna@gmail.com&amp;subject=Hola%20Sebasti%C3%A1n" target="_blank" rel="noopener" data-i18n="mail.outlook">Abrir en Outlook ↗</a>
+        <a class="btn btn--ghost" href="mailto:jsebasferna@gmail.com?subject=Hola%20Sebasti%C3%A1n" data-i18n="mail.app">Mi app de correo</a>
+        <button class="btn btn--ghost" type="button" id="sheetCopy" data-i18n="mail.copy">Copiar dirección</button>
       </div>
-      <button class="mailsheet__close" type="button" data-sheet-close aria-label="Cerrar" data-i18n-aria="mail.close">✕</button>
+      <button class="icon-btn mailsheet__close" type="button" data-sheet-close aria-label="Cerrar" data-i18n-aria="mail.close">✕</button>
     </div>
   </div>
+
+  <!-- ════════ MODAL DE PROYECTO ════════ -->
+  <dialog class="pd" id="projectDialog" aria-labelledby="pdTitle">
+    <div class="pd__inner">
+      <div class="pd__gallery">
+        <div class="pd__switch" role="group" aria-label="Ver captura" data-i18n-aria="aria.shot">
+          <button class="pill-btn is-on" type="button" data-shot="d" aria-pressed="true" data-i18n="label.desktop">Desktop</button>
+          <button class="pill-btn" type="button" data-shot="m" aria-pressed="false" data-i18n="label.mobile">Mobile</button>
+        </div>
+        <div class="pd__stage">
+          <img class="pd__d" alt="" width="2880" height="1800" decoding="async">
+          <div class="phone pd__m" hidden><img alt="" width="1170" height="2532" decoding="async"></div>
+        </div>
+      </div>
+      <div class="pd__info">
+        <div class="pd__top">
+          <ul class="tags pd__tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"></ul>
+          <button class="icon-btn pd__close" type="button" aria-label="Cerrar" data-i18n-aria="mail.close">✕</button>
+        </div>
+        <p class="label case__kicker pd__kicker"></p>
+        <h2 class="case__title pd__title" id="pdTitle"></h2>
+        <p class="case__context pd__context"></p>
+        <div class="case__solved">
+          <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· <span class="pd__count"></span></p>
+          <ol class="pd__solved"></ol>
+        </div>
+        <p class="case__note pd__note" hidden></p>
+        <div class="case__stack">
+          <span class="label" aria-hidden="true">Stack</span>
+          <ul class="stack pd__stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"></ul>
+        </div>
+        <div class="case__actions">
+          <a class="btn pd__live" href="#" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
+          <a class="btn btn--ghost pd__code" href="#" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
+        </div>
+        <div class="pd__nav">
+          <button class="pd__step" type="button" data-step="-1"><span aria-hidden="true">←</span> <span class="pd__step-name"></span></button>
+          <button class="pd__step pd__step--next" type="button" data-step="1"><span class="pd__step-name"></span> <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- build:data:start -->
+  <script type="application/json" id="projectsData">{"types":{"tienda":{"es":"Tienda","en":"Store"},"sitio":{"es":"Sitio","en":"Website"},"landing":{"es":"Landing","en":"Landing"},"app":{"es":"App","en":"App"},"sistema":{"es":"Sistema","en":"System"}},"origins":{"familia":{"es":"Negocio familiar","en":"Family business"},"cliente":{"es":"Cliente real","en":"Real client"},"propio":{"es":"Producto propio","en":"Own product"},"estudio":{"es":"Estudio","en":"Study project"}},"focus":{"conversion":{"es":"Conversión","en":"Conversion"},"seo":{"es":"SEO","en":"SEO"},"perf":{"es":"Performance","en":"Performance"},"db":{"es":"Base de datos","en":"Database"},"ia":{"es":"IA aplicada","en":"Applied AI"},"js":{"es":"JS puro","en":"Vanilla JS"},"diseno":{"es":"Diseño visual","en":"Visual design"}},"projects":[{"id":"cespad","featured":true,"accent":"sage","placeholder":"#303530","name":{"es":"Grupo CESPAD","en":"Grupo CESPAD"},"type":"sitio","origin":"cliente","focus":["conversion","seo","js"],"badge":{"es":"Rediseño 2.0","en":"Redesign 2.0"},"kicker":{"es":"Cliente recurrente · Evolución de producto","en":"Returning client · Product evolution"},"context":{"es":"Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.","en":"Grupo CESPAD had no online presence of its own and its offer had outgrown padel. I turned the first landing into an experience built to discover its sports, understand each service and reach the right contact channel."},"solved":{"es":["Arquitectura de contenido por deporte","CTAs directos a WhatsApp para contactos con intención alta","Formulario con validación de los datos esenciales","HTML semántico y datos estructurados para la búsqueda local"],"en":["Sport-based content architecture","Direct WhatsApp CTAs for high-intent contacts","A form that validates the essential data","Semantic HTML and structured data for local search"]},"stack":["HTML5","CSS3","JS ES6+","Schema.org","WhatsApp API","Vercel"],"live":"https://grupo-cespad-actualizacion.vercel.app/","code":"https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion","alt":{"es":"el sitio Grupo CESPAD","en":"the Grupo CESPAD website"}},{"id":"bagues","featured":true,"accent":"coral","placeholder":"#613928","name":{"es":"Bagués Grupo Wolf","en":"Bagués Grupo Wolf"},"type":"tienda","origin":"familia","focus":["conversion","db","perf"],"badge":{"es":"Tienda + panel propio","en":"Store + own admin panel"},"kicker":{"es":"Tienda por pedido · En producción","en":"Order-based store · In production"},"context":{"es":"Grupo Wolf, el emprendimiento familiar, revende perfumes de la casa Bagués de persona a persona en Córdoba. Construí una tienda por pedido donde cada cliente explora el catálogo del ciclo, arma su pedido y lo confirma por WhatsApp.","en":"Grupo Wolf, our family business, resells Bagués perfumes person to person in Córdoba. I built an order-based store where each customer browses the current cycle's catalog, builds an order and confirms it over WhatsApp."},"solved":{"es":["Catálogo de 100 aromas por ciclo, con familia olfativa y precio en cada ficha","Carrito que arma el pedido y lo envía listo por WhatsApp","Datos en Supabase y un panel propio para gestionar el catálogo","Carga rápida: conexión anticipada a la base, imágenes responsive y fuentes diferidas"],"en":["A 100-scent catalog per cycle, with scent family and price on every card","A cart that builds the order and sends it ready over WhatsApp","Data in Supabase and a custom panel to manage the catalog","Fast loading: early database connection, responsive images and deferred fonts"]},"stack":["React","Vite","Supabase","WhatsApp","Vercel"],"live":"https://baguesfraganciaswolf.vercel.app/","code":"","alt":{"es":"la tienda Bagués Grupo Wolf","en":"the Bagués Grupo Wolf store"}},{"id":"oratoria","featured":true,"accent":"peach","placeholder":"#151515","name":{"es":"Checklist de Oratoria","en":"Speaking Checklist"},"type":"app","origin":"propio","focus":["ia"],"badge":{"es":"App propia","en":"Own app"},"kicker":{"es":"Producto personal · React + IA","en":"Personal product · React + AI"},"context":{"es":"Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir diagnósticos manuales.","en":"Built to solve a problem of my own: tracking practice and getting feedback without repeating manual diagnostics."},"solved":{"es":["Interfaz de checklist para registrar cada práctica","Persistencia local entre sesiones","Asistencia de IA para acelerar el feedback"],"en":["A checklist interface to log every practice","Local persistence between sessions","AI assistance to speed up feedback"]},"stack":["React","Vite","LocalStorage","Claude API","Vercel"],"live":"https://checklist-para-oratoria.vercel.app/","code":"https://github.com/Seba-fernandez/ChecklistOratoria","alt":{"es":"la app Checklist de Oratoria","en":"the Speaking Checklist app"}},{"id":"greenset","featured":false,"accent":"peach","placeholder":"#45554c","name":{"es":"Greenset Court","en":"Greenset Court"},"type":"landing","origin":"cliente","focus":["conversion","js"],"badge":{"es":"Versión 1.0","en":"Version 1.0"},"kicker":{"es":"Primera entrega · Punto de partida","en":"First delivery · Starting point"},"context":{"es":"Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto, sin sumar complejidad técnica innecesaria.","en":"The first digital presence for a padel offering. The goal was simple and concrete, without adding unnecessary technical complexity."},"solved":{"es":["Explicar el servicio de un vistazo","Verse confiable en el celular","Abrir un camino de contacto claro por WhatsApp"],"en":["Explain the service at a glance","Look trustworthy on a phone","Open a clear contact path over WhatsApp"]},"note":{"es":"La expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD.","en":"The business expansion outgrew this first version. That learning led to Grupo CESPAD."},"stack":["HTML5","CSS3","JS ES6+","WhatsApp API","Vercel"],"live":"https://greenset-landing.vercel.app/","code":"https://github.com/Seba-fernandez/Greenset-Landing","alt":{"es":"el sitio Greenset Court","en":"the Greenset Court website"}},{"id":"cafe","featured":false,"accent":"peach","placeholder":"#5e5b5a","name":{"es":"Blog de Café","en":"Coffee Blog"},"type":"sitio","origin":"estudio","focus":["js"],"kicker":{"es":"Proyecto de estudio · Multipágina","en":"Study project · Multi-page"},"context":{"es":"Proyecto de estudio para practicar la estructura de un sitio multipágina en HTML: blog, listado de cursos y contacto con validación de formulario.","en":"A study project to practice the structure of a multi-page HTML site: blog, course listing and a contact form with validation."},"solved":{"es":["Navegación entre 5 páginas con una estructura compartida","Listado de cursos y entradas del blog","Validación de formulario en JS puro"],"en":["Navigation across 5 pages with a shared structure","Course listing and blog posts","Form validation in vanilla JS"]},"stack":["HTML5","CSS3","JS ES6+","DOM API","Vercel"],"live":"https://blog-cafe-beige.vercel.app/","code":"https://github.com/Seba-fernandez/BlogCafe","alt":{"es":"el Blog de Café","en":"the Coffee Blog"}},{"id":"festival","featured":false,"accent":"coral","placeholder":"#755f90","name":{"es":"Festival de Música","en":"Music Festival"},"type":"landing","origin":"estudio","focus":["perf","diseno"],"kicker":{"es":"Proyecto de estudio · Imágenes y diseño","en":"Study project · Images and design"},"context":{"es":"Proyecto de estudio enfocado en compresión de imágenes y diseño: una landing de alto impacto para un festival EDM, con video de fondo, lineup y tickets.","en":"A study project focused on image compression and design: a high-impact landing for an EDM festival, with a background video, lineup and tickets."},"solved":{"es":["Imágenes en WebP con carga diferida","Video de fondo sin bloquear la carga","Lineup de 2 días y 2 escenarios en grilla","SASS organizado en partials"],"en":["WebP images with lazy loading","A background video that doesn't block loading","A 2-day, 2-stage lineup grid","SASS organized in partials"]},"stack":["HTML5","SASS/SCSS","WebP","Lazy loading","Vercel"],"live":"https://festivalde-musica.vercel.app/","code":"https://github.com/Seba-fernandez/FestivaldeMusica","alt":{"es":"el sitio Festival de Música","en":"the Music Festival website"}}]}</script>
+  <!-- build:data:end -->
 
   <script src="js/vendor/gsap.min.js" defer onerror="document.documentElement.classList.remove('js')"></script>
   <script src="js/vendor/ScrollTrigger.min.js" defer onerror="document.documentElement.classList.remove('js')"></script>
   <script src="js/fit.js" defer></script>
   <script src="js/app.js" defer></script>
+  <script src="js/projects.js" defer></script>
   <script src="js/motion.js" defer></script>
 </body>
 </html>

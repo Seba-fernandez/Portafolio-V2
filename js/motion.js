@@ -1,22 +1,22 @@
 /* ════════════════════════════════════════════════
    MOTION — GSAP + ScrollTrigger
-   Progressive enhancement: sin JS o con
-   reduced-motion, todo queda visible y usable.
+   Mejora progresiva: sin JS o con reduced-motion,
+   todo queda visible y usable.
    ════════════════════════════════════════════════ */
 
 (() => {
   'use strict';
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (typeof gsap === 'undefined' || reduceMotion) {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || reduceMotion) {
     document.documentElement.classList.remove('js');
+    document.documentElement.classList.add('js-lite');
     return;
   }
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // fit.js termina de ajustar al cargar Archivo y al completar la página.
-  // Sin este refresh los triggers conservaban medidas de la fuente de fallback.
+  // fit.js avisa cuando el layout es definitivo (fuente cargada): se re-miden los triggers.
   window.addEventListener('jsf:layout-settled', () => {
     requestAnimationFrame(() => ScrollTrigger.refresh());
   });
@@ -34,7 +34,7 @@
       const span = document.createElement('span');
       span.className = 'char';
       span.setAttribute('aria-hidden', 'true');
-      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      span.textContent = ch === ' ' ? ' ' : ch;
       el.appendChild(span);
     }
     return el.querySelectorAll('.char');
@@ -47,7 +47,6 @@
     sr.textContent = el.textContent.trim();
     el.textContent = '';
     el.appendChild(sr);
-
     const push = (text, wrapper) => {
       text.split(/(\s+)/).forEach(part => {
         if (!part) return;
@@ -65,7 +64,6 @@
         el.appendChild(w);
       });
     };
-
     nodes.forEach(n => {
       if (n.nodeType === Node.TEXT_NODE) push(n.textContent, null);
       else if (n.nodeType === Node.ELEMENT_NODE) push(n.textContent, n);
@@ -86,19 +84,16 @@
   });
 
   intro
-    .from('.hero__strip', { scaleX: 0, transformOrigin: 'left center', duration: 0.7, ease: 'power4.inOut' }, 0.35)
-    .from('.hero__bottom > *', { opacity: 0, y: 30, duration: 0.7, stagger: 0.12, ease: 'power3.out' }, 0.7)
+    .from('.hero__strip', { scaleX: 0, transformOrigin: 'left center', duration: 0.75, ease: 'power4.inOut' }, 0.35)
+    .from('.hero__bottom > *, .hero__stats .stat', { opacity: 0, y: 30, duration: 0.7, stagger: 0.08, ease: 'power3.out' }, 0.7)
     .from('.hero__badge', { scale: 0, rotation: -120, duration: 0.9, ease: 'back.out(1.7)' }, 0.9)
-    .from('.hero__coords', { opacity: 0, y: -16, duration: 0.6, ease: 'power3.out' }, 1)
-    // Los tickets se animan SOLO con opacidad: si GSAP les escribiera un
-    // transform inline, ese valor le ganaría al CSS responsive (el
-    // translateX(-50%) de desktop quedaba pegado al pasar a mobile).
-    .from('.tickets', { opacity: 0, duration: 0.6, ease: 'power3.out', clearProps: 'opacity' }, 1.1);
+    .from('.hero__top > *', { opacity: 0, y: -14, duration: 0.6, stagger: 0.1, ease: 'power3.out' }, 0.95)
+    // La nav solo con opacidad: un transform inline le ganaría al translate del CSS (auto-ocultar).
+    .from('.nav', { opacity: 0, duration: 0.6, ease: 'power3.out', clearProps: 'opacity' }, 1);
 
-  /* ---------- Títulos: reveal al entrar en viewport ---------- */
+  /* ---------- Títulos gigantes: reveal por letra ---------- */
 
-  document.querySelectorAll('.project__title[data-split], .giant-title[data-split], .footer__cta-text[data-split]').forEach(el => {
-    // Si fit.js dividió en .fit-line, se splitea línea por línea
+  document.querySelectorAll('.giant-title[data-split], .footer__cta-text[data-split]').forEach(el => {
     const lines = el.querySelectorAll(':scope > .fit-line');
     const targets = lines.length ? Array.from(lines) : [el];
     if (!lines.length) el.style.overflow = 'hidden';
@@ -119,21 +114,67 @@
     });
   }
 
-  /* ---------- Proyectos: parallax de marcos y números ---------- */
+  /* ---------- Encabezados de sección ---------- */
 
-  document.querySelectorAll('.project').forEach(section => {
-    const frame = section.querySelector('[data-parallax]');
-    const num = section.querySelector('.project__num');
-    const st = { trigger: section, start: 'top bottom', end: 'bottom top' };
-
-    if (frame) gsap.fromTo(frame, { y: 60 }, { y: -60, ease: 'none', scrollTrigger: { ...st, scrub: 0.6 } });
-    if (num) gsap.fromTo(num, { y: 90 }, { y: -40, ease: 'none', scrollTrigger: { ...st, scrub: 1 } });
-
-    gsap.from(section.querySelectorAll('.project__meta, .project__desc, .project__result, .tags, .project__links'), {
-      opacity: 0, y: 28, duration: 0.7, ease: 'power3.out', stagger: 0.08,
-      scrollTrigger: { trigger: section, start: 'top 70%', once: true },
+  gsap.utils.toArray('.section-head').forEach(head => {
+    gsap.from(head.querySelectorAll('.section-head__tag, .tag'), {
+      opacity: 0, y: 16, scale: 0.9, duration: 0.55, stagger: 0.06, ease: 'back.out(1.6)',
+      scrollTrigger: { trigger: head, start: 'top 90%', once: true },
     });
   });
+
+  /* ---------- Casos destacados ---------- */
+
+  const mm = gsap.matchMedia();
+
+  gsap.utils.toArray('.case').forEach(c => {
+    const info = c.querySelector('.case__info');
+    gsap.from(info.querySelectorAll(':scope > *'), {
+      opacity: 0, y: 32, duration: 0.75, ease: 'power3.out', stagger: 0.07,
+      scrollTrigger: { trigger: c, start: 'top 75%', once: true },
+    });
+    gsap.from(info.querySelectorAll('.tags .tag, .stack li'), {
+      opacity: 0, scale: 0.6, duration: 0.5, ease: 'back.out(2)', stagger: 0.035,
+      scrollTrigger: { trigger: info, start: 'top 70%', once: true },
+    });
+    gsap.from(c.querySelectorAll('.shot-label'), {
+      opacity: 0, y: 10, rotate: -6, duration: 0.6, ease: 'back.out(2)', stagger: 0.15,
+      scrollTrigger: { trigger: c, start: 'top 70%', once: true },
+    });
+  });
+
+  // Parallax de capturas: solo donde la composición desktop + teléfono está visible.
+  mm.add('(min-width: 701px)', () => {
+    gsap.utils.toArray('.case').forEach(c => {
+      const st = { trigger: c, start: 'top bottom', end: 'bottom top', scrub: 0.8 };
+      const d = c.querySelector('.shot-d');
+      const m = c.querySelector('.shot-m');
+      if (d) gsap.fromTo(d, { y: 36 }, { y: -36, ease: 'none', scrollTrigger: st });
+      if (m) gsap.fromTo(m, { y: 90, rotate: 3 }, { y: -50, rotate: -2, ease: 'none', scrollTrigger: st });
+    });
+  });
+  mm.add('(max-width: 700px)', () => {
+    gsap.utils.toArray('.case .shot-m').forEach(m => {
+      gsap.from(m, {
+        y: 80, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: m, start: 'top 95%', once: true },
+      });
+    });
+  });
+
+  /* ---------- Archivo ---------- */
+
+  const archive = document.querySelector('.archive');
+  if (archive) {
+    gsap.from(archive.querySelectorAll('.archive__eyebrow, .archive__title, .view-switch, .filters__row, .filters__count'), {
+      opacity: 0, y: 26, duration: 0.7, ease: 'power3.out', stagger: 0.08,
+      scrollTrigger: { trigger: archive, start: 'top 75%', once: true },
+    });
+    gsap.from('.arc-item', {
+      opacity: 0, y: 30, duration: 0.6, ease: 'power3.out', stagger: 0.07,
+      scrollTrigger: { trigger: '.arc-list', start: 'top 85%', once: true },
+    });
+  }
 
   /* ---------- Skills: pop de columnas + onda que se dibuja ---------- */
 
@@ -151,8 +192,7 @@
     gsap.fromTo(wave,
       { strokeDasharray: len, strokeDashoffset: len },
       { strokeDashoffset: 0, ease: 'none',
-        scrollTrigger: { trigger: '.wave', start: 'top 95%', end: 'top 45%', scrub: 0.5 } }
-    );
+        scrollTrigger: { trigger: '.wave', start: 'top 95%', end: 'top 45%', scrub: 0.5 } });
   }
 
   gsap.from('.xp', {
@@ -160,22 +200,22 @@
     scrollTrigger: { trigger: '.xp', start: 'top 88%', once: true },
   });
 
-  /* ---------- Marquees: skew según velocidad de scroll ----------
-     Va al contenedor: el track ya anima transform en CSS. */
+  gsap.from('.footer__contact, .footer__links a', {
+    opacity: 0, y: 20, duration: 0.6, ease: 'power3.out', stagger: 0.06,
+    scrollTrigger: { trigger: '.footer__contact', start: 'top 95%', once: true },
+  });
 
-  const marquees = document.querySelectorAll('.marquee, .hero__strip');
-  if (marquees.length) {
-    const setters = Array.from(marquees).map(m => gsap.quickSetter(m, 'skewX', 'deg'));
+  /* ---------- Marquees: skew según la velocidad del scroll ---------- */
+
+  const skewed = document.querySelectorAll('.marquee, .hero__strip, .band');
+  if (skewed.length) {
+    const setters = Array.from(skewed).map(m => gsap.quickSetter(m, 'skewX', 'deg'));
     const clamp = gsap.utils.clamp(-10, 10);
     let target = 0, current = 0;
-
-    // Sin asignar tweens durante el scroll: un solo lerp en el ticker.
-    ScrollTrigger.create({
-      onUpdate(self) { target = clamp(self.getVelocity() / -250); },
-    });
+    ScrollTrigger.create({ onUpdate(self) { target = clamp(self.getVelocity() / -250); } });
     gsap.ticker.add(() => {
-      target *= 0.88;                                  // decae hacia 0
-      current += (target - current) * 0.18;            // sigue con suavidad
+      target *= 0.88;
+      current += (target - current) * 0.18;
       if (Math.abs(current) < 0.02 && Math.abs(target) < 0.02) {
         if (current !== 0) { current = 0; setters.forEach(s => s(0)); }
         return;
@@ -184,7 +224,7 @@
     });
   }
 
-  /* ---------- Cursor follower (solo puntero fino) ---------- */
+  /* ---------- Cursor (solo puntero fino) ---------- */
 
   if (window.matchMedia('(pointer: fine)').matches) {
     const cursor = document.querySelector('.cursor');
@@ -192,18 +232,19 @@
       const xTo = gsap.quickTo(cursor, 'x', { duration: 0.35, ease: 'power3' });
       const yTo = gsap.quickTo(cursor, 'y', { duration: 0.35, ease: 'power3' });
       window.addEventListener('pointermove', e => { xTo(e.clientX); yTo(e.clientY); }, { passive: true });
-
-      document.querySelectorAll('a, button, [data-hover]').forEach(el => {
-        el.addEventListener('pointerenter', () => gsap.to(cursor, { scale: 3, duration: 0.25 }));
-        el.addEventListener('pointerleave', () => gsap.to(cursor, { scale: 1, duration: 0.25 }));
-      });
+      const hot = 'a, button, [data-open]';
+      document.addEventListener('pointerover', e => {
+        if (e.target.closest(hot)) gsap.to(cursor, { scale: 3, duration: 0.25 });
+      }, { passive: true });
+      document.addEventListener('pointerout', e => {
+        if (e.target.closest(hot) && !e.relatedTarget?.closest?.(hot)) gsap.to(cursor, { scale: 1, duration: 0.25 });
+      }, { passive: true });
     }
   }
 
   /* ---------- API mínima para app.js (cambio de idioma) ---------- */
 
   window.JSF = {
-    // Tras cambiar textos o tamaños, recalcula posiciones de los triggers.
     refreshSplits() { ScrollTrigger.refresh(); },
   };
 })();

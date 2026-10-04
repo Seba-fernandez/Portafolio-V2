@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Panel · JSF®</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+
+  <!-- ════════ LOGIN ════════ -->
+  <main class="login" id="login">
+    <form class="login__card" id="loginForm" autocomplete="off">
+      <p class="eyebrow">JSF® · Panel privado</p>
+      <h1 class="login__title">Proyectos</h1>
+      <p class="muted">Ingresá con tu token de GitHub. Solo funciona con permiso de escritura sobre el repo del portafolio.</p>
+
+      <label class="field">
+        <span class="field__label">Token de GitHub</span>
+        <input id="tokenInput" type="password" required spellcheck="false" placeholder="github_pat_…" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="field__label">Rama</span>
+        <input id="branchInput" type="text" required spellcheck="false" value="main">
+      </label>
+      <label class="check">
+        <input id="rememberInput" type="checkbox">
+        <span>Recordar en este dispositivo</span>
+      </label>
+
+      <p class="error" id="loginError" role="alert" hidden></p>
+      <button class="btn btn--primary" type="submit" id="loginBtn">Entrar</button>
+
+      <details class="help">
+        <summary>¿Cómo creo el token?</summary>
+        <ol>
+          <li>En GitHub: <b>Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token</b>.</li>
+          <li><b>Repository access:</b> “Only select repositories” → <b>Portafolio-V2</b>.</li>
+          <li><b>Permissions → Repository permissions → Contents:</b> “Read and write”. Nada más.</li>
+          <li>Copiá el token y pegalo acá. Si lo perdés o se filtra, lo borrás en GitHub y creás otro.</li>
+        </ol>
+      </details>
+    </form>
+  </main>
+
+  <!-- ════════ APP ════════ -->
+  <div class="app" id="app" hidden>
+    <header class="top">
+      <div class="top__brand">
+        <span class="top__logo">JSF<sup>®</sup></span>
+        <span class="top__ctx" id="repoCtx"></span>
+      </div>
+      <div class="top__actions">
+        <a class="btn btn--ghost btn--sm" href="/" target="_blank" rel="noopener">Ver sitio ↗</a>
+        <button class="btn btn--ghost btn--sm" type="button" id="logoutBtn">Salir</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="side" aria-label="Lista de proyectos">
+        <div class="side__head">
+          <h2 class="side__title">Proyectos</h2>
+          <button class="btn btn--primary btn--sm" type="button" id="newBtn">+ Nuevo</button>
+        </div>
+        <h3 class="group__title">Destacados <span class="count" id="countFeat"></span></h3>
+        <ol class="plist" id="listFeat"></ol>
+        <h3 class="group__title">Más proyectos <span class="count" id="countRest"></span></h3>
+        <ol class="plist" id="listRest"></ol>
+        <p class="side__hint">El orden de la lista es el orden en la página. Los destacados van arriba; el resto, en “Más proyectos”.</p>
+      </aside>
+
+      <section class="editor" id="editor" aria-label="Editar proyecto">
+        <div class="empty" id="emptyState">
+          <p>Elegí un proyecto de la lista o creá uno nuevo.</p>
+        </div>
+
+        <form class="form" id="form" hidden novalidate>
+          <div class="form__head">
+            <h2 class="form__title" id="formTitle">Proyecto</h2>
+            <label class="switch">
+              <input type="checkbox" name="featured">
+              <span class="switch__ui" aria-hidden="true"></span>
+              <span>Destacado</span>
+            </label>
+          </div>
+
+          <fieldset class="block">
+            <legend>Básico</legend>
+            <div class="grid2">
+              <label class="field"><span class="field__label">Nombre</span><input name="name.es" required></label>
+              <label class="field"><span class="field__label">Nombre (EN) <em>opcional</em></span><input name="name.en"></label>
+            </div>
+            <div class="grid3">
+              <label class="field"><span class="field__label">ID (para las imágenes)</span><input name="id" required spellcheck="false" pattern="[a-z0-9][a-z0-9-]*"></label>
+              <label class="field"><span class="field__label">Tipo de web</span><select name="type" required></select></label>
+              <label class="field"><span class="field__label">Origen</span><select name="origin" required></select></label>
+            </div>
+            <div class="field">
+              <span class="field__label">Enfoque</span>
+              <div class="chips" id="focusChips"></div>
+            </div>
+            <div class="grid2">
+              <label class="field"><span class="field__label">Link en vivo</span><input name="live" type="url" required placeholder="https://…"></label>
+              <label class="field"><span class="field__label">Link al código <em>opcional</em></span><input name="code" type="url" placeholder="https://github.com/…"></label>
+            </div>
+            <label class="field"><span class="field__label">Stack <em>separado por comas</em></span><input name="stack" placeholder="React, Vite, Supabase, Vercel"></label>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>Capturas</legend>
+            <p class="muted small">Desktop: captura de 1440×900 (ideal a 2x, 2880×1800). Mobile: 390×844 (ideal a 3x, 1170×2532). Se recortan desde arriba y se generan solas todas las versiones en WebP.</p>
+            <div class="shots">
+              <div class="shot">
+                <span class="field__label">Desktop</span>
+                <div class="shot__frame shot__frame--d"><img alt="" id="prevD" hidden><span class="shot__none" id="noneD">Sin captura</span></div>
+                <label class="btn btn--ghost btn--sm file">Subir desktop<input type="file" accept="image/*" id="fileD"></label>
+                <p class="small" id="infoD"></p>
+              </div>
+              <div class="shot">
+                <span class="field__label">Mobile</span>
+                <div class="shot__frame shot__frame--m"><img alt="" id="prevM" hidden><span class="shot__none" id="noneM">Sin captura</span></div>
+                <label class="btn btn--ghost btn--sm file">Subir mobile<input type="file" accept="image/*" id="fileM"></label>
+                <p class="small" id="infoM"></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>Contenido</legend>
+            <label class="field"><span class="field__label">Contexto</span><textarea name="context.es" rows="4" required></textarea></label>
+            <label class="field"><span class="field__label">Contexto (EN) <em>opcional</em></span><textarea name="context.en" rows="3"></textarea></label>
+            <div class="grid2">
+              <label class="field"><span class="field__label">Qué resolví <em>uno por línea</em></span><textarea name="solved.es" rows="5" required></textarea></label>
+              <label class="field"><span class="field__label">Qué resolví (EN) <em>opcional</em></span><textarea name="solved.en" rows="5"></textarea></label>
+            </div>
+            <div class="grid2">
+              <label class="field"><span class="field__label">Bajada <em>ej.: Cliente recurrente · Evolución</em></span><input name="kicker.es"></label>
+              <label class="field"><span class="field__label">Bajada (EN)</span><input name="kicker.en"></label>
+            </div>
+            <div class="grid2">
+              <label class="field"><span class="field__label">Nota destacada <em>opcional</em></span><textarea name="note.es" rows="2"></textarea></label>
+              <label class="field"><span class="field__label">Nota (EN)</span><textarea name="note.en" rows="2"></textarea></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="block" id="featBlock">
+            <legend>Solo para destacados</legend>
+            <div class="grid2">
+              <label class="field"><span class="field__label">Etiqueta <em>ej.: Rediseño 2.0</em></span><input name="badge.es"></label>
+              <label class="field"><span class="field__label">Etiqueta (EN)</span><input name="badge.en"></label>
+            </div>
+            <div class="field">
+              <span class="field__label">Color del bloque</span>
+              <div class="swatches">
+                <label class="swatch"><input type="radio" name="accent" value="coral"><span style="background:#F48067"></span>Coral</label>
+                <label class="swatch"><input type="radio" name="accent" value="sage"><span style="background:#D1C58B"></span>Salvia</label>
+                <label class="swatch"><input type="radio" name="accent" value="peach"><span style="background:#F8B384"></span>Durazno</label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>Accesibilidad</legend>
+            <div class="grid2">
+              <label class="field"><span class="field__label">Describe la captura como… <em>“Captura desktop de …”</em></span><input name="alt.es" placeholder="el sitio Grupo CESPAD"></label>
+              <label class="field"><span class="field__label">(EN)</span><input name="alt.en" placeholder="the Grupo CESPAD website"></label>
+            </div>
+          </fieldset>
+
+          <div class="danger">
+            <button class="btn btn--danger btn--sm" type="button" id="deleteBtn">Borrar proyecto</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <footer class="bar">
+      <p class="bar__status" id="status" role="status" aria-live="polite">Sin cambios</p>
+      <div class="bar__actions">
+        <button class="btn btn--ghost" type="button" id="discardBtn" disabled>Descartar</button>
+        <button class="btn btn--primary" type="button" id="saveBtn" disabled>Guardar y publicar</button>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="panel.js"></script>
+</body>
+</html>

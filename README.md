@@ -1,8 +1,9 @@
 # JSF® — Portfolio
 
 Personal portfolio of **Juan Sebastián Fernandez**, web developer based in Córdoba, Argentina.
-Brutalist editorial design, kinetic typography and saturated color blocks — built with performance,
-accessibility and clear user flows as implementation criteria.
+Brutalist editorial design, kinetic typography and a palette taken from Sanzo Wada's
+*A Dictionary of Color Combinations* (No. 166) — built with performance, accessibility and
+clear user flows as implementation criteria.
 
 **Live:** https://juansebastianfernandez-dev.vercel.app
 
@@ -11,83 +12,86 @@ accessibility and clear user flows as implementation criteria.
 ## Stack
 
 Vanilla **HTML5 · CSS3 · JavaScript ES6+**, with [GSAP](https://gsap.com) + ScrollTrigger
-for motion over **native scrolling** (no scroll hijacking — input latency is zero).
-Animation libraries are **vendored locally** (`js/vendor/`); Archivo is loaded from Google Fonts.
-No framework or build step is required: clone and deploy.
+for motion over **native scrolling**. Animation libraries are vendored locally (`js/vendor/`);
+Archivo is loaded from Google Fonts. No framework or build step is needed to deploy.
 
 ## Structure
 
 ```
-├── index.html          # Semantic markup, one commented block per section
-├── css/
-│   ├── tokens.css      # Design tokens: palette, themes, type scale, spacing
-│   ├── base.css        # Reset, utilities, accessibility helpers
-│   ├── components.css  # Tickets, chips, buttons, frames, badges, marquees
-│   └── sections.css    # Nav, hero, manifesto, projects, skills, footer
+├── index.html              # Semantic markup, one commented block per section
+├── data/projects.json      # Single source of truth for every project (ES + EN), in page order
+├── scripts/
+│   └── build-projects.mjs  # Writes featured cases, archive rows and modal data into index.html
+├── css/styles.css          # Tokens, base, components, sections
+├── panel/                  # Private admin panel (see below)
 ├── js/
-│   ├── vendor/         # gsap + ScrollTrigger (local, no CDN)
-│   ├── fit.js          # Fit-text: display type always fills its container
-│   ├── app.js          # Theme toggle, ES/EN i18n, clipboard — zero deps
-│   └── motion.js       # GSAP layer: kinetic type, parallax, velocity skew
-├── img/                # Project screenshots (WebP, ~267 KB total)
-└── og.png              # 1200×630 social preview (LinkedIn / Twitter cards)
-
-Five live projects are featured, opening with Grupo CESPAD: a returning-client project
-that evolved an initial padel landing into a broader digital presence, with sport-based
-information architecture, conversion paths and technical SEO.
+│   ├── vendor/             # gsap + ScrollTrigger (local, no CDN)
+│   ├── fit.js              # Fit-text: display type always fills its container
+│   ├── app.js              # Floating nav, theme, ES/EN i18n, contact panel
+│   ├── projects.js         # Archive filters, list/grid view, project dialog
+│   ├── render-projects.mjs # Shared renderer used by the build script and the panel
+│   └── motion.js           # GSAP layer: kinetic type, parallax, reveals
+├── img/p/                  # Project screenshots, desktop + mobile, responsive WebP
+└── og.png                  # 1200×630 social preview
 ```
+
+## Private panel (`/panel`)
+
+A small admin page to add, edit, reorder, feature or delete projects and upload their
+screenshots — no backend, no extra services.
+
+- **Access:** a GitHub fine-grained token with *Contents: Read and write* on this repo only.
+  Anyone else who finds `/panel` just sees a login. The page is never linked from the site and
+  is served with `noindex` (meta tag + `X-Robots-Tag` header in `vercel.json`).
+- **Screenshots:** upload a desktop capture (1440×900, ideally @2x) and a mobile one (390×844,
+  ideally @3x). The browser crops them from the top and generates every WebP size.
+- **Save & publish:** one commit with `data/projects.json`, the regenerated `index.html` and the
+  new images (images of deleted projects are removed). Vercel deploys it automatically.
+  It refuses to save if the projects changed on GitHub since the panel was opened.
+- The panel and `scripts/build-projects.mjs` share the same renderer (`js/render-projects.mjs`),
+  so editing the JSON by hand and running the script gives exactly the same result.
+
+## Adding or editing a project by hand
+
+1. Edit `data/projects.json`: name, type, origin, focus tags, context, what was solved
+   (Spanish and English), stack, links, and `featured: true` to show it as a case study
+   (otherwise it goes to "More projects"). The list order is the page order.
+2. Add its screenshots to `img/p/` with these names and widths:
+   - desktop (16:10, captured at 1440×900 @2x): `<id>-d-480.webp`, `-960`, `-1440`, `-2160`, `-2880`
+   - mobile (captured at 390×844 @3x): `<id>-m-390.webp`, `-780`, `-1170`
+3. Run `node scripts/build-projects.mjs` and commit. Filter chips and counters update by themselves:
+   a type or focus only shows up once at least one project uses it.
 
 ## Features
 
-- **Dark / light mode** — hanging "cinema ticket" toggle. Only neutrals rotate;
-  brand colors stay intact so no block loses identity. No flash on load
-  (theme is applied by an inline snippet before first paint) and the
-  preference persists via `localStorage`, falling back to `prefers-color-scheme`.
-- **ES / EN** — second ticket switches language. Spanish lives in the HTML;
-  English is a flat dictionary in `app.js` applied through `data-i18n` attributes.
-  Updates `<html lang>` and persists.
-- **Native scroll** — no smooth-scroll library: wheel input maps 1:1 to movement.
-  In-page anchors use CSS `scroll-behavior` + `scroll-margin-top` for the fixed nav.
-- **Motion with guardrails** — GSAP loads deferred; if it fails, the page
-  works fully static. `prefers-reduced-motion` disables everything kinetic.
-  Split text keeps an `sr-only` copy so screen readers are unaffected.
-- **Performance** — LCP is text; images have explicit dimensions and load lazily;
-  motion is limited to composited properties where possible.
-- **Fit-text titles** — display type is measured and sized at runtime so every
-  line fills its container exactly, at any viewport width and in both languages.
-  No hardcoded sizes per breakpoint; recalculates on resize, font load and
-  language switch, with a final guard pass that guarantees text never overflows
-  its box. CSS `clamp()` remains as the no-JS fallback.
-- **Contact panel that never dead-ends** — `mailto:` silently fails on systems
-  with no mail client configured, so the CTA opens a small panel offering real
-  destinations (Gmail, Outlook web, local mail app, copy address) as plain
-  anchors — no popup blocker or OS can refuse them. Keyboard accessible: focus
-  trap, Esc to close, focus restored on exit. Without JS the CTA stays a
-  standard `mailto:` link.
-- **Locked header controls** — the nav's real height is published as `--nav-h`
-  via `ResizeObserver`, so the theme/language tickets dock exactly beneath the
-  bar at every width, zoom level and font size. Below 900px the bar turns solid
-  for legibility over saturated blocks; above it, the blend-mode nav returns and
-  the tickets hang centered from the top edge. `viewport-fit=cover` plus
-  `env(safe-area-inset-right)` keeps them clear of notches on iOS.
-- **Responsive** — fluid `clamp()` scale plus breakpoints at 1100 / 900 / 768 / 700 / 560 / 480 / 400 px.
-  On mobile, the theme/language tickets dock as side tabs below the nav.
+- **Featured cases** — sticky screenshots on desktop (desktop capture + phone overlap), the
+  project's real mobile design inside a phone frame on small screens, and a "what I solved" list.
+- **More projects** — everything that isn't featured (featured ones never repeat here),
+  filterable by website type and focus, in list or grid view. Numbering continues from the
+  featured cases. Filtering animates with the View Transitions API where supported. Without JS
+  each row is a plain link to the live site.
+- **Project dialog** — native `<dialog>` (top layer, focus handling and Esc for free),
+  desktop/mobile screenshot switch, previous/next, arrow keys and deep links (`#ver-<id>`).
+  High-resolution screenshots are warmed on hover/focus, so the dialog opens sharp.
+- **Sharp images without a loading screen** — every screenshot ships at up to 2880 px (desktop)
+  and 1170 px (mobile) with `srcset` + `sizes`, explicit dimensions, lazy loading and a
+  placeholder colour taken from the image.
+- **Floating nav** — theme and language live inside the bar; it hides while scrolling down and
+  comes back on scroll up or focus.
+- **Dark / light mode** — the Wada combination simply inverts. No flash on load, preference persisted.
+- **ES / EN** — UI strings live in `app.js`, project content in `data/projects.json`.
+- **Motion with guardrails** — GSAP loads deferred; if it fails the page works fully static.
+  `prefers-reduced-motion` disables everything kinetic. Split text keeps an `sr-only` copy.
+- **Contact panel that never dead-ends** — Gmail, Outlook web, local mail app or copy address.
 
 ## Design notes
 
 - Typeface: **Archivo** (variable, width + weight axes) by Omnibus-Type — an Argentine foundry.
-- Palette: ink `#131210` · bone `#EFEDE6` · electric blue `#1D35F5` · red-orange `#FF4017` · yellow `#FFD600`.
-- Each project lives in a color block chosen from the real site's own aesthetic.
-
-## Before publishing
-
-- **Social preview**: `og:image` points to `https://juansebastianfernandez-dev.vercel.app/og.png` —
-  update the absolute URLs in `<head>` if your domain differs.
-- **CV**: Spanish and English PDFs live in `/cv` and are linked from the footer.
+- Colour: Wada No. 166 — Naples Yellow `#FBE6A0`, Grenadine Pink `#F48067`, Deep Slate Green
+  `#112F2C`, plus two mixes of them: peach `#F8B384` and sage `#D1C58B`.
+  Text contrast is ≥ 4.5:1 everywhere; grenadine is only used as a fill under slate text (5.5:1).
 
 ## Run locally
-
-Any static server works:
 
 ```bash
 npx serve .
@@ -102,12 +106,13 @@ Static output — push to GitHub and import in [Vercel](https://vercel.com), or 
 <details>
 <summary>🇦🇷 Versión en español</summary>
 
-Portfolio personal de Juan Sebastián Fernandez (Córdoba, AR). Diseño editorial
-brutalist con tipografía cinética y bloques de color saturados, construido en
-HTML/CSS/JS vanilla + GSAP, sin build step. Incluye modo oscuro sin flash,
-idioma ES/EN persistente y motion con `prefers-reduced-motion` respetado.
-Para correrlo local: `npx serve .` — para publicar:
-importar el repo en Vercel.
+Portfolio personal de Juan Sebastián Fernandez (Córdoba, AR). Diseño editorial brutalist con
+tipografía cinética y la combinación Nº 166 del diccionario de color de Sanzo Wada, en
+HTML/CSS/JS vanilla + GSAP, sin build step para publicar.
+
+**Sumar un proyecto:** desde el panel privado en `/panel` (token de GitHub con permiso de
+escritura solo sobre este repo), o a mano: editar `data/projects.json`, agregar las capturas en
+`img/p/` y correr `node scripts/build-projects.mjs`.
 
 </details>
 
