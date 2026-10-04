@@ -23,17 +23,35 @@ Archivo is loaded from Google Fonts. No framework or build step is needed to dep
 ├── scripts/
 │   └── build-projects.mjs  # Writes featured cases, archive rows and modal data into index.html
 ├── css/styles.css          # Tokens, base, components, sections
+├── panel/                  # Private admin panel (see below)
 ├── js/
 │   ├── vendor/             # gsap + ScrollTrigger (local, no CDN)
 │   ├── fit.js              # Fit-text: display type always fills its container
 │   ├── app.js              # Floating nav, theme, ES/EN i18n, contact panel
 │   ├── projects.js         # Archive filters, list/grid view, project dialog
+│   ├── render-projects.mjs # Shared renderer used by the build script and the panel
 │   └── motion.js           # GSAP layer: kinetic type, parallax, reveals
 ├── img/p/                  # Project screenshots, desktop + mobile, responsive WebP
 └── og.png                  # 1200×630 social preview
 ```
 
-## Adding or editing a project
+## Private panel (`/panel`)
+
+A small admin page to add, edit, reorder, feature or delete projects and upload their
+screenshots — no backend, no extra services.
+
+- **Access:** a GitHub fine-grained token with *Contents: Read and write* on this repo only.
+  Anyone else who finds `/panel` just sees a login. The page is never linked from the site and
+  is served with `noindex` (meta tag + `X-Robots-Tag` header in `vercel.json`).
+- **Screenshots:** upload a desktop capture (1440×900, ideally @2x) and a mobile one (390×844,
+  ideally @3x). The browser crops them from the top and generates every WebP size.
+- **Save & publish:** one commit with `data/projects.json`, the regenerated `index.html` and the
+  new images (images of deleted projects are removed). Vercel deploys it automatically.
+  It refuses to save if the projects changed on GitHub since the panel was opened.
+- The panel and `scripts/build-projects.mjs` share the same renderer (`js/render-projects.mjs`),
+  so editing the JSON by hand and running the script gives exactly the same result.
+
+## Adding or editing a project by hand
 
 1. Edit `data/projects.json`: name, type, origin, focus tags, context, what was solved
    (Spanish and English), stack, links, and `featured: true` to show it as a case study
@@ -92,8 +110,9 @@ Portfolio personal de Juan Sebastián Fernandez (Córdoba, AR). Diseño editoria
 tipografía cinética y la combinación Nº 166 del diccionario de color de Sanzo Wada, en
 HTML/CSS/JS vanilla + GSAP, sin build step para publicar.
 
-**Sumar un proyecto:** editar `data/projects.json`, agregar las capturas en `img/p/` con los
-nombres de arriba y correr `node scripts/build-projects.mjs`.
+**Sumar un proyecto:** desde el panel privado en `/panel` (token de GitHub con permiso de
+escritura solo sobre este repo), o a mano: editar `data/projects.json`, agregar las capturas en
+`img/p/` y correr `node scripts/build-projects.mjs`.
 
 </details>
 
