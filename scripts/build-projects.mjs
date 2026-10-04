@@ -89,16 +89,13 @@ function featured(p, i) {
 }
 
 function row(p, i) {
-  const star = p.featured
-    ? '<span class="tag tag--naples" data-i18n="label.featured">Destacado ✦</span>'
-    : '';
   return `
           <li class="arc-item" data-type="${p.type}" data-focus="${p.focus.join(' ')}">
             <a class="arc-row" href="${esc(p.live)}" target="_blank" rel="noopener" data-open="${p.id}">
               <span class="arc-row__num">${num(i)}</span>
               <span class="arc-row__main">
                 <span class="arc-row__name" data-pf="${p.id}:name">${esc(p.name.es)}</span>
-                <span class="arc-row__tags">${star}${tagsFor(p, true)}</span>
+                <span class="arc-row__tags">${tagsFor(p, true)}</span>
               </span>
               <span class="arc-row__type">${tagSpan('tag--line', `type:${p.type}`, data.types[p.type].es)}</span>
               <span class="arc-row__thumbs" aria-hidden="true" style="--ph: ${p.placeholder}">
@@ -110,12 +107,16 @@ function row(p, i) {
           </li>`;
 }
 
+// Destacados arriba; "Más proyectos" muestra solo el resto (nunca se repiten).
+// La numeración sigue de corrido y el modal recorre los proyectos en ese mismo orden.
 const feat = data.projects.filter((p) => p.featured);
+const rest = data.projects.filter((p) => !p.featured);
+const ordered = [...feat, ...rest];
 const parts = {
   featured: feat.map(featured).join('\n') + '\n      ',
-  archive: data.projects.map(row).join('\n') + '\n          ',
+  archive: rest.map((p, i) => row(p, feat.length + i)).join('\n') + '\n          ',
   data: `\n  <script type="application/json" id="projectsData">${JSON.stringify({
-    types: data.types, origins: data.origins, focus: data.focus, projects: data.projects,
+    types: data.types, origins: data.origins, focus: data.focus, projects: ordered,
   }).replace(/</g, '\\u003c')}</script>\n  `,
 };
 
@@ -130,4 +131,4 @@ html = html.replace(/(data-count="live">)\d+/g, `$1${data.projects.length}`);
 html = html.replace(/(data-count="featured">)\d+/g, `$1${feat.length}`);
 
 writeFileSync(htmlPath, html);
-console.log(`OK · ${feat.length} destacados · ${data.projects.length} proyectos en el archivo`);
+console.log(`OK · ${feat.length} destacados · ${rest.length} en "Más proyectos" · ${data.projects.length} en total`);

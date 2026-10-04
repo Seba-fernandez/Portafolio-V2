@@ -75,6 +75,13 @@
   const fCount = document.getElementById('fCount');
   const state = { type: 'all', focus: null };
 
+  // Sin proyectos fuera de los destacados, la sección y su franja no se muestran.
+  if (!items.length) {
+    document.getElementById('archive').hidden = true;
+    const band = document.querySelector('.band');
+    if (band) band.hidden = true;
+  }
+
   items.forEach((li, i) => {
     const a = li.querySelector('[data-open]');
     li.style.viewTransitionName = `arc-${a ? a.dataset.open : i}`;

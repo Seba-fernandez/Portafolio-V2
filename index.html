@@ -142,14 +142,14 @@
 
       <svg class="badge hero__badge" viewBox="0 0 200 200" aria-hidden="true">
         <circle cx="100" cy="100" r="98"/>
-        <text class="badge__text"><textPath href="#circ" data-i18n="hero.badge">DISPONIBLE PARA PROYECTOS ✳ CÓRDOBA · ARGENTINA ✳ </textPath></text>
+        <text class="badge__text"><textPath href="#circ" data-i18n="hero.badge">VER PROYECTOS ✳ HECHO EN CÓRDOBA, ARGENTINA ✳ </textPath></text>
         <text x="100" y="112" text-anchor="middle" class="badge__center">↓</text>
       </svg>
 
       <h1 class="hero__title display">
         <span class="hero__line" data-split data-fit>Sebastián</span>
         <span class="hero__strip" aria-hidden="true"><span class="hero__strip-inner" data-i18n="hero.strip">Frontend Developer ✳ Mentalidad de producto ✳ UX · Performance · Accesibilidad ✳&nbsp;</span></span>
-        <span class="sr-only">— Frontend Developer con mentalidad de producto —</span>
+        <span class="sr-only" data-i18n="hero.sr">— Frontend Developer con mentalidad de producto —</span>
         <span class="hero__line hero__line--alt" data-split data-fit>Fernandez</span>
       </h1>
 
@@ -186,13 +186,60 @@
       <div class="section-head">
         <p class="label section-head__tag"><span data-i18n="projects.tag">01 — Casos y trabajo seleccionado</span> ↓</p>
         <ul class="section-head__tags" aria-hidden="true">
-          <li class="tag tag--ink"><span data-count="featured">4</span>&nbsp;<span data-i18n="projects.featured">destacados</span></li>
+          <li class="tag tag--ink"><span data-count="featured">3</span>&nbsp;<span data-i18n="projects.featured">destacados</span></li>
           <li class="tag tag--coral"><span class="dot"></span><span data-count="live">6</span>&nbsp;live</li>
           <li class="tag tag--sage">Desktop + mobile</li>
         </ul>
       </div>
       <h2 class="giant-title display" id="work-title" data-split data-fit data-i18n="projects.title">Proyectos</h2>
       <!-- build:featured:start -->
+      <article class="case" id="p-cespad" style="--accent: var(--sage)" aria-labelledby="t-cespad">
+        <div class="case__media">
+          <figure class="shot-d" style="--ph: #303530">
+            <img src="img/p/cespad-d-1440.webp" srcset="img/p/cespad-d-960.webp 960w, img/p/cespad-d-1440.webp 1440w, img/p/cespad-d-2160.webp 2160w, img/p/cespad-d-2880.webp 2880w"
+                 sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
+                 loading="lazy" decoding="async" alt="Captura desktop de el sitio Grupo CESPAD" data-pa="cespad:d">
+            <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
+          </figure>
+          <figure class="shot-m">
+            <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
+            <div class="phone" style="--ph: #303530">
+              <img src="img/p/cespad-m-780.webp" srcset="img/p/cespad-m-390.webp 390w, img/p/cespad-m-780.webp 780w, img/p/cespad-m-1170.webp 1170w"
+                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
+                   loading="lazy" decoding="async" alt="Captura mobile de el sitio Grupo CESPAD" data-pa="cespad:m">
+            </div>
+          </figure>
+        </div>
+        <div class="case__info">
+          <div class="case__head">
+            <span class="case__num" aria-hidden="true">01</span>
+            <span class="tag tag--coral tag--lg"><span data-pf="cespad:badge">Rediseño 2.0</span> ✦</span>
+          </div>
+          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:cliente">Cliente real</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:sitio">Sitio</li><li class="tag tag--sage" data-pt="focus:conversion">Conversión</li><li class="tag tag--sage" data-pt="focus:seo">SEO</li><li class="tag tag--sage" data-pt="focus:js">JS puro</li></ul>
+          <p class="label case__kicker" data-pf="cespad:kicker">Cliente recurrente · Evolución de producto</p>
+          <h3 class="case__title" id="t-cespad" data-pf="cespad:name">Grupo CESPAD</h3>
+          <p class="case__context" data-pf="cespad:context">Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.</p>
+          <div class="case__solved">
+            <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· 4</p>
+            <ol>
+              <li><span class="case__n" aria-hidden="true">01</span><span data-pf="cespad:solved:0">Arquitectura de contenido por deporte</span></li>
+              <li><span class="case__n" aria-hidden="true">02</span><span data-pf="cespad:solved:1">CTAs directos a WhatsApp para contactos con intención alta</span></li>
+              <li><span class="case__n" aria-hidden="true">03</span><span data-pf="cespad:solved:2">Formulario con validación de los datos esenciales</span></li>
+              <li><span class="case__n" aria-hidden="true">04</span><span data-pf="cespad:solved:3">HTML semántico y datos estructurados para la búsqueda local</span></li>
+            </ol>
+          </div>
+          <div class="case__stack">
+            <span class="label" aria-hidden="true">Stack</span>
+            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>Schema.org</li><li>WhatsApp API</li><li>Vercel</li></ul>
+          </div>
+          <div class="case__actions">
+            <a class="btn" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
+            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
+            <button class="btn btn--ghost" type="button" data-open="cespad" data-i18n="btn.shots">Ver capturas</button>
+          </div>
+        </div>
+      </article>
+
       <article class="case" id="p-bagues" style="--accent: var(--coral)" aria-labelledby="t-bagues">
         <div class="case__media">
           <figure class="shot-d" style="--ph: #613928">
@@ -212,8 +259,8 @@
         </div>
         <div class="case__info">
           <div class="case__head">
-            <span class="case__num" aria-hidden="true">01</span>
-            <span class="tag tag--coral tag--lg"><span data-pf="bagues:badge">Proyecto insignia</span> ✦</span>
+            <span class="case__num" aria-hidden="true">02</span>
+            <span class="tag tag--coral tag--lg"><span data-pf="bagues:badge">Tienda + panel propio</span> ✦</span>
           </div>
           <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:familia">Negocio familiar</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:tienda">Tienda</li><li class="tag tag--sage" data-pt="focus:conversion">Conversión</li><li class="tag tag--sage" data-pt="focus:db">Base de datos</li><li class="tag tag--sage" data-pt="focus:perf">Performance</li></ul>
           <p class="label case__kicker" data-pf="bagues:kicker">Tienda por pedido · En producción</p>
@@ -239,101 +286,7 @@
         </div>
       </article>
 
-      <article class="case" id="p-cespad" style="--accent: var(--sage)" aria-labelledby="t-cespad">
-        <div class="case__media">
-          <figure class="shot-d" style="--ph: #303530">
-            <img src="img/p/cespad-d-1440.webp" srcset="img/p/cespad-d-960.webp 960w, img/p/cespad-d-1440.webp 1440w, img/p/cespad-d-2160.webp 2160w, img/p/cespad-d-2880.webp 2880w"
-                 sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
-                 loading="lazy" decoding="async" alt="Captura desktop de el sitio Grupo CESPAD" data-pa="cespad:d">
-            <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
-          </figure>
-          <figure class="shot-m">
-            <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
-            <div class="phone" style="--ph: #303530">
-              <img src="img/p/cespad-m-780.webp" srcset="img/p/cespad-m-390.webp 390w, img/p/cespad-m-780.webp 780w, img/p/cespad-m-1170.webp 1170w"
-                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
-                   loading="lazy" decoding="async" alt="Captura mobile de el sitio Grupo CESPAD" data-pa="cespad:m">
-            </div>
-          </figure>
-        </div>
-        <div class="case__info">
-          <div class="case__head">
-            <span class="case__num" aria-hidden="true">02</span>
-            <span class="tag tag--coral tag--lg"><span data-pf="cespad:badge">Rediseño 2.0</span> ✦</span>
-          </div>
-          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:cliente">Cliente real</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:sitio">Sitio</li><li class="tag tag--sage" data-pt="focus:conversion">Conversión</li><li class="tag tag--sage" data-pt="focus:seo">SEO</li><li class="tag tag--sage" data-pt="focus:js">JS puro</li></ul>
-          <p class="label case__kicker" data-pf="cespad:kicker">Cliente recurrente · Evolución de producto</p>
-          <h3 class="case__title" id="t-cespad" data-pf="cespad:name">Grupo CESPAD</h3>
-          <p class="case__context" data-pf="cespad:context">Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.</p>
-          <div class="case__solved">
-            <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· 4</p>
-            <ol>
-              <li><span class="case__n" aria-hidden="true">01</span><span data-pf="cespad:solved:0">Arquitectura de contenido por deporte</span></li>
-              <li><span class="case__n" aria-hidden="true">02</span><span data-pf="cespad:solved:1">CTAs directos a WhatsApp para contactos con intención alta</span></li>
-              <li><span class="case__n" aria-hidden="true">03</span><span data-pf="cespad:solved:2">Formulario con validación de los datos esenciales</span></li>
-              <li><span class="case__n" aria-hidden="true">04</span><span data-pf="cespad:solved:3">HTML semántico y datos estructurados para la búsqueda local</span></li>
-            </ol>
-          </div>
-          <div class="case__stack">
-            <span class="label" aria-hidden="true">Stack</span>
-            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>Schema.org</li><li>SEO técnico</li><li>Vercel</li></ul>
-          </div>
-          <div class="case__actions">
-            <a class="btn" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
-            <button class="btn btn--ghost" type="button" data-open="cespad" data-i18n="btn.shots">Ver capturas</button>
-          </div>
-        </div>
-      </article>
-
-      <article class="case" id="p-greenset" style="--accent: var(--peach)" aria-labelledby="t-greenset">
-        <div class="case__media">
-          <figure class="shot-d" style="--ph: #45554c">
-            <img src="img/p/greenset-d-1440.webp" srcset="img/p/greenset-d-960.webp 960w, img/p/greenset-d-1440.webp 1440w, img/p/greenset-d-2160.webp 2160w, img/p/greenset-d-2880.webp 2880w"
-                 sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
-                 loading="lazy" decoding="async" alt="Captura desktop de el sitio Greenset Court" data-pa="greenset:d">
-            <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
-          </figure>
-          <figure class="shot-m">
-            <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
-            <div class="phone" style="--ph: #45554c">
-              <img src="img/p/greenset-m-780.webp" srcset="img/p/greenset-m-390.webp 390w, img/p/greenset-m-780.webp 780w, img/p/greenset-m-1170.webp 1170w"
-                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
-                   loading="lazy" decoding="async" alt="Captura mobile de el sitio Greenset Court" data-pa="greenset:m">
-            </div>
-          </figure>
-        </div>
-        <div class="case__info">
-          <div class="case__head">
-            <span class="case__num" aria-hidden="true">03</span>
-            <span class="tag tag--coral tag--lg"><span data-pf="greenset:badge">Versión 1.0</span> ✦</span>
-          </div>
-          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:cliente">Cliente real</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:landing">Landing</li><li class="tag tag--sage" data-pt="focus:conversion">Conversión</li><li class="tag tag--sage" data-pt="focus:js">JS puro</li></ul>
-          <p class="label case__kicker" data-pf="greenset:kicker">Primera entrega · Punto de partida</p>
-          <h3 class="case__title" id="t-greenset" data-pf="greenset:name">Greenset Court</h3>
-          <p class="case__context" data-pf="greenset:context">Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto, sin sumar complejidad técnica innecesaria.</p>
-          <div class="case__solved">
-            <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· 3</p>
-            <ol>
-              <li><span class="case__n" aria-hidden="true">01</span><span data-pf="greenset:solved:0">Explicar el servicio de un vistazo</span></li>
-              <li><span class="case__n" aria-hidden="true">02</span><span data-pf="greenset:solved:1">Verse confiable en el celular</span></li>
-              <li><span class="case__n" aria-hidden="true">03</span><span data-pf="greenset:solved:2">Abrir un camino de contacto claro por WhatsApp</span></li>
-            </ol>
-          </div>
-          <p class="case__note" data-pf="greenset:note">La expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD.</p>
-          <div class="case__stack">
-            <span class="label" aria-hidden="true">Stack</span>
-            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>WhatsApp API</li><li>Vercel</li></ul>
-          </div>
-          <div class="case__actions">
-            <a class="btn" href="https://greenset-landing.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/Greenset-Landing" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
-            <button class="btn btn--ghost" type="button" data-open="greenset" data-i18n="btn.shots">Ver capturas</button>
-          </div>
-        </div>
-      </article>
-
-      <article class="case" id="p-oratoria" style="--accent: var(--sage)" aria-labelledby="t-oratoria">
+      <article class="case" id="p-oratoria" style="--accent: var(--peach)" aria-labelledby="t-oratoria">
         <div class="case__media">
           <figure class="shot-d" style="--ph: #151515">
             <img src="img/p/oratoria-d-1440.webp" srcset="img/p/oratoria-d-960.webp 960w, img/p/oratoria-d-1440.webp 1440w, img/p/oratoria-d-2160.webp 2160w, img/p/oratoria-d-2880.webp 2880w"
@@ -352,11 +305,11 @@
         </div>
         <div class="case__info">
           <div class="case__head">
-            <span class="case__num" aria-hidden="true">04</span>
+            <span class="case__num" aria-hidden="true">03</span>
             <span class="tag tag--coral tag--lg"><span data-pf="oratoria:badge">App propia</span> ✦</span>
           </div>
-          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:propio">Producto propio</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:app">App</li><li class="tag tag--sage" data-pt="focus:ia">IA aplicada</li><li class="tag tag--sage" data-pt="focus:js">JS puro</li></ul>
-          <p class="label case__kicker" data-pf="oratoria:kicker">Producto personal · Persistencia local</p>
+          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags"><li class="tag tag--ink" data-pt="origin:propio">Producto propio</li><li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li><li class="tag tag--peach" data-pt="type:app">App</li><li class="tag tag--sage" data-pt="focus:ia">IA aplicada</li></ul>
+          <p class="label case__kicker" data-pf="oratoria:kicker">Producto personal · React + IA</p>
           <h3 class="case__title" id="t-oratoria" data-pf="oratoria:name">Checklist de Oratoria</h3>
           <p class="case__context" data-pf="oratoria:context">Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir diagnósticos manuales.</p>
           <div class="case__solved">
@@ -369,7 +322,7 @@
           </div>
           <div class="case__stack">
             <span class="label" aria-hidden="true">Stack</span>
-            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>LocalStorage</li><li>Claude API</li><li>Vercel</li></ul>
+            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>React</li><li>Vite</li><li>LocalStorage</li><li>Claude API</li><li>Vercel</li></ul>
           </div>
           <div class="case__actions">
             <a class="btn" href="https://checklist-para-oratoria.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
@@ -391,7 +344,7 @@
     <!-- ════════ ARCHIVO ════════ -->
     <section class="archive" id="archive" aria-labelledby="arc-title">
       <div class="archive__inner">
-        <p class="label archive__eyebrow" data-i18n="archive.tag">02 — Archivo completo</p>
+        <p class="label archive__eyebrow" data-i18n="archive.tag">02 — Otros trabajos</p>
         <div class="archive__head">
           <h2 class="archive__title display" id="arc-title" data-i18n="archive.title">Más proyectos</h2>
           <div class="view-switch js-only" role="group" aria-label="Vista" data-i18n-aria="aria.view">
@@ -413,65 +366,17 @@
         </div>
 
         <ul class="arc-list" id="arcList"><!-- build:archive:start -->
-          <li class="arc-item" data-type="tienda" data-focus="conversion db perf">
-            <a class="arc-row" href="https://baguesfraganciaswolf.vercel.app/" target="_blank" rel="noopener" data-open="bagues">
-              <span class="arc-row__num">01</span>
-              <span class="arc-row__main">
-                <span class="arc-row__name" data-pf="bagues:name">Bagués Grupo Wolf</span>
-                <span class="arc-row__tags"><span class="tag tag--naples" data-i18n="label.featured">Destacado ✦</span><span class="tag tag--ink" data-pt="origin:familia">Negocio familiar</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:conversion">Conversión</span><span class="tag tag--sage" data-pt="focus:db">Base de datos</span><span class="tag tag--sage" data-pt="focus:perf">Performance</span></span>
-              </span>
-              <span class="arc-row__type"><span class="tag tag--line" data-pt="type:tienda">Tienda</span></span>
-              <span class="arc-row__thumbs" aria-hidden="true" style="--ph: #613928">
-                <img class="arc-row__d" src="img/p/bagues-d-480.webp" srcset="img/p/bagues-d-480.webp 480w, img/p/bagues-d-960.webp 960w" sizes="(min-width: 900px) 30vw, 60vw" width="480" height="300" loading="lazy" decoding="async" alt="">
-                <img class="arc-row__m" src="img/p/bagues-m-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="">
-              </span>
-              <span class="arc-row__go" aria-hidden="true">↗</span>
-            </a>
-          </li>
-
-          <li class="arc-item" data-type="sitio" data-focus="conversion seo js">
-            <a class="arc-row" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener" data-open="cespad">
-              <span class="arc-row__num">02</span>
-              <span class="arc-row__main">
-                <span class="arc-row__name" data-pf="cespad:name">Grupo CESPAD</span>
-                <span class="arc-row__tags"><span class="tag tag--naples" data-i18n="label.featured">Destacado ✦</span><span class="tag tag--ink" data-pt="origin:cliente">Cliente real</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:conversion">Conversión</span><span class="tag tag--sage" data-pt="focus:seo">SEO</span><span class="tag tag--sage" data-pt="focus:js">JS puro</span></span>
-              </span>
-              <span class="arc-row__type"><span class="tag tag--line" data-pt="type:sitio">Sitio</span></span>
-              <span class="arc-row__thumbs" aria-hidden="true" style="--ph: #303530">
-                <img class="arc-row__d" src="img/p/cespad-d-480.webp" srcset="img/p/cespad-d-480.webp 480w, img/p/cespad-d-960.webp 960w" sizes="(min-width: 900px) 30vw, 60vw" width="480" height="300" loading="lazy" decoding="async" alt="">
-                <img class="arc-row__m" src="img/p/cespad-m-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="">
-              </span>
-              <span class="arc-row__go" aria-hidden="true">↗</span>
-            </a>
-          </li>
-
           <li class="arc-item" data-type="landing" data-focus="conversion js">
             <a class="arc-row" href="https://greenset-landing.vercel.app/" target="_blank" rel="noopener" data-open="greenset">
-              <span class="arc-row__num">03</span>
+              <span class="arc-row__num">04</span>
               <span class="arc-row__main">
                 <span class="arc-row__name" data-pf="greenset:name">Greenset Court</span>
-                <span class="arc-row__tags"><span class="tag tag--naples" data-i18n="label.featured">Destacado ✦</span><span class="tag tag--ink" data-pt="origin:cliente">Cliente real</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:conversion">Conversión</span><span class="tag tag--sage" data-pt="focus:js">JS puro</span></span>
+                <span class="arc-row__tags"><span class="tag tag--ink" data-pt="origin:cliente">Cliente real</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:conversion">Conversión</span><span class="tag tag--sage" data-pt="focus:js">JS puro</span></span>
               </span>
               <span class="arc-row__type"><span class="tag tag--line" data-pt="type:landing">Landing</span></span>
               <span class="arc-row__thumbs" aria-hidden="true" style="--ph: #45554c">
                 <img class="arc-row__d" src="img/p/greenset-d-480.webp" srcset="img/p/greenset-d-480.webp 480w, img/p/greenset-d-960.webp 960w" sizes="(min-width: 900px) 30vw, 60vw" width="480" height="300" loading="lazy" decoding="async" alt="">
                 <img class="arc-row__m" src="img/p/greenset-m-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="">
-              </span>
-              <span class="arc-row__go" aria-hidden="true">↗</span>
-            </a>
-          </li>
-
-          <li class="arc-item" data-type="app" data-focus="ia js">
-            <a class="arc-row" href="https://checklist-para-oratoria.vercel.app/" target="_blank" rel="noopener" data-open="oratoria">
-              <span class="arc-row__num">04</span>
-              <span class="arc-row__main">
-                <span class="arc-row__name" data-pf="oratoria:name">Checklist de Oratoria</span>
-                <span class="arc-row__tags"><span class="tag tag--naples" data-i18n="label.featured">Destacado ✦</span><span class="tag tag--ink" data-pt="origin:propio">Producto propio</span><span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span><span class="tag tag--sage" data-pt="focus:ia">IA aplicada</span><span class="tag tag--sage" data-pt="focus:js">JS puro</span></span>
-              </span>
-              <span class="arc-row__type"><span class="tag tag--line" data-pt="type:app">App</span></span>
-              <span class="arc-row__thumbs" aria-hidden="true" style="--ph: #151515">
-                <img class="arc-row__d" src="img/p/oratoria-d-480.webp" srcset="img/p/oratoria-d-480.webp 480w, img/p/oratoria-d-960.webp 960w" sizes="(min-width: 900px) 30vw, 60vw" width="480" height="300" loading="lazy" decoding="async" alt="">
-                <img class="arc-row__m" src="img/p/oratoria-m-390.webp" width="390" height="844" loading="lazy" decoding="async" alt="">
               </span>
               <span class="arc-row__go" aria-hidden="true">↗</span>
             </a>
@@ -592,7 +497,7 @@
       <p data-i18n="footer.credit">Diseñado y desarrollado por Juan Sebastián Fernandez · Córdoba, AR · 2026</p>
       <p data-i18n="footer.type">Tipografía: Archivo — Omnibus-Type, Argentina · Color: Sanzo Wada, combinación Nº 166</p>
     </div>
-    <p class="footer__fin" aria-hidden="true">— FIN —</p>
+    <p class="footer__fin" aria-hidden="true" data-i18n="footer.fin">— FIN —</p>
     <span class="toast" id="mailToast" role="status" aria-live="polite"></span>
   </footer>
 
@@ -655,7 +560,7 @@
   </dialog>
 
   <!-- build:data:start -->
-  <script type="application/json" id="projectsData">{"types":{"tienda":{"es":"Tienda","en":"Store"},"sitio":{"es":"Sitio","en":"Website"},"landing":{"es":"Landing","en":"Landing"},"app":{"es":"App","en":"App"},"sistema":{"es":"Sistema","en":"System"}},"origins":{"familia":{"es":"Negocio familiar","en":"Family business"},"cliente":{"es":"Cliente real","en":"Real client"},"propio":{"es":"Producto propio","en":"Own product"},"estudio":{"es":"Estudio","en":"Study project"}},"focus":{"conversion":{"es":"Conversión","en":"Conversion"},"seo":{"es":"SEO","en":"SEO"},"perf":{"es":"Performance","en":"Performance"},"db":{"es":"Base de datos","en":"Database"},"ia":{"es":"IA aplicada","en":"Applied AI"},"js":{"es":"JS puro","en":"Vanilla JS"},"diseno":{"es":"Diseño visual","en":"Visual design"}},"projects":[{"id":"bagues","featured":true,"accent":"coral","placeholder":"#613928","name":{"es":"Bagués Grupo Wolf","en":"Bagués Grupo Wolf"},"type":"tienda","origin":"familia","focus":["conversion","db","perf"],"badge":{"es":"Proyecto insignia","en":"Flagship project"},"kicker":{"es":"Tienda por pedido · En producción","en":"Order-based store · In production"},"context":{"es":"Grupo Wolf, el emprendimiento familiar, revende perfumes de la casa Bagués de persona a persona en Córdoba. Construí una tienda por pedido donde cada cliente explora el catálogo del ciclo, arma su pedido y lo confirma por WhatsApp.","en":"Grupo Wolf, our family business, resells Bagués perfumes person to person in Córdoba. I built an order-based store where each customer browses the current cycle's catalog, builds an order and confirms it over WhatsApp."},"solved":{"es":["Catálogo de 100 aromas por ciclo, con familia olfativa y precio en cada ficha","Carrito que arma el pedido y lo envía listo por WhatsApp","Datos en Supabase y un panel propio para gestionar el catálogo","Carga rápida: conexión anticipada a la base, imágenes responsive y fuentes diferidas"],"en":["A 100-scent catalog per cycle, with scent family and price on every card","A cart that builds the order and sends it ready over WhatsApp","Data in Supabase and a custom panel to manage the catalog","Fast loading: early database connection, responsive images and deferred fonts"]},"stack":["React","Vite","Supabase","WhatsApp","Vercel"],"live":"https://baguesfraganciaswolf.vercel.app/","code":"","alt":{"es":"la tienda Bagués Grupo Wolf","en":"the Bagués Grupo Wolf store"}},{"id":"cespad","featured":true,"accent":"sage","placeholder":"#303530","name":{"es":"Grupo CESPAD","en":"Grupo CESPAD"},"type":"sitio","origin":"cliente","focus":["conversion","seo","js"],"badge":{"es":"Rediseño 2.0","en":"Redesign 2.0"},"kicker":{"es":"Cliente recurrente · Evolución de producto","en":"Returning client · Product evolution"},"context":{"es":"Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.","en":"Grupo CESPAD had no online presence of its own and its offer had outgrown padel. I turned the first landing into an experience built to discover its sports, understand each service and reach the right contact channel."},"solved":{"es":["Arquitectura de contenido por deporte","CTAs directos a WhatsApp para contactos con intención alta","Formulario con validación de los datos esenciales","HTML semántico y datos estructurados para la búsqueda local"],"en":["Sport-based content architecture","Direct WhatsApp CTAs for high-intent contacts","A form that validates the essential data","Semantic HTML and structured data for local search"]},"stack":["HTML5","CSS3","JS ES6+","Schema.org","SEO técnico","Vercel"],"live":"https://grupo-cespad-actualizacion.vercel.app/","code":"https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion","alt":{"es":"el sitio Grupo CESPAD","en":"the Grupo CESPAD website"}},{"id":"greenset","featured":true,"accent":"peach","placeholder":"#45554c","name":{"es":"Greenset Court","en":"Greenset Court"},"type":"landing","origin":"cliente","focus":["conversion","js"],"badge":{"es":"Versión 1.0","en":"Version 1.0"},"kicker":{"es":"Primera entrega · Punto de partida","en":"First delivery · Starting point"},"context":{"es":"Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto, sin sumar complejidad técnica innecesaria.","en":"The first digital presence for a padel offering. The goal was simple and concrete, without adding unnecessary technical complexity."},"solved":{"es":["Explicar el servicio de un vistazo","Verse confiable en el celular","Abrir un camino de contacto claro por WhatsApp"],"en":["Explain the service at a glance","Look trustworthy on a phone","Open a clear contact path over WhatsApp"]},"note":{"es":"La expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD.","en":"The business expansion outgrew this first version. That learning led to Grupo CESPAD."},"stack":["HTML5","CSS3","JS ES6+","WhatsApp API","Vercel"],"live":"https://greenset-landing.vercel.app/","code":"https://github.com/Seba-fernandez/Greenset-Landing","alt":{"es":"el sitio Greenset Court","en":"the Greenset Court website"}},{"id":"oratoria","featured":true,"accent":"sage","placeholder":"#151515","name":{"es":"Checklist de Oratoria","en":"Speaking Checklist"},"type":"app","origin":"propio","focus":["ia","js"],"badge":{"es":"App propia","en":"Own app"},"kicker":{"es":"Producto personal · Persistencia local","en":"Personal product · Local persistence"},"context":{"es":"Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir diagnósticos manuales.","en":"Built to solve a problem of my own: tracking practice and getting feedback without repeating manual diagnostics."},"solved":{"es":["Interfaz de checklist para registrar cada práctica","Persistencia local entre sesiones","Asistencia de IA para acelerar el feedback"],"en":["A checklist interface to log every practice","Local persistence between sessions","AI assistance to speed up feedback"]},"stack":["HTML5","CSS3","JS ES6+","LocalStorage","Claude API","Vercel"],"live":"https://checklist-para-oratoria.vercel.app/","code":"https://github.com/Seba-fernandez/ChecklistOratoria","alt":{"es":"la app Checklist de Oratoria","en":"the Speaking Checklist app"}},{"id":"cafe","featured":false,"accent":"peach","placeholder":"#5e5b5a","name":{"es":"Blog de Café","en":"Coffee Blog"},"type":"sitio","origin":"estudio","focus":["js"],"kicker":{"es":"Proyecto de estudio · Multipágina","en":"Study project · Multi-page"},"context":{"es":"Proyecto de estudio para practicar la estructura de un sitio multipágina en HTML: blog, listado de cursos y contacto con validación de formulario.","en":"A study project to practice the structure of a multi-page HTML site: blog, course listing and a contact form with validation."},"solved":{"es":["Navegación entre 5 páginas con una estructura compartida","Listado de cursos y entradas del blog","Validación de formulario en JS puro"],"en":["Navigation across 5 pages with a shared structure","Course listing and blog posts","Form validation in vanilla JS"]},"stack":["HTML5","CSS3","JS ES6+","DOM API","Vercel"],"live":"https://blog-cafe-beige.vercel.app/","code":"https://github.com/Seba-fernandez/BlogCafe","alt":{"es":"el Blog de Café","en":"the Coffee Blog"}},{"id":"festival","featured":false,"accent":"coral","placeholder":"#755f90","name":{"es":"Festival de Música","en":"Music Festival"},"type":"landing","origin":"estudio","focus":["perf","diseno"],"kicker":{"es":"Proyecto de estudio · Imágenes y diseño","en":"Study project · Images and design"},"context":{"es":"Proyecto de estudio enfocado en compresión de imágenes y diseño: una landing de alto impacto para un festival EDM, con video de fondo, lineup y tickets.","en":"A study project focused on image compression and design: a high-impact landing for an EDM festival, with a background video, lineup and tickets."},"solved":{"es":["Imágenes en WebP con carga diferida","Video de fondo sin bloquear la carga","Lineup de 2 días y 2 escenarios en grilla","SASS organizado en partials"],"en":["WebP images with lazy loading","A background video that doesn't block loading","A 2-day, 2-stage lineup grid","SASS organized in partials"]},"stack":["HTML5","SASS/SCSS","WebP","Lazy loading","Vercel"],"live":"https://festivalde-musica.vercel.app/","code":"https://github.com/Seba-fernandez/FestivaldeMusica","alt":{"es":"el sitio Festival de Música","en":"the Music Festival website"}}]}</script>
+  <script type="application/json" id="projectsData">{"types":{"tienda":{"es":"Tienda","en":"Store"},"sitio":{"es":"Sitio","en":"Website"},"landing":{"es":"Landing","en":"Landing"},"app":{"es":"App","en":"App"},"sistema":{"es":"Sistema","en":"System"}},"origins":{"familia":{"es":"Negocio familiar","en":"Family business"},"cliente":{"es":"Cliente real","en":"Real client"},"propio":{"es":"Producto propio","en":"Own product"},"estudio":{"es":"Estudio","en":"Study project"}},"focus":{"conversion":{"es":"Conversión","en":"Conversion"},"seo":{"es":"SEO","en":"SEO"},"perf":{"es":"Performance","en":"Performance"},"db":{"es":"Base de datos","en":"Database"},"ia":{"es":"IA aplicada","en":"Applied AI"},"js":{"es":"JS puro","en":"Vanilla JS"},"diseno":{"es":"Diseño visual","en":"Visual design"}},"projects":[{"id":"cespad","featured":true,"accent":"sage","placeholder":"#303530","name":{"es":"Grupo CESPAD","en":"Grupo CESPAD"},"type":"sitio","origin":"cliente","focus":["conversion","seo","js"],"badge":{"es":"Rediseño 2.0","en":"Redesign 2.0"},"kicker":{"es":"Cliente recurrente · Evolución de producto","en":"Returning client · Product evolution"},"context":{"es":"Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.","en":"Grupo CESPAD had no online presence of its own and its offer had outgrown padel. I turned the first landing into an experience built to discover its sports, understand each service and reach the right contact channel."},"solved":{"es":["Arquitectura de contenido por deporte","CTAs directos a WhatsApp para contactos con intención alta","Formulario con validación de los datos esenciales","HTML semántico y datos estructurados para la búsqueda local"],"en":["Sport-based content architecture","Direct WhatsApp CTAs for high-intent contacts","A form that validates the essential data","Semantic HTML and structured data for local search"]},"stack":["HTML5","CSS3","JS ES6+","Schema.org","WhatsApp API","Vercel"],"live":"https://grupo-cespad-actualizacion.vercel.app/","code":"https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion","alt":{"es":"el sitio Grupo CESPAD","en":"the Grupo CESPAD website"}},{"id":"bagues","featured":true,"accent":"coral","placeholder":"#613928","name":{"es":"Bagués Grupo Wolf","en":"Bagués Grupo Wolf"},"type":"tienda","origin":"familia","focus":["conversion","db","perf"],"badge":{"es":"Tienda + panel propio","en":"Store + own admin panel"},"kicker":{"es":"Tienda por pedido · En producción","en":"Order-based store · In production"},"context":{"es":"Grupo Wolf, el emprendimiento familiar, revende perfumes de la casa Bagués de persona a persona en Córdoba. Construí una tienda por pedido donde cada cliente explora el catálogo del ciclo, arma su pedido y lo confirma por WhatsApp.","en":"Grupo Wolf, our family business, resells Bagués perfumes person to person in Córdoba. I built an order-based store where each customer browses the current cycle's catalog, builds an order and confirms it over WhatsApp."},"solved":{"es":["Catálogo de 100 aromas por ciclo, con familia olfativa y precio en cada ficha","Carrito que arma el pedido y lo envía listo por WhatsApp","Datos en Supabase y un panel propio para gestionar el catálogo","Carga rápida: conexión anticipada a la base, imágenes responsive y fuentes diferidas"],"en":["A 100-scent catalog per cycle, with scent family and price on every card","A cart that builds the order and sends it ready over WhatsApp","Data in Supabase and a custom panel to manage the catalog","Fast loading: early database connection, responsive images and deferred fonts"]},"stack":["React","Vite","Supabase","WhatsApp","Vercel"],"live":"https://baguesfraganciaswolf.vercel.app/","code":"","alt":{"es":"la tienda Bagués Grupo Wolf","en":"the Bagués Grupo Wolf store"}},{"id":"oratoria","featured":true,"accent":"peach","placeholder":"#151515","name":{"es":"Checklist de Oratoria","en":"Speaking Checklist"},"type":"app","origin":"propio","focus":["ia"],"badge":{"es":"App propia","en":"Own app"},"kicker":{"es":"Producto personal · React + IA","en":"Personal product · React + AI"},"context":{"es":"Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir diagnósticos manuales.","en":"Built to solve a problem of my own: tracking practice and getting feedback without repeating manual diagnostics."},"solved":{"es":["Interfaz de checklist para registrar cada práctica","Persistencia local entre sesiones","Asistencia de IA para acelerar el feedback"],"en":["A checklist interface to log every practice","Local persistence between sessions","AI assistance to speed up feedback"]},"stack":["React","Vite","LocalStorage","Claude API","Vercel"],"live":"https://checklist-para-oratoria.vercel.app/","code":"https://github.com/Seba-fernandez/ChecklistOratoria","alt":{"es":"la app Checklist de Oratoria","en":"the Speaking Checklist app"}},{"id":"greenset","featured":false,"accent":"peach","placeholder":"#45554c","name":{"es":"Greenset Court","en":"Greenset Court"},"type":"landing","origin":"cliente","focus":["conversion","js"],"badge":{"es":"Versión 1.0","en":"Version 1.0"},"kicker":{"es":"Primera entrega · Punto de partida","en":"First delivery · Starting point"},"context":{"es":"Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto, sin sumar complejidad técnica innecesaria.","en":"The first digital presence for a padel offering. The goal was simple and concrete, without adding unnecessary technical complexity."},"solved":{"es":["Explicar el servicio de un vistazo","Verse confiable en el celular","Abrir un camino de contacto claro por WhatsApp"],"en":["Explain the service at a glance","Look trustworthy on a phone","Open a clear contact path over WhatsApp"]},"note":{"es":"La expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD.","en":"The business expansion outgrew this first version. That learning led to Grupo CESPAD."},"stack":["HTML5","CSS3","JS ES6+","WhatsApp API","Vercel"],"live":"https://greenset-landing.vercel.app/","code":"https://github.com/Seba-fernandez/Greenset-Landing","alt":{"es":"el sitio Greenset Court","en":"the Greenset Court website"}},{"id":"cafe","featured":false,"accent":"peach","placeholder":"#5e5b5a","name":{"es":"Blog de Café","en":"Coffee Blog"},"type":"sitio","origin":"estudio","focus":["js"],"kicker":{"es":"Proyecto de estudio · Multipágina","en":"Study project · Multi-page"},"context":{"es":"Proyecto de estudio para practicar la estructura de un sitio multipágina en HTML: blog, listado de cursos y contacto con validación de formulario.","en":"A study project to practice the structure of a multi-page HTML site: blog, course listing and a contact form with validation."},"solved":{"es":["Navegación entre 5 páginas con una estructura compartida","Listado de cursos y entradas del blog","Validación de formulario en JS puro"],"en":["Navigation across 5 pages with a shared structure","Course listing and blog posts","Form validation in vanilla JS"]},"stack":["HTML5","CSS3","JS ES6+","DOM API","Vercel"],"live":"https://blog-cafe-beige.vercel.app/","code":"https://github.com/Seba-fernandez/BlogCafe","alt":{"es":"el Blog de Café","en":"the Coffee Blog"}},{"id":"festival","featured":false,"accent":"coral","placeholder":"#755f90","name":{"es":"Festival de Música","en":"Music Festival"},"type":"landing","origin":"estudio","focus":["perf","diseno"],"kicker":{"es":"Proyecto de estudio · Imágenes y diseño","en":"Study project · Images and design"},"context":{"es":"Proyecto de estudio enfocado en compresión de imágenes y diseño: una landing de alto impacto para un festival EDM, con video de fondo, lineup y tickets.","en":"A study project focused on image compression and design: a high-impact landing for an EDM festival, with a background video, lineup and tickets."},"solved":{"es":["Imágenes en WebP con carga diferida","Video de fondo sin bloquear la carga","Lineup de 2 días y 2 escenarios en grilla","SASS organizado en partials"],"en":["WebP images with lazy loading","A background video that doesn't block loading","A 2-day, 2-stage lineup grid","SASS organized in partials"]},"stack":["HTML5","SASS/SCSS","WebP","Lazy loading","Vercel"],"live":"https://festivalde-musica.vercel.app/","code":"https://github.com/Seba-fernandez/FestivaldeMusica","alt":{"es":"el sitio Festival de Música","en":"the Music Festival website"}}]}</script>
   <!-- build:data:end -->
 
   <script src="js/vendor/gsap.min.js" defer onerror="document.documentElement.classList.remove('js')"></script>

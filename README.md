@@ -19,7 +19,7 @@ Archivo is loaded from Google Fonts. No framework or build step is needed to dep
 
 ```
 ├── index.html              # Semantic markup, one commented block per section
-├── data/projects.json      # Single source of truth for every project (ES + EN)
+├── data/projects.json      # Single source of truth for every project (ES + EN), in page order
 ├── scripts/
 │   └── build-projects.mjs  # Writes featured cases, archive rows and modal data into index.html
 ├── css/styles.css          # Tokens, base, components, sections
@@ -36,7 +36,8 @@ Archivo is loaded from Google Fonts. No framework or build step is needed to dep
 ## Adding or editing a project
 
 1. Edit `data/projects.json`: name, type, origin, focus tags, context, what was solved
-   (Spanish and English), stack, links, and `featured: true` to show it as a case study.
+   (Spanish and English), stack, links, and `featured: true` to show it as a case study
+   (otherwise it goes to "More projects"). The list order is the page order.
 2. Add its screenshots to `img/p/` with these names and widths:
    - desktop (16:10, captured at 1440×900 @2x): `<id>-d-480.webp`, `-960`, `-1440`, `-2160`, `-2880`
    - mobile (captured at 390×844 @3x): `<id>-m-390.webp`, `-780`, `-1170`
@@ -47,9 +48,10 @@ Archivo is loaded from Google Fonts. No framework or build step is needed to dep
 
 - **Featured cases** — sticky screenshots on desktop (desktop capture + phone overlap), the
   project's real mobile design inside a phone frame on small screens, and a "what I solved" list.
-- **Archive** — every project, filterable by website type and focus, in list or grid view.
-  Filtering animates with the View Transitions API where supported. Without JS each row is a
-  plain link to the live site.
+- **More projects** — everything that isn't featured (featured ones never repeat here),
+  filterable by website type and focus, in list or grid view. Numbering continues from the
+  featured cases. Filtering animates with the View Transitions API where supported. Without JS
+  each row is a plain link to the live site.
 - **Project dialog** — native `<dialog>` (top layer, focus handling and Esc for free),
   desktop/mobile screenshot switch, previous/next, arrow keys and deep links (`#ver-<id>`).
   High-resolution screenshots are warmed on hover/focus, so the dialog opens sharp.
