@@ -584,6 +584,13 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
   border-radius: calc(var(--r) - 3px);
 }
+.shot-btn { display: block; width: 100%; padding: 0; cursor: zoom-in; text-align: left; }
+.shot-btn img { transition: scale 0.5s var(--ease-out), filter 0.3s; }
+.shot-d .shot-btn { overflow: hidden; border-radius: calc(var(--r) - 3px); }
+.shot-d .shot-btn:hover img { scale: 1.025; }
+.phone.shot-btn { overflow: hidden; }
+.phone.shot-btn:hover img { scale: 1.03; }
+.shot-btn:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
 .shot-label { position: absolute; z-index: 3; top: -0.85rem; left: 1rem; box-shadow: inset 0 0 0 1.5px var(--slate); }
 .shot-m {
   position: absolute; z-index: 2;
