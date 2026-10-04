@@ -80,18 +80,22 @@ export function renderProjects(html, data) {
       <article class="case" id="p-${p.id}" style="--accent: ${ACCENT[p.accent] || ACCENT.coral}" aria-labelledby="t-${p.id}">
         <div class="case__media">
           <figure class="shot-d" style="--ph: ${esc(p.placeholder || '#112F2C')}">
-            <img src="img/p/${p.id}-d-1440.webp" srcset="${srcset(p.id, 'd', D_SRCSET)}"
-                 sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
-                 loading="lazy" decoding="async" alt="Captura desktop de ${esc(alt)}" data-pa="${p.id}:d">
+            <button class="shot-btn" type="button" data-open="${p.id}" data-shot-pref="d">
+              <span class="sr-only" data-i18n="btn.zoom">Ampliar</span>
+              <img src="img/p/${p.id}-d-1440.webp" srcset="${srcset(p.id, 'd', D_SRCSET)}"
+                   sizes="(min-width: 1024px) min(56vw, 780px), 100vw" width="2880" height="1800"
+                   loading="lazy" decoding="async" alt="Captura desktop de ${esc(alt)}" data-pa="${p.id}:d">
+            </button>
             <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
           </figure>
           <figure class="shot-m">
             <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
-            <div class="phone" style="--ph: ${esc(p.placeholder || '#112F2C')}">
+            <button class="phone shot-btn" type="button" data-open="${p.id}" data-shot-pref="m" style="--ph: ${esc(p.placeholder || '#112F2C')}">
+              <span class="sr-only" data-i18n="btn.zoom">Ampliar</span>
               <img src="img/p/${p.id}-m-780.webp" srcset="${srcset(p.id, 'm', M_W)}"
                    sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
                    loading="lazy" decoding="async" alt="Captura mobile de ${esc(alt)}" data-pa="${p.id}:m">
-            </div>
+            </button>
           </figure>
         </div>
         <div class="case__info">

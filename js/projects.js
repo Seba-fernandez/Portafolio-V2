@@ -239,11 +239,12 @@
     $('.pd__inner').scrollTop = 0;
   }
 
-  function open(id) {
+  function open(id, pref) {
     if (!byId[id]) return;
     if (!dlg.open) lastFocus = document.activeElement;
     fill(id);
-    setShot(window.matchMedia('(max-width: 700px)').matches ? 'm' : 'd');
+    // Si se tocó una captura, el modal abre en esa misma (desktop o mobile).
+    setShot(pref === 'd' || pref === 'm' ? pref : (window.matchMedia('(max-width: 700px)').matches ? 'm' : 'd'));
     if (!dlg.open) {
       dlg.showModal();
       root.classList.add('is-locked');
@@ -279,7 +280,7 @@
     // Ctrl/Cmd/Shift + click en una fila: se respeta abrir el sitio en otra pestaña.
     if (trigger.tagName === 'A' && (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0)) return;
     e.preventDefault();
-    open(trigger.dataset.open);
+    open(trigger.dataset.open, trigger.dataset.shotPref);
   });
 
   // Precarga de las capturas en alta al pasar el puntero o enfocar: el modal abre nítido.
