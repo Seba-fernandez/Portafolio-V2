@@ -949,7 +949,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    /* 0s y no 0.01ms: con 0.01ms TODA propiedad pasa a tener transición (incluido el
+       tamaño de letra) y fit.js medía en medio de ella, dejando el nombre cortado. */
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
   }
   .js .hero__line .char, .js .giant-title .char,
   .js .footer__cta-text .char { transform: none; }

@@ -129,6 +129,20 @@
     observeOffscreen();
   });
 
+  // Cuando termina de cargar Archivo (más ancha que la fuente de respaldo) se
+  // reajusta TODO, también lo que ya se había medido fuera de pantalla. Sin esto,
+  // si el primer ajuste se hizo con la fuente de respaldo, los títulos quedaban
+  // más grandes que su caja (se notaba con "reducir movimiento" activado).
+  if (document.fonts && document.fonts.addEventListener) {
+    document.fonts.addEventListener('loadingdone', () => requestAnimationFrame(() => {
+      refit();
+      window.dispatchEvent(new Event('jsf:layout-settled'));
+    }));
+  }
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load('900 1em "Archivo"').then(() => requestAnimationFrame(refit)).catch(() => {});
+  }
+
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
       // La fuente variable cambia las métricas. Refit + aviso permite que
