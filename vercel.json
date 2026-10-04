@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/panel", "destination": "/panel/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/panel/(.*)",
