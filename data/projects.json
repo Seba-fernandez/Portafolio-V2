@@ -126,6 +126,11 @@
       "alt": {
         "es": "el sitio Grupo CESPAD",
         "en": "the Grupo CESPAD website"
+      },
+      "casa": {
+        "prop": "racket",
+        "color": "#FF6A2B",
+        "status": "live"
       }
     },
     {
@@ -182,6 +187,11 @@
       "alt": {
         "es": "la tienda Bagués Grupo Wolf",
         "en": "the Bagués Grupo Wolf store"
+      },
+      "casa": {
+        "prop": "perfume",
+        "color": "#C9B6E4",
+        "status": "live"
       }
     },
     {
@@ -234,6 +244,11 @@
       "alt": {
         "es": "la app Checklist de Oratoria",
         "en": "the Speaking Checklist app"
+      },
+      "casa": {
+        "prop": "mic",
+        "color": "#8DB596",
+        "status": "live"
       }
     },
     {
@@ -291,6 +306,11 @@
       "alt": {
         "es": "el sitio Greenset Court",
         "en": "the Greenset Court website"
+      },
+      "casa": {
+        "prop": "court",
+        "color": "#5FA777",
+        "status": "live"
       }
     },
     {
@@ -339,6 +359,11 @@
       "alt": {
         "es": "el Blog de Café",
         "en": "the Coffee Blog"
+      },
+      "casa": {
+        "prop": "coffee",
+        "color": "#B97D4C",
+        "status": "live"
       }
     },
     {
@@ -390,6 +415,11 @@
       "alt": {
         "es": "el sitio Festival de Música",
         "en": "the Music Festival website"
+      },
+      "casa": {
+        "prop": "vinyl",
+        "color": "#E86A8C",
+        "status": "live"
       }
     }
   ]

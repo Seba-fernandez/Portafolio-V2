@@ -166,6 +166,32 @@
           </fieldset>
 
           <fieldset class="block">
+            <legend>En la casa 3D</legend>
+            <p class="muted small">La <a href="https://casa-3d-sebas.vercel.app/" target="_blank" rel="noopener">casa 3D</a> lee estos mismos proyectos. Esto solo cambia cómo se ve allá.</p>
+            <div class="grid3">
+              <label class="field"><span class="field__label">Objeto</span>
+                <select name="casa.prop">
+                  <option value="box">Caja ✳</option>
+                  <option value="racket">Paleta de pádel</option>
+                  <option value="perfume">Perfumes</option>
+                  <option value="mic">Micrófono</option>
+                  <option value="court">Cancha</option>
+                  <option value="coffee">Taza de café</option>
+                  <option value="vinyl">Tocadiscos</option>
+                </select>
+              </label>
+              <label class="field"><span class="field__label">Estado</span>
+                <select name="casa.status">
+                  <option value="live">Live</option>
+                  <option value="wip">En curso</option>
+                  <option value="pending">Pendiente</option>
+                </select>
+              </label>
+              <label class="field"><span class="field__label">Color</span><input name="casa.color" type="color" value="#F48067"></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="block">
             <legend>Accesibilidad</legend>
             <div class="grid2">
               <label class="field"><span class="field__label">Describe la captura como… <em>“Captura desktop de …”</em></span><input name="alt.es" placeholder="el sitio Grupo CESPAD"></label>

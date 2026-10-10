@@ -127,9 +127,17 @@ function cleanProject(p) {
     live: p.live || '',
     code: p.code || '',
     alt: pair(p.alt),
+    casa: casaOf(p),
   };
   Object.keys(out).forEach((k) => out[k] === undefined && delete out[k]);
   return out;
+}
+
+// Cómo se ve en la casa 3D (casa-3d-sebas lee este mismo JSON).
+const CASA_DEFAULT = { prop: 'box', color: '#F48067', status: 'live' };
+function casaOf(p) {
+  const c = { ...CASA_DEFAULT, ...(p.casa || {}) };
+  return { prop: c.prop, color: c.color, status: c.status };
 }
 
 function cleanData() {
@@ -164,12 +172,12 @@ async function connect(token, branch) {
     [dataFile, htmlFile] = await Promise.all([readFile(DATA_PATH, branch), readFile(HTML_PATH, branch)]);
   } catch (e) {
     if (e instanceof GhError && e.status === 404) {
-      throw new Error(`La rama “${branch}” todavía no tiene el rediseño (falta ${DATA_PATH}). Mergeá el PR o entrá con la rama rediseno-wada-166.`);
+      throw new Error(`La rama “${branch}” no existe o no tiene ${DATA_PATH}. Normalmente la rama es “main”.`);
     }
     throw e;
   }
   if (!htmlFile.text.includes('<!-- build:featured:start -->')) {
-    throw new Error(`El index.html de la rama “${branch}” no tiene los marcadores del rediseño. Mergeá el PR o usá la rama rediseno-wada-166.`);
+    throw new Error(`El index.html de la rama “${branch}” no tiene los marcadores de proyectos. Probá con la rama “main”.`);
   }
   const data = JSON.parse(dataFile.text);
   state.remote = { data, dataSha: dataFile.sha, ids: new Set(data.projects.map((p) => p.id)) };
@@ -370,6 +378,7 @@ function showEditor(key) {
     if (name === 'accent') { el.checked = (p.accent || 'coral') === el.value; return; }
     if (name === 'stack') { el.value = (p.stack || []).join(', '); return; }
     if (name.startsWith('solved.')) { el.value = (getPath(p, name) || []).join('\n'); return; }
+    if (name.startsWith('casa.')) { el.value = casaOf(p)[name.slice(5)]; return; }
     el.value = getPath(p, name) || '';
   });
   const exists = state.remote.ids.has(p.id);
@@ -452,6 +461,7 @@ $('#newBtn').addEventListener('click', () => {
     stack: [],
     live: '',
     code: '',
+    casa: { ...CASA_DEFAULT },
   };
   projects().push(p);
   showEditor(p._key);
@@ -796,7 +806,8 @@ window.addEventListener('beforeunload', (e) => {
   try {
     token = sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || '';
     branch = localStorage.getItem(BRANCH_KEY) || 'main';
-    $('#rememberInput').checked = !!localStorage.getItem(TOKEN_KEY);
+    // Recordar viene marcado: solo queda sin marcar si la última vez elegiste no recordar.
+    $('#rememberInput').checked = !sessionStorage.getItem(TOKEN_KEY);
   } catch { /* modo privado */ }
   $('#branchInput').value = branch;
   if (!token) { $('#tokenInput').focus(); return; }
