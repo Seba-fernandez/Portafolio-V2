@@ -12,6 +12,13 @@
       ]
     },
     {
+      "source": "/data/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
       "source": "/js/(.*).mjs",
       "headers": [{ "key": "Content-Type", "value": "text/javascript; charset=utf-8" }]
     }

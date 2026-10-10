@@ -154,7 +154,8 @@ export function renderProjects(html, data) {
     featured: feat.map(featured).join('\n') + '\n      ',
     archive: rest.map((p, i) => row(p, feat.length + i)).join('\n') + '\n          ',
     data: `\n  <script type="application/json" id="projectsData">${JSON.stringify({
-      types: data.types, origins: data.origins, focus: data.focus, projects: ordered,
+      // `casa` (objeto y estado en la casa 3D) no lo usa esta página: queda solo en el JSON.
+      types: data.types, origins: data.origins, focus: data.focus, projects: ordered.map(({ casa, ...p }) => p),
     }).replace(/</g, '\\u003c')}</script>\n  `,
   };
 

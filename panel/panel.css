@@ -196,3 +196,4 @@ input[readonly] { background: var(--bg); color: var(--muted); }
   .bar__actions { width: 100%; }
   .bar__actions .btn { flex: 1; }
 }
+.block a { color: inherit; font-weight: 700; text-underline-offset: 2px; }
