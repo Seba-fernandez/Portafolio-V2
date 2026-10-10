@@ -515,6 +515,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 
 .hero__title { font-size: var(--display-xl); margin-bottom: var(--s-5); }
 .hero__line { display: block; }
+/* El nombre ya sale con su tamaño final desde el primer pintado: --fit-k es la proporción
+   tamaño/ancho que mide fit.js con Archivo. Así nada se corre cuando corre fit.js o llega la fuente. */
+.hero__title { container-type: inline-size; }
+.hero__line[style*="--fit-k"] { font-size: calc(var(--fit-k) * 100cqi); }
 .hero__line--alt { text-shadow: 0.035em 0.035em 0 var(--coral); }
 .hero__line .char { display: inline-block; }
 

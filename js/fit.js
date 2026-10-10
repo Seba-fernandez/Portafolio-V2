@@ -33,7 +33,12 @@
     });
   }
 
+  // Las líneas con --fit-k ya tienen su tamaño por CSS: hasta que llegue Archivo no se
+  // tocan (medir con la fuente de respaldo las agrandaría y correría todo lo de abajo).
+  const fontReady = () => !document.fonts || document.fonts.check('900 1em "Archivo"');
+
   function fitLine(line) {
+    if (line.style.getPropertyValue('--fit-k') && !fontReady()) return;
     const holder = line.closest(SEL) || line;
     const ratio = parseFloat(holder.dataset.fitRatio || '1');
 
