@@ -35,7 +35,7 @@
   /* Tema claro */
   --bg:      var(--naples);
   --fg:      var(--slate);
-  --muted:   #5C6A51;  /* 4.7:1 sobre naples */
+  --muted:   #536048;  /* 5.2:1 sobre naples con textura · 5.4:1 sin */
   --line:    var(--slate);
   --rule:    #C9BD86;
   --surface: #EDDB99;
@@ -71,12 +71,31 @@
   --r-sm: 10px;
   --r:    16px;
   --r-lg: 24px;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Papel: grano fino tipo imprenta + fibras muy suaves. SVG en línea (<1 KB),
+     va como fondo de cada superficie: nada de capas fijas que traben el scroll. */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.18 0 0 0 0 0.17 0 0 0 0.5 -0.24'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --paper-fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035 0.22' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.18 0 0 0 0 0.17 0 0 0 0.24 -0.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --paper: var(--paper-grain), var(--paper-fibers);
+  /* Sobre fondos oscuros el grano va claro y más tenue */
+  --paper-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.98 0 0 0 0 0.9 0 0 0 0 0.63 0 0 0 0.36 -0.16'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+
+  /* Movimiento: un solo lenguaje para toda la página.
+     Recorridos cortos, arranque firme y asentado breve, como tinta que se apoya en papel. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);     /* expo-out: llega rápido, sin rebote */
+  --ease-ui:  cubic-bezier(0.3, 0.7, 0.2, 1);    /* hover y estados */
+  --ease-pop: cubic-bezier(0.3, 1.25, 0.5, 1);   /* un toque de resorte, apenas perceptible */
+  --t-ui:    0.18s;    /* hover, color */
+  --t-press: 0.09s;    /* al apretar */
+  --t-in:    0.56s;    /* apariciones */
+  --t-stamp: 0.3s;     /* sellos (chips, etiquetas) */
+  --stagger: 45ms;
+  --shift:   10px;
 }
 
 /* Tema oscuro: se invierte la combinación (slate de fondo, naples de texto) */
 [data-theme="dark"] {
+  --paper: var(--paper-dark);
   --bg:      var(--slate);
   --fg:      var(--naples);
   --muted:   #B0AB7B;
@@ -111,10 +130,11 @@ body {
   line-height: 1.55;
   color: var(--fg);
   background: var(--bg);
+  background-image: var(--paper);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   overflow-x: clip;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition: background-color 0.3s var(--ease-ui), color 0.3s var(--ease-ui);
 }
 
 ::selection { background: var(--coral); color: var(--slate); }
@@ -200,10 +220,10 @@ p { text-wrap: pretty; }
   border: 2px solid var(--fg);
   border-radius: 999px;
   box-shadow: 4px 4px 0 var(--coral);
-  transition: translate 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background-color 0.25s, color 0.25s;
+  transition: translate var(--t-ui) var(--ease-ui), box-shadow var(--t-ui) var(--ease-ui), background-color var(--t-ui), color var(--t-ui);
 }
 .btn:hover, .btn:focus-visible { translate: -2px -2px; box-shadow: 6px 6px 0 var(--coral); }
-.btn:active { translate: 2px 2px; box-shadow: 1px 1px 0 var(--coral); }
+.btn:active { translate: 2px 2px; box-shadow: 1px 1px 0 var(--coral); transition-duration: var(--t-press); }
 .btn--ghost { background: transparent; color: var(--fg); box-shadow: none; }
 .btn--ghost:hover, .btn--ghost:focus-visible { background: var(--sage); color: var(--slate); border-color: var(--fg); box-shadow: 4px 4px 0 var(--fg); }
 
@@ -213,9 +233,10 @@ p { text-wrap: pretty; }
   border-radius: 999px;
   box-shadow: inset 0 0 0 1.5px currentColor;
   font-size: 0.9rem; font-weight: 700; line-height: 1; white-space: nowrap;
-  transition: background-color 0.25s, color 0.25s, box-shadow 0.25s, translate 0.25s var(--ease-out);
+  transition: background-color var(--t-ui), color var(--t-ui), box-shadow var(--t-ui), translate var(--t-ui) var(--ease-ui), scale var(--t-ui) var(--ease-ui);
 }
 .pill-btn:hover { translate: 0 -2px; }
+.pill-btn:active { translate: 0; scale: 0.96; transition-duration: var(--t-press); }
 .pill-btn.is-on { background: var(--coral); color: var(--slate); box-shadow: inset 0 0 0 1.5px var(--coral); }
 .pill-btn--ink { background: var(--slate); color: var(--naples); box-shadow: none; }
 .pill-btn--ink.is-copied { background: var(--naples); color: var(--slate); }
@@ -225,12 +246,17 @@ p { text-wrap: pretty; }
   width: 2.75rem; height: 2.75rem; border-radius: 50%;
   box-shadow: inset 0 0 0 2px currentColor;
   font-size: 1rem; font-weight: 900;
-  transition: background-color 0.2s, color 0.2s, rotate 0.3s var(--ease-out);
+  transition: background-color var(--t-ui), color var(--t-ui), rotate 0.28s var(--ease-out), scale var(--t-press) var(--ease-ui);
 }
 .icon-btn:hover, .icon-btn:focus-visible { background: var(--coral); color: var(--slate); box-shadow: inset 0 0 0 2px var(--coral); rotate: 90deg; }
+.icon-btn:active { scale: 0.92; }
 
 /* ---------- Badge circular giratorio ---------- */
-.badge { width: clamp(6.5rem, 11vw, 9.5rem); height: auto; animation: spin 18s linear infinite; }
+.badge { display: block; width: clamp(6.5rem, 11vw, 9.5rem); aspect-ratio: 1; }
+.badge svg { display: block; width: 100%; height: 100%; }
+/* Gira una capa HTML y no el <svg>: rotar un svg obliga a recalcular el layout en cada frame. */
+.badge__spin { position: absolute; inset: 0; animation: spin 18s linear infinite; }
+.badge__mid { position: absolute; inset: 0; }
 .badge__text { font-size: 17.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
 .badge__center { font-size: 42px; font-weight: 900; }
 @keyframes spin { to { rotate: 1turn; } }
@@ -252,6 +278,7 @@ p { text-wrap: pretty; }
 
 .marquee--ink {
   background: var(--band-bg);
+  background-image: var(--paper-dark);
   border-block: 3px solid var(--line);
   padding: var(--s-2) 0;
 }
@@ -272,6 +299,7 @@ p { text-wrap: pretty; }
 /* ---------- Franja de chips ---------- */
 .band {
   background: var(--coral);
+  background-image: var(--paper-grain), var(--paper-fibers);
   border-block: 3px solid var(--line);
   padding: 1rem 0;
   overflow: hidden;
@@ -301,6 +329,45 @@ p { text-wrap: pretty; }
 .js .fit-line { overflow: hidden; }
 .fit-line .char { display: inline-block; }
 
+/* ---------- Apariciones (las maneja js/motion.js) ----------
+   Solo opacity/transform/scale: corren en el compositor, sin tocar el layout.
+   Recorrido corto (10px), arranque firme y asentado breve. Al terminar, motion.js
+   quita las clases y cada elemento vuelve a sus propias transiciones. */
+.rv {
+  opacity: 0;
+  transform: translate3d(0, var(--shift), 0);
+  transition: opacity var(--t-in) var(--ease-out), transform var(--t-in) var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+.rv--down  { transform: translate3d(0, calc(var(--shift) * -1), 0); }
+.rv--media { transform: translate3d(0, calc(var(--shift) * 1.8), 0); transition-duration: 0.7s; }
+/* Sello (hanko): se apoya de golpe y asienta. Para chips, etiquetas y badges. */
+.rv--stamp { transform: scale(1.12); transition-duration: 0.14s, var(--t-stamp); }
+/* Letras de los títulos: suben desde la línea base, enmascaradas por su renglón */
+.rv--char  { opacity: 1; transform: translate3d(0, 104%, 0); transition-duration: 0s, 0.62s; }
+/* Cinta del hero: se despliega desde la izquierda (scale, no transform: el skew usa transform) */
+.rv--wipe  { opacity: 1; transform: none; scale: 0 1; transform-origin: left center;
+             transition: scale 0.6s var(--ease-out) var(--d, 0ms); }
+.rv.is-in  { opacity: 1; transform: none; }
+.rv--wipe.is-in { scale: 1 1; }
+.rv-now, .rv-now::before { transition: none !important; }
+
+/* El bloque de color detrás de las capturas se apoya primero, después las capturas encima */
+.case__media.rv-paper::before { opacity: 0; scale: 0.96; transition: opacity 0.3s var(--ease-out), scale 0.6s var(--ease-out); }
+.case__media.rv-paper.is-in::before { opacity: 1; scale: 1; }
+
+/* Hasta que motion.js prepara el hero, no se pinta (evita un destello del texto sin animar).
+   Si el script no llegara a correr, a los 2,5 s se muestra igual. */
+.js:not(.rv-ready) .hero > *, .js:not(.rv-ready) .nav { opacity: 0; animation: rv-safety 0s 2.5s both; }
+@keyframes rv-safety { to { opacity: 1; } }
+
+/* Parallax de capturas: motion.js mueve --py (translate, independiente del transform del reveal) */
+@property --py { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.shot-d, .shot-m { translate: 0 var(--py); }
+
+/* Cintas que se inclinan con la velocidad del scroll: capa propia, sin repintar */
+.marquee, .band, .hero__strip { will-change: transform; }
+
 /* ---------- Teléfono (marco de las capturas mobile) ---------- */
 .phone {
   border: 7px solid var(--phone);
@@ -326,7 +393,7 @@ p { text-wrap: pretty; }
   border-radius: 999px;
   font-size: var(--small); font-weight: 800; letter-spacing: 0.02em;
   padding: 0.8rem 1.3rem; z-index: 450;
-  transition: transform 0.4s var(--ease-pop);
+  transition: transform 0.32s var(--ease-out);
   pointer-events: none; max-width: min(92vw, 30rem); text-align: center;
 }
 .toast.is-visible { transform: translate(-50%, 0); visibility: visible; }
@@ -347,9 +414,9 @@ p { text-wrap: pretty; }
   border-radius: var(--r-lg);
   box-shadow: 8px 8px 0 var(--coral);
   padding: var(--s-4) var(--s-3) var(--s-3);
-  animation: popIn 0.35s var(--ease-pop);
+  animation: popIn 0.3s var(--ease-out);
 }
-@keyframes popIn { from { transform: translateY(16px) scale(0.96); opacity: 0; } }
+@keyframes popIn { from { transform: translateY(8px) scale(0.985); opacity: 0; } }
 .mailsheet__eyebrow { color: var(--muted); margin-bottom: var(--s-1); padding-right: 3rem; }
 .mailsheet__mail {
   font-weight: 900; font-stretch: 110%;
@@ -378,7 +445,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   border: 2px solid var(--line);
   border-radius: 999px;
   box-shadow: 4px 4px 0 var(--shadow);
-  transition: translate 0.5s var(--ease-out), background-color 0.4s, border-color 0.4s;
+  transition: translate 0.36s var(--ease-out), background-color 0.3s, border-color 0.3s;
 }
 .nav.is-hidden { translate: 0 calc(-100% - 2rem); }
 .nav__logo {
@@ -395,7 +462,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   font-size: 0.78rem; font-weight: 800; font-stretch: 85%;
   text-transform: uppercase; letter-spacing: 0.08em;
   text-decoration: none; white-space: nowrap;
-  transition: background-color 0.25s, color 0.25s;
+  transition: background-color var(--t-ui), color var(--t-ui);
 }
 .nav__link:hover, .nav__link:focus-visible { background: var(--sage); color: var(--slate); }
 .nav__tools { display: flex; gap: 0.35rem; }
@@ -405,12 +472,13 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   color: var(--slate);
   box-shadow: inset 0 0 0 2px var(--slate);
   font-weight: 900; font-size: 0.8rem; letter-spacing: 0.04em;
-  transition: rotate 0.45s var(--ease-pop), scale 0.25s var(--ease-pop);
+  transition: rotate 0.3s var(--ease-out), scale var(--t-ui) var(--ease-pop);
 }
 .tool--theme { background: var(--sage); font-size: 1.1rem; }
 .tool--lang  { background: var(--coral); }
 .tool:hover, .tool:focus-visible { scale: 1.08; }
 .tool--theme:hover { rotate: -25deg; }
+.tool:active { scale: 0.92; transition-duration: var(--t-press); }
 
 @media (max-width: 420px) {
   .nav { padding-left: 0.9rem; gap: 0.25rem; }
@@ -453,7 +521,6 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .hero__line[style*="--fit-k"] { font-size: calc(var(--fit-k) * 100cqi); }
 .hero__line--alt { text-shadow: 0.035em 0.035em 0 var(--coral); }
 .hero__line .char { display: inline-block; }
-.js .hero__line .char { transform: translateY(120%) rotate(6deg); }
 
 .hero__strip {
   display: block; overflow: hidden;
@@ -532,6 +599,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 }
 .manifesto__text .word { display: inline-block; }
 .js .manifesto__text .word { opacity: 0.14; }
+.no-gsap .manifesto__text .word { opacity: 1; }
 .mk {
   padding: 0.02em 0.18em; color: var(--slate);
   border-radius: 0.22em;
@@ -556,7 +624,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   width: min(100% - 2 * var(--gutter), var(--max-w)); margin-inline: auto;
   padding-bottom: var(--s-4);
 }
-.js .giant-title .char { display: inline-block; transform: translateY(115%) rotate(4deg); }
+.giant-title .char { display: inline-block; }
 
 /* ---------- Proyectos destacados ---------- */
 .work { padding-bottom: var(--s-6); }
@@ -586,6 +654,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   content: ""; position: absolute; z-index: 0;
   inset: 12% -2.5% 1.5rem 14%;
   background: var(--accent);
+  background-image: var(--paper-grain), var(--paper-fibers);
   border-radius: var(--r-lg);
   box-shadow: inset 0 0 0 2px var(--slate);
   rotate: 2.5deg;
@@ -604,8 +673,9 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
   border-radius: calc(var(--r) - 3px);
 }
-.shot-btn { display: block; width: 100%; padding: 0; cursor: zoom-in; text-align: left; }
-.shot-btn img { transition: scale 0.5s var(--ease-out), filter 0.3s; }
+.shot-btn { display: block; width: 100%; padding: 0; cursor: zoom-in; text-align: left; transition: scale var(--t-press) var(--ease-ui); }
+.shot-btn:active { scale: 0.992; }
+.shot-btn img { transition: scale 0.4s var(--ease-out), filter var(--t-ui); }
 .shot-d .shot-btn { overflow: hidden; border-radius: calc(var(--r) - 3px); }
 .shot-d .shot-btn:hover img { scale: 1.025; }
 .phone.shot-btn { overflow: hidden; }
@@ -696,7 +766,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 }
 
 /* ---------- Archivo ---------- */
-.archive { background: var(--band-bg); color: var(--band-fg); }
+.archive { background: var(--band-bg); background-image: var(--paper-dark); color: var(--band-fg); }
 .archive__inner {
   width: min(100% - 2 * var(--gutter), var(--max-w)); margin-inline: auto;
   padding-block: clamp(4rem, 9vw, 7.5rem);
@@ -734,7 +804,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   padding: 1.35rem 0.75rem;
   border-top: 1px solid var(--band-line);
   text-decoration: none; color: inherit;
-  transition: background-color 0.3s;
+  transition: background-color var(--t-ui) var(--ease-ui);
 }
 .arc-row:hover { background: var(--band-hover); }
 .arc-row:focus-visible { outline-offset: -3px; }
@@ -751,18 +821,18 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   width: 86%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
   border-radius: 8px; background: var(--ph);
   box-shadow: 0 0 0 1.5px var(--naples);
-  transition: scale 0.45s var(--ease-out);
+  transition: scale 0.32s var(--ease-out);
 }
 .arc-row__m {
   position: absolute; right: 0; bottom: 0;
   width: 30%; height: auto; aspect-ratio: 390 / 844; object-fit: cover; object-position: top;
   border-radius: 9px; background: var(--ph);
   border: 3px solid var(--naples);
-  transition: translate 0.45s var(--ease-out);
+  transition: translate 0.32s var(--ease-out);
 }
 .arc-row:hover .arc-row__d { scale: 1.04; }
 .arc-row:hover .arc-row__m { translate: 0 -6px; }
-.arc-row__go { grid-area: go; font-size: 1.6rem; font-weight: 800; color: var(--coral); text-align: right; transition: translate 0.3s var(--ease-out); }
+.arc-row__go { grid-area: go; font-size: 1.6rem; font-weight: 800; color: var(--coral); text-align: right; transition: translate 0.24s var(--ease-out); }
 .arc-row:hover .arc-row__go { translate: 0.25rem -0.25rem; }
 
 /* Vista grilla */
@@ -848,6 +918,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .footer {
   position: relative;
   background: var(--coral); color: var(--slate);
+  background-image: var(--paper-grain), var(--paper-fibers);
   padding: var(--s-7) var(--gutter) var(--s-4);
   border-top: 3px solid var(--slate);
 }
@@ -858,8 +929,8 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 
 .footer__cta { display: flex; align-items: baseline; gap: 0.05em; text-decoration: none; width: 100%; overflow: hidden; }
 .footer__cta-text { font-size: var(--display-xl); display: inline-block; }
-.js .footer__cta-text .char { display: inline-block; transform: translateY(115%); }
-.footer__cta-arrow { font-size: var(--display-lg); font-weight: 900; transition: transform 0.4s var(--ease-pop); }
+.footer__cta-text .char { display: inline-block; }
+.footer__cta-arrow { font-size: var(--display-lg); font-weight: 900; transition: transform 0.3s var(--ease-pop); }
 .footer__cta:hover .footer__cta-arrow,
 .footer__cta:focus-visible .footer__cta-arrow { transform: translate(0.14em, -0.14em) rotate(8deg); }
 
@@ -871,8 +942,9 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   padding: 0 1.1rem; border-radius: 999px;
   font-weight: 800; text-decoration: none;
   box-shadow: inset 0 0 0 2px var(--slate);
-  transition: background-color 0.25s, color 0.25s;
+  transition: background-color var(--t-ui), color var(--t-ui), scale var(--t-press) var(--ease-ui);
 }
+.footer__links a:active { scale: 0.96; }
 .footer__links a:hover, .footer__links a:focus-visible { background: var(--slate); color: var(--naples); }
 .footer :focus-visible { outline-color: var(--slate); }
 .footer__base {
@@ -901,7 +973,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   overflow: hidden;
 }
 .pd::backdrop { background: rgba(10, 31, 29, 0.74); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
-.pd[open] { animation: popIn 0.4s var(--ease-out); }
+.pd[open] { animation: popIn 0.32s var(--ease-out); }
 .pd__inner {
   display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   height: min(100dvh - 2rem - 6px, 52rem - 6px);
@@ -960,7 +1032,6 @@ html.is-locked, html.is-locked body { overflow: hidden; }
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
-  .js .hero__line .char, .js .giant-title .char,
-  .js .footer__cta-text .char { transform: none; }
+  .rv { opacity: 1 !important; transform: none !important; scale: none !important; }
   .js .manifesto__text .word { opacity: 1; }
 }
