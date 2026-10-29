@@ -137,7 +137,7 @@
       "id": "bagues",
       "featured": true,
       "accent": "coral",
-      "placeholder": "#613928",
+      "placeholder": "#431f23",
       "name": {
         "es": "Bagués Grupo Wolf",
         "en": "Bagués Grupo Wolf"
@@ -147,43 +147,51 @@
       "focus": [
         "conversion",
         "db",
-        "perf"
+        "perf",
+        "diseno"
       ],
       "badge": {
-        "es": "Tienda + panel propio",
-        "en": "Store + own admin panel"
+        "es": "Versión 3.0",
+        "en": "Version 3.0"
       },
       "kicker": {
-        "es": "Tienda por pedido · En producción",
-        "en": "Order-based store · In production"
+        "es": "Nació como un CRM · Hoy tienda y panel en producción",
+        "en": "Started as a CRM · Now a store and admin panel in production"
       },
       "context": {
-        "es": "Grupo Wolf, el emprendimiento familiar, revende perfumes de la casa Bagués de persona a persona en Córdoba. Construí una tienda por pedido donde cada cliente explora el catálogo del ciclo, arma su pedido y lo confirma por WhatsApp.",
-        "en": "Grupo Wolf, our family business, resells Bagués perfumes person to person in Córdoba. I built an order-based store where each customer browses the current cycle's catalog, builds an order and confirms it over WhatsApp."
+        "es": "Grupo Wolf, el emprendimiento familiar, vende perfumes Bagués por catálogo, y el catálogo cambia cada mes: más de cien aromas, precios que se mueven, perfumes que entran y salen. Actualizar todo a mano llevaba una o dos semanas. Lo resolví con una tienda y un panel propios: el ciclo nuevo se carga desde los PDF del proveedor y cada pedido llega listo por WhatsApp.",
+        "en": "Grupo Wolf, our family business, sells Bagués perfumes from a catalog that changes every month: over a hundred scents, shifting prices, perfumes coming and going. Updating everything by hand took one or two weeks. I solved it with a custom store and admin panel: the new cycle loads from the supplier's PDFs and every order arrives ready over WhatsApp."
       },
       "solved": {
         "es": [
-          "Catálogo de 100 aromas por ciclo, con familia olfativa y precio en cada ficha",
-          "Carrito que arma el pedido y lo envía listo por WhatsApp",
-          "Datos en Supabase y un panel propio para gestionar el catálogo",
-          "Carga rápida: conexión anticipada a la base, imágenes responsive y fuentes diferidas"
+          "El panel lee los PDF del ciclo nuevo, muestra qué cambia y lo aplica solo cuando confirmo, con respaldo",
+          "Cada perfume con el nombre que la gente ya conoce, buscador que tolera errores y filtros por familia",
+          "Ficha por perfume con notas, tamaños, precio y un link propio para compartir",
+          "Pedido por WhatsApp sin pasarela de pago, a propósito: la venta se cierra hablando y los precios se verifican en la base",
+          "Rediseño completo, “Cada perfume, una ciudad”, con las fotos de todo el catálogo en un mismo estudio"
         ],
         "en": [
-          "A 100-scent catalog per cycle, with scent family and price on every card",
-          "A cart that builds the order and sends it ready over WhatsApp",
-          "Data in Supabase and a custom panel to manage the catalog",
-          "Fast loading: early database connection, responsive images and deferred fonts"
+          "The panel reads the new cycle's PDFs, shows what changes and applies it only when I confirm, with a backup",
+          "Every perfume under the name people already know, a search that forgives typos and filters by scent family",
+          "A page per perfume with notes, sizes, price and its own shareable link",
+          "Orders over WhatsApp with no payment gateway, on purpose: the sale closes in conversation and prices are checked in the database",
+          "A full redesign, “Every perfume, a city”, with the whole catalog photographed in one consistent studio look"
         ]
+      },
+      "note": {
+        "es": "Resultado: el ciclo nuevo se carga en menos de media hora (antes, una o dos semanas). Más de 90 de velocidad en el celular y pruebas en Safari, Chrome y Firefox antes de cada publicación.",
+        "en": "Result: a new cycle loads in under half an hour (it used to take one or two weeks). Over 90 on mobile speed, and tested in Safari, Chrome and Firefox before every release."
       },
       "stack": [
         "React",
         "Vite",
+        "React Router",
         "Supabase",
-        "WhatsApp",
+        "PDF.js",
         "Vercel"
       ],
       "live": "https://baguesfraganciaswolf.vercel.app/",
-      "code": "",
+      "code": "https://github.com/Seba-fernandez/baguesfraganciaswolf",
       "alt": {
         "es": "la tienda Bagués Grupo Wolf",
         "en": "the Bagués Grupo Wolf store"
