@@ -14,21 +14,28 @@
   /* ---------- Nav flotante: --nav-h = borde inferior real ---------- */
 
   const nav = document.querySelector('.nav');
+  // El valor por defecto (4.5rem = 72px) ya está en el CSS: solo se escribe si la medición difiere
+  // (zoom de texto, notch). Se mide dentro del ResizeObserver / rAF, nunca en la primera tarea del script:
+  // leer el layout acá obligaba a calcularlo antes del primer pintado.
   const setNavH = () => {
     const r = nav.getBoundingClientRect();
     // Se mide sin el desplazamiento de "oculta" para que el valor sea estable.
-    root.style.setProperty('--nav-h', Math.ceil(nav.offsetTop + r.height) + 'px');
+    const h = Math.ceil(nav.offsetTop + r.height);
+    if (Math.abs(parseFloat(getComputedStyle(root).getPropertyValue('--nav-h')) - h) < 0.5) return;
+    root.style.setProperty('--nav-h', h + 'px');
   };
-  setNavH();
-  if ('ResizeObserver' in window) new ResizeObserver(setNavH).observe(nav);
+  if ('ResizeObserver' in window) new ResizeObserver(setNavH).observe(nav); // 1ª llamada: después del layout
+  else requestAnimationFrame(setNavH);
   window.addEventListener('resize', setNavH, { passive: true });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(setNavH);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(setNavH));
 
   // Se esconde al bajar y vuelve al subir. Nunca se esconde con el foco adentro.
-  let lastY = window.scrollY;
+  // scrollY fuerza layout: se lee recién en el primer scroll, no al arrancar.
+  let lastY = null;
   let ticking = false;
   function onScroll() {
     const y = window.scrollY;
+    if (lastY === null) lastY = y;
     const down = y > lastY + 6;
     const up = y < lastY - 6;
     const locked = root.classList.contains('is-locked') || nav.contains(document.activeElement);
@@ -166,7 +173,7 @@
 
   function t(key) { return (lang === 'en' ? EN[key] : ES[key]) || ES[key] || key; }
 
-  function applyLang(next) {
+  function applyLang(next, initial) {
     lang = next;
     root.lang = lang;
     nodes.text.forEach(el => { el.textContent = t(el.dataset.i18n); });
@@ -176,12 +183,14 @@
 
     const langBtn = document.getElementById('langToggle');
     document.getElementById('langLabel').textContent = lang === 'en' ? 'ES' : 'EN';
-    langBtn.setAttribute('aria-label', lang === 'en' ? 'Cambiar a español' : 'Switch to English');
+    // El nombre accesible empieza con el texto visible (WCAG 2.5.3)
+    langBtn.setAttribute('aria-label', lang === 'en' ? 'ES · Cambiar a español' : 'EN · Switch to English');
     langBtn.setAttribute('lang', lang === 'en' ? 'es' : 'en');
 
     store.set('jsf-lang', lang);
     window.dispatchEvent(new CustomEvent('jsf:lang', { detail: { lang } }));
-    if (window.JSFfit) { window.JSFfit.prepare(); window.JSFfit.refit(); }
+    // Al arrancar (idioma guardado) el ajuste se agenda; al tocar el botón es inmediato (sin un frame sin ajustar).
+    if (window.JSFfit) { window.JSFfit.prepare(); window.JSFfit.refit(!initial); }
     if (window.JSF && window.JSF.refreshSplits) window.JSF.refreshSplits();
   }
 
@@ -190,7 +199,7 @@
   });
 
   applyTheme(root.getAttribute('data-theme') || 'light');
-  if (lang === 'en') applyLang('en');
+  if (lang === 'en') applyLang('en', true);
 
   window.JSFi18n = { t, get lang() { return lang; } };
 

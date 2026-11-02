@@ -22,6 +22,26 @@
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
+/* Registrada como <length>: app.js compara el valor medido con este en px y evita recalcular estilos si coincide */
+@property --nav-h { syntax: "<length>"; inherits: true; initial-value: 72px; }
+
+/* Respaldo con las métricas de Archivo (wdth 100): mientras llega la fuente web, el texto ocupa casi lo
+   mismo y no se reacomoda (el párrafo del hero y el manifiesto no saltan al hacer el swap). size-adjust =
+   ancho medio de Archivo / ancho medio de Arial (Liberation Sans) sobre el texto del sitio, en 400 y 700;
+   ascent/descent de hhea de Archivo (878/-210 sobre 1000) divididos por size-adjust. */
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial"), local("Helvetica"), local("Roboto"), local("Liberation Sans");
+  font-weight: 400 500; font-style: normal;
+  size-adjust: 98.43%; ascent-override: 89.2%; descent-override: 21.34%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial Bold"), local("Helvetica Bold"), local("Roboto Bold"), local("Liberation Sans Bold");
+  font-weight: 600 900; font-style: normal;
+  size-adjust: 98.23%; ascent-override: 89.38%; descent-override: 21.38%; line-gap-override: 0%;
+}
+
 /* ═════════ 01 · TOKENS ═════════ */
 :root {
   /* Combinación Nº 166 */
@@ -53,7 +73,7 @@
   --band-hover: #18403B;
 
   /* Tipografía */
-  --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font: "Archivo", "Archivo Fallback", "Helvetica Neue", Arial, sans-serif;
   --display-xl: clamp(2.9rem, 13.5vw, 15rem);
   --display-lg: clamp(2.3rem, 7.5vw, 7.5rem);
   --display-md: clamp(1.5rem, 3.6vw, 3rem);
@@ -67,7 +87,7 @@
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max-w: 84rem;
-  --nav-h: 5rem;        /* app.js la reemplaza por el borde inferior real de la nav */
+  --nav-h: 4.5rem;      /* = borde inferior real de la nav (72px); app.js solo lo corrige si difiere (zoom, notch) */
   --r-sm: 10px;
   --r:    16px;
   --r-lg: 24px;
@@ -345,20 +365,39 @@ p { text-wrap: pretty; }
 .rv--stamp { transform: scale(1.12); transition-duration: 0.14s, var(--t-stamp); }
 /* Letras de los títulos: suben desde la línea base, enmascaradas por su renglón */
 .rv--char  { opacity: 1; transform: translate3d(0, 104%, 0); transition-duration: 0s, 0.62s; }
-/* Cinta del hero: se despliega desde la izquierda (scale, no transform: el skew usa transform) */
-.rv--wipe  { opacity: 1; transform: none; scale: 0 1; transform-origin: left center;
-             transition: scale 0.6s var(--ease-out) var(--d, 0ms); }
 .rv.is-in  { opacity: 1; transform: none; }
-.rv--wipe.is-in { scale: 1 1; }
 .rv-now, .rv-now::before { transition: none !important; }
 
 /* El bloque de color detrás de las capturas se apoya primero, después las capturas encima */
 .case__media.rv-paper::before { opacity: 0; scale: 0.96; transition: opacity 0.3s var(--ease-out), scale 0.6s var(--ease-out); }
 .case__media.rv-paper.is-in::before { opacity: 1; scale: 1; }
 
-/* Hasta que motion.js prepara el hero, no se pinta (evita un destello del texto sin animar).
-   Si el script no llegara a correr, a los 2,5 s se muestra igual. */
-.js:not(.rv-ready) .hero > *, .js:not(.rv-ready) .nav { opacity: 0; animation: rv-safety 0s 2.5s both; }
+/* Entrada del hero en CSS puro: arranca en el primer pintado, sin esperar al JS.
+   Solo con .js (sin JS todo se ve). Mismos tokens que .rv: sello = escala 1,12 → 1 + opacidad corta;
+   base = sube --shift; down = baja --shift. La cinta se despliega con clip-path (no con scale: su pivote
+   es el mismo del rotate y GSAP la reescribe al inclinarla). Solo transform/opacity/clip-path, así no
+   pisan el `rotate` de .stat/.avail/.badge__spin ni el `translate` de .nav. */
+.js .hero__top > *, .js .hero__badge, .js .hero__stats .stat {
+  animation: hero-in 0.14s var(--ease-out) both, hero-stamp var(--t-stamp) var(--ease-out) both;
+  animation-delay: var(--hd, 120ms);
+}
+.js .hero__top > :nth-child(2) { --hd: 160ms; }
+.js .hero__badge { --hd: 140ms; }
+.js .hero__stats .stat:nth-child(1) { --hd: 150ms; }
+.js .hero__stats .stat:nth-child(2) { --hd: 195ms; }
+.js .hero__stats .stat:nth-child(3) { --hd: 240ms; }
+.js .hero__intro { animation: hero-rise var(--t-in) var(--ease-out) both; }
+.js .nav { animation: hero-drop var(--t-in) var(--ease-out) 200ms both; }
+.js .hero__strip { animation: hero-wipe 0.6s var(--ease-out) 120ms backwards; }
+@keyframes hero-in    { from { opacity: 0; } }
+@keyframes hero-stamp { from { transform: scale(1.12); } }
+@keyframes hero-rise  { from { opacity: 0; transform: translate3d(0, var(--shift), 0); } }
+@keyframes hero-drop  { from { opacity: 0; transform: translate3d(0, calc(var(--shift) * -1), 0); } }
+@keyframes hero-wipe  { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+
+/* Solo las letras del nombre dependen de motion.js (las parte en .char): hasta que las arma no se
+   pintan (evita un destello del texto sin animar). Si el script no llegara a correr, a los 2,5 s se muestra igual. */
+.js:not(.rv-ready) .hero__line { opacity: 0; animation: rv-safety 0s 2.5s both; }
 @keyframes rv-safety { to { opacity: 1; } }
 
 /* Parallax de capturas: motion.js mueve --py (translate, independiente del transform del reveal) */
@@ -598,16 +637,27 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   max-width: 60rem;
 }
 .manifesto__text .word { display: inline-block; }
-.js .manifesto__text .word { opacity: 0.14; }
-.no-gsap .manifesto__text .word { opacity: 1; }
 .mk {
   padding: 0.02em 0.18em; color: var(--slate);
   border-radius: 0.22em;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
-.mk--coral { background: var(--coral); }
-.mk--sage  { background: var(--sage); }
-.mk--peach { background: var(--peach); }
+.mk--coral { --mk: var(--coral); }
+.mk--sage  { --mk: var(--sage); }
+.mk--peach { --mk: var(--peach); }
+.mk { background: var(--mk); }
+/* Tinta con el scroll: motion.js anima --ink (0 → 1) en cada palabra. El texto pasa de --muted a --fg
+   (siempre ≥ 5:1 sobre el fondo, no se atenúa con opacity) y el resaltador de las marcas se "pasa" de
+   transparente a su color. Antes de que cargue GSAP ya está en el estado inicial (sin destello);
+   sin color-mix, sin GSAP o con "reducir movimiento" el texto queda entintado. */
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .js .manifesto__text .word { --ink: 0; color: color-mix(in srgb, var(--fg) calc(var(--ink) * 100%), var(--muted)); }
+  .js .manifesto__text .word .mk {
+    background: color-mix(in srgb, var(--mk) calc(var(--ink) * 100%), transparent);
+    color: color-mix(in srgb, var(--slate) calc(var(--ink) * 100%), var(--muted));
+  }
+  .js.no-gsap .manifesto__text .word { --ink: 1; }
+}
 @media (max-width: 700px) { .manifesto { padding-block: var(--s-7); } }
 
 /* ---------- Encabezado de sección ---------- */
@@ -1033,5 +1083,8 @@ html.is-locked, html.is-locked body { overflow: hidden; }
     transition-delay: 0s !important;
   }
   .rv { opacity: 1 !important; transform: none !important; scale: none !important; }
-  .js .manifesto__text .word { opacity: 1; }
+  .js .manifesto__text .word { --ink: 1; }
+  /* Entrada del hero: sin animación, todo en su estado final (el retardo seguiría ocultándolo) */
+  .js .hero__top > *, .js .hero__badge, .js .hero__stats .stat, .js .hero__intro, .js .nav, .js .hero__strip,
+  .js:not(.rv-ready) .hero__line { animation: none !important; opacity: 1; }
 }
