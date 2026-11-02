@@ -124,11 +124,27 @@
                          (a.boundingClientRect.left - b.boundingClientRect.left));
     let t = 0;
     for (const e of batch) {
-      const kind = pending.get(e.target).kind;
+      // Un mismo elemento puede llegar dos veces en la misma tanda: la segunda ya no está pendiente.
+      const it = pending.get(e.target);
+      if (!it) continue;
+      const kind = it.kind;
       reveal(e.target, Math.min(t, MAX_DELAY), false);
       t += STEP[kind] || STEP.base;
     }
   }, { rootMargin: '0px 0px -6% 0px' });
+
+  // Un scroll muy rápido (o un salto a un ancla) puede pasar por encima de un elemento sin que el
+  // observador lo vea entrar: al terminar el scroll, lo que quedó arriba se muestra sin animar.
+  const sweep = () => {
+    for (const el of [...pending.keys()]) {
+      if (el.getBoundingClientRect().bottom <= 0) reveal(el, 0, true);
+    }
+  };
+  if ('onscrollend' in window) window.addEventListener('scrollend', sweep, { passive: true });
+  else {
+    let sweepT;
+    window.addEventListener('scroll', () => { clearTimeout(sweepT); sweepT = setTimeout(sweep, 150); }, { passive: true });
+  }
 
   // Observa un elemento y corre `show` cuando entra (sin tocar sus clases).
   function watch(el, kind, show) {
