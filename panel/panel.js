@@ -2,7 +2,7 @@
 // Lee y escribe data/projects.json en GitHub con un token personal del dueño del repo,
 // regenera index.html con el mismo módulo que usa scripts/build-projects.mjs y publica
 // todo en un único commit. Vercel despliega ese commit solo.
-import { renderProjects, validate, imagePaths, D_W, M_W } from '../js/render-projects.mjs';
+import { renderProjects, validate, imagePaths, D_W, M_W, C_W } from '../js/render-projects.mjs';
 
 const OWNER = 'Seba-fernandez';
 const REPO = 'Portafolio-V2';
@@ -501,6 +501,8 @@ const SHOT = {
   d: { ratio: 16 / 10, widths: D_W, previewW: 960, minW: 1440, label: 'desktop' },
   m: { ratio: 390 / 844, widths: M_W, previewW: 780, minW: 780, label: 'mobile' },
 };
+// Variantes "card" (kind 'c'): recorte 4:5 desde arriba de la captura mobile, para la tarjeta en ≤700 px.
+const CARD = { ratio: 4 / 5, widths: C_W, quality: 0.82 };
 
 function renderShots(p) {
   ['d', 'm'].forEach((k) => {
@@ -564,11 +566,27 @@ async function processShot(file, kind) {
     }
     blobs[w] = blob;
   }
+  // Mobile: además el recorte 4:5 (arriba) de la misma captura, kind 'c'.
+  let extra;
+  if (kind === 'm') {
+    const ch = Math.min(sh, Math.round(sw / CARD.ratio));
+    const cBlobs = {};
+    for (const w of CARD.widths) {
+      const canvas = drawStepped(bmp, sx, sy, sw, ch, w, Math.round(w / CARD.ratio));
+      const blob = await toBlob(canvas, CARD.quality);
+      if (!blob || blob.type !== 'image/webp') {
+        throw new Error('Este navegador no puede generar WebP. Usá Chrome, Edge o Firefox para subir capturas.');
+      }
+      cBlobs[w] = blob;
+    }
+    extra = { c: cBlobs };
+  }
   const one = drawStepped(bmp, sx, sy, sw, sh, 1, 1).getContext('2d').getImageData(0, 0, 1, 1).data;
   const placeholder = '#' + [one[0], one[1], one[2]].map((v) => v.toString(16).padStart(2, '0')).join('');
   bmp.close?.();
   return {
     blobs,
+    extra,
     placeholder,
     srcW: sw,
     srcH: sh,
@@ -717,6 +735,9 @@ async function save() {
       ['d', 'm'].forEach((k) => {
         if (!up[k]) return;
         Object.entries(up[k].blobs).forEach(([w, blob]) => files.push({ path: `img/p/${p.id}-${k}-${w}.webp`, blob }));
+        Object.entries(up[k].extra || {}).forEach(([ek, bl]) => {
+          Object.entries(bl).forEach(([w, blob]) => files.push({ path: `img/p/${p.id}-${ek}-${w}.webp`, blob }));
+        });
       });
     });
 

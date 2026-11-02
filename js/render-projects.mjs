@@ -7,9 +7,16 @@ const esc = (s) => String(s ?? '')
 const num = (i) => String(i + 1).padStart(2, '0');
 
 export const D_W = [480, 960, 1440, 2160, 2880];
-export const M_W = [390, 780, 1170];
+// 240 w: el teléfono de escritorio se ve a 124–186 px. El modal (js/projects.js) usa 390/780/1170.
+export const M_W = [240, 390, 780, 1170];
+// Variantes "card": recorte 4:5 desde arriba de la captura mobile (la tarjeta en ≤700 px).
+export const C_W = [390, 640, 780];
 const D_SRCSET = [960, 1440, 2160, 2880];
 const srcset = (id, kind, ws) => ws.map((w) => `img/p/${id}-${kind}-${w}.webp ${w}w`).join(', ');
+// Ancho real del teléfono, medido a 320–2560 px: ≤700 la tarjeta ocupa 100vw − 46..62 px;
+// 701–1023 ≈ 124 px; desde 1024 ≈ 12,5vw hasta un tope de 186 px.
+const PHONE_SIZES = '(max-width: 1023px) 124px, min(12.5vw, 186px)';
+const PHONE_SIZES_CARD = 'calc(100vw - 48px)';
 const ACCENT = { coral: 'var(--coral)', sage: 'var(--sage)', peach: 'var(--peach)' };
 
 /** Archivos de imagen que necesita un proyecto. */
@@ -17,6 +24,7 @@ export function imagePaths(id) {
   return [
     ...D_W.map((w) => `img/p/${id}-d-${w}.webp`),
     ...M_W.map((w) => `img/p/${id}-m-${w}.webp`),
+    ...C_W.map((w) => `img/p/${id}-c-${w}.webp`),
   ];
 }
 
@@ -73,8 +81,11 @@ export function renderProjects(html, data) {
     const note = L(p.note)
       ? `\n          <p class="case__note" data-pf="${p.id}:note">${esc(L(p.note))}</p>`
       : '';
+    // Nombre accesible único (varios proyectos repiten "Ver en vivo"): el texto visible queda
+    // en un <span data-i18n> (app.js lo traduce) y el nombre del proyecto va solo para lectores.
+    const who = `<span class="sr-only"> · <span data-pf="${p.id}:name">${esc(L(p.name))}</span></span>`;
     const code = p.code
-      ? `\n            <a class="btn btn--ghost" href="${esc(p.code)}" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>`
+      ? `\n            <a class="btn btn--ghost" href="${esc(p.code)}" target="_blank" rel="noopener"><span data-i18n="btn.code">Código</span>${who}</a>`
       : '';
     return `
       <article class="case" id="p-${p.id}" style="--accent: ${ACCENT[p.accent] || ACCENT.coral}" aria-labelledby="t-${p.id}">
@@ -92,9 +103,12 @@ export function renderProjects(html, data) {
             <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
             <button class="phone shot-btn" type="button" data-open="${p.id}" data-shot-pref="m" style="--ph: ${esc(p.placeholder || '#112F2C')}">
               <span class="sr-only" data-i18n="btn.zoom">Ampliar</span>
-              <img src="img/p/${p.id}-m-780.webp" srcset="${srcset(p.id, 'm', M_W)}"
-                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
-                   loading="lazy" decoding="async" alt="Captura mobile de ${esc(alt)}" data-pa="${p.id}:m">
+              <picture>
+                <source media="(max-width: 700px)" srcset="${srcset(p.id, 'c', C_W)}" sizes="${PHONE_SIZES_CARD}">
+                <img src="img/p/${p.id}-m-780.webp" srcset="${srcset(p.id, 'm', M_W)}"
+                     sizes="${PHONE_SIZES}" width="1170" height="2532"
+                     loading="lazy" decoding="async" alt="Captura mobile de ${esc(alt)}" data-pa="${p.id}:m">
+              </picture>
             </button>
           </figure>
         </div>
@@ -116,8 +130,8 @@ export function renderProjects(html, data) {
             <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack">${(p.stack || []).map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
           </div>
           <div class="case__actions">
-            <a class="btn" href="${esc(p.live)}" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>${code}
-            <button class="btn btn--ghost" type="button" data-open="${p.id}" data-i18n="btn.shots">Ver capturas</button>
+            <a class="btn" href="${esc(p.live)}" target="_blank" rel="noopener"><span data-i18n="btn.live">Ver en vivo ↗</span>${who}</a>${code}
+            <button class="btn btn--ghost" type="button" data-open="${p.id}"><span data-i18n="btn.shots">Ver capturas</span>${who}</button>
           </div>
         </div>
       </article>`;
