@@ -124,7 +124,7 @@
         <span class="tool__icon" aria-hidden="true">☾</span>
       </button>
       <button class="tool tool--lang" id="langToggle" type="button"
-              aria-label="Switch to English" lang="en">
+              aria-label="EN · Switch to English" lang="en">
         <span class="tool__word" aria-hidden="true" id="langLabel">EN</span>
       </button>
     </div>
@@ -209,9 +209,12 @@
             <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
             <button class="phone shot-btn" type="button" data-open="cespad" data-shot-pref="m" style="--ph: #303530">
               <span class="sr-only" data-i18n="btn.zoom">Ampliar</span>
-              <img src="img/p/cespad-m-780.webp" srcset="img/p/cespad-m-390.webp 390w, img/p/cespad-m-780.webp 780w, img/p/cespad-m-1170.webp 1170w"
-                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
-                   loading="lazy" decoding="async" alt="Captura mobile de el sitio Grupo CESPAD" data-pa="cespad:m">
+              <picture>
+                <source media="(max-width: 700px)" srcset="img/p/cespad-c-390.webp 390w, img/p/cespad-c-640.webp 640w, img/p/cespad-c-780.webp 780w" sizes="calc(100vw - 48px)">
+                <img src="img/p/cespad-m-780.webp" srcset="img/p/cespad-m-240.webp 240w, img/p/cespad-m-390.webp 390w, img/p/cespad-m-780.webp 780w, img/p/cespad-m-1170.webp 1170w"
+                     sizes="(max-width: 1023px) 124px, min(12.5vw, 186px)" width="1170" height="2532"
+                     loading="lazy" decoding="async" alt="Captura mobile de el sitio Grupo CESPAD" data-pa="cespad:m">
+              </picture>
             </button>
           </figure>
         </div>
@@ -238,9 +241,9 @@
             <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>HTML5</li><li>CSS3</li><li>JS ES6+</li><li>Schema.org</li><li>WhatsApp API</li><li>Vercel</li></ul>
           </div>
           <div class="case__actions">
-            <a class="btn" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
-            <button class="btn btn--ghost" type="button" data-open="cespad" data-i18n="btn.shots">Ver capturas</button>
+            <a class="btn" href="https://grupo-cespad-actualizacion.vercel.app/" target="_blank" rel="noopener"><span data-i18n="btn.live">Ver en vivo ↗</span><span class="sr-only"> · <span data-pf="cespad:name">Grupo CESPAD</span></span></a>
+            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion" target="_blank" rel="noopener"><span data-i18n="btn.code">Código</span><span class="sr-only"> · <span data-pf="cespad:name">Grupo CESPAD</span></span></a>
+            <button class="btn btn--ghost" type="button" data-open="cespad"><span data-i18n="btn.shots">Ver capturas</span><span class="sr-only"> · <span data-pf="cespad:name">Grupo CESPAD</span></span></button>
           </div>
         </div>
       </article>
@@ -260,9 +263,12 @@
             <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
             <button class="phone shot-btn" type="button" data-open="bagues" data-shot-pref="m" style="--ph: #431f23">
               <span class="sr-only" data-i18n="btn.zoom">Ampliar</span>
-              <img src="img/p/bagues-m-780.webp" srcset="img/p/bagues-m-390.webp 390w, img/p/bagues-m-780.webp 780w, img/p/bagues-m-1170.webp 1170w"
-                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
-                   loading="lazy" decoding="async" alt="Captura mobile de la tienda Bagués Grupo Wolf" data-pa="bagues:m">
+              <picture>
+                <source media="(max-width: 700px)" srcset="img/p/bagues-c-390.webp 390w, img/p/bagues-c-640.webp 640w, img/p/bagues-c-780.webp 780w" sizes="calc(100vw - 48px)">
+                <img src="img/p/bagues-m-780.webp" srcset="img/p/bagues-m-240.webp 240w, img/p/bagues-m-390.webp 390w, img/p/bagues-m-780.webp 780w, img/p/bagues-m-1170.webp 1170w"
+                     sizes="(max-width: 1023px) 124px, min(12.5vw, 186px)" width="1170" height="2532"
+                     loading="lazy" decoding="async" alt="Captura mobile de la tienda Bagués Grupo Wolf" data-pa="bagues:m">
+              </picture>
             </button>
           </figure>
         </div>
@@ -291,9 +297,9 @@
             <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>React</li><li>Vite</li><li>React Router</li><li>Supabase</li><li>PDF.js</li><li>Vercel</li></ul>
           </div>
           <div class="case__actions">
-            <a class="btn" href="https://baguesfraganciaswolf.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/baguesfraganciaswolf" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
-            <button class="btn btn--ghost" type="button" data-open="bagues" data-i18n="btn.shots">Ver capturas</button>
+            <a class="btn" href="https://baguesfraganciaswolf.vercel.app/" target="_blank" rel="noopener"><span data-i18n="btn.live">Ver en vivo ↗</span><span class="sr-only"> · <span data-pf="bagues:name">Bagués Grupo Wolf</span></span></a>
+            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/baguesfraganciaswolf" target="_blank" rel="noopener"><span data-i18n="btn.code">Código</span><span class="sr-only"> · <span data-pf="bagues:name">Bagués Grupo Wolf</span></span></a>
+            <button class="btn btn--ghost" type="button" data-open="bagues"><span data-i18n="btn.shots">Ver capturas</span><span class="sr-only"> · <span data-pf="bagues:name">Bagués Grupo Wolf</span></span></button>
           </div>
         </div>
       </article>
@@ -313,9 +319,12 @@
             <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
             <button class="phone shot-btn" type="button" data-open="oratoria" data-shot-pref="m" style="--ph: #f1ece1">
               <span class="sr-only" data-i18n="btn.zoom">Ampliar</span>
-              <img src="img/p/oratoria-m-780.webp" srcset="img/p/oratoria-m-390.webp 390w, img/p/oratoria-m-780.webp 780w, img/p/oratoria-m-1170.webp 1170w"
-                   sizes="(max-width: 700px) 92vw, (min-width: 1024px) 210px, 220px" width="1170" height="2532"
-                   loading="lazy" decoding="async" alt="Captura mobile de la app Checklist de Oratoria" data-pa="oratoria:m">
+              <picture>
+                <source media="(max-width: 700px)" srcset="img/p/oratoria-c-390.webp 390w, img/p/oratoria-c-640.webp 640w, img/p/oratoria-c-780.webp 780w" sizes="calc(100vw - 48px)">
+                <img src="img/p/oratoria-m-780.webp" srcset="img/p/oratoria-m-240.webp 240w, img/p/oratoria-m-390.webp 390w, img/p/oratoria-m-780.webp 780w, img/p/oratoria-m-1170.webp 1170w"
+                     sizes="(max-width: 1023px) 124px, min(12.5vw, 186px)" width="1170" height="2532"
+                     loading="lazy" decoding="async" alt="Captura mobile de la app Checklist de Oratoria" data-pa="oratoria:m">
+              </picture>
             </button>
           </figure>
         </div>
@@ -341,9 +350,9 @@
             <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack"><li>React</li><li>Vite</li><li>LocalStorage</li><li>Claude API</li><li>Vercel</li></ul>
           </div>
           <div class="case__actions">
-            <a class="btn" href="https://checklist-para-oratoria.vercel.app/" target="_blank" rel="noopener" data-i18n="btn.live">Ver en vivo ↗</a>
-            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/ChecklistOratoria" target="_blank" rel="noopener" data-i18n="btn.code">Código</a>
-            <button class="btn btn--ghost" type="button" data-open="oratoria" data-i18n="btn.shots">Ver capturas</button>
+            <a class="btn" href="https://checklist-para-oratoria.vercel.app/" target="_blank" rel="noopener"><span data-i18n="btn.live">Ver en vivo ↗</span><span class="sr-only"> · <span data-pf="oratoria:name">Checklist de Oratoria</span></span></a>
+            <a class="btn btn--ghost" href="https://github.com/Seba-fernandez/ChecklistOratoria" target="_blank" rel="noopener"><span data-i18n="btn.code">Código</span><span class="sr-only"> · <span data-pf="oratoria:name">Checklist de Oratoria</span></span></a>
+            <button class="btn btn--ghost" type="button" data-open="oratoria"><span data-i18n="btn.shots">Ver capturas</span><span class="sr-only"> · <span data-pf="oratoria:name">Checklist de Oratoria</span></span></button>
           </div>
         </div>
       </article>

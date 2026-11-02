@@ -42,17 +42,19 @@
     return Array.from(el.querySelectorAll('.char'));
   }
 
+  // Sin lecturas de layout: arma todo en un fragmento y lo inserta de una vez.
   function splitWords(el) {
     const nodes = Array.from(el.childNodes);
+    const text = el.textContent.trim();
+    const frag = document.createDocumentFragment();
     const sr = document.createElement('span');
     sr.className = 'sr-only';
-    sr.textContent = el.textContent.trim();
-    el.textContent = '';
-    el.appendChild(sr);
-    const push = (text, wrapper) => {
-      text.split(/(\s+)/).forEach(part => {
+    sr.textContent = text;
+    frag.appendChild(sr);
+    const push = (txt, wrapper) => {
+      txt.split(/(\s+)/).forEach(part => {
         if (!part) return;
-        if (/^\s+$/.test(part)) { el.appendChild(document.createTextNode(' ')); return; }
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
         const w = document.createElement('span');
         w.className = 'word';
         w.setAttribute('aria-hidden', 'true');
@@ -63,20 +65,22 @@
         } else {
           w.textContent = part;
         }
-        el.appendChild(w);
+        frag.appendChild(w);
       });
     };
     nodes.forEach(n => {
       if (n.nodeType === Node.TEXT_NODE) push(n.textContent, null);
       else if (n.nodeType === Node.ELEMENT_NODE) push(n.textContent, n);
     });
+    el.textContent = '';
+    el.appendChild(frag);
     return el.querySelectorAll('.word');
   }
 
   /* ---------- Motor de apariciones ---------- */
 
   // Duración de cada tipo (ms), para limpiar las clases al terminar.
-  const DUR = { base: 560, down: 560, media: 700, stamp: 300, char: 620, wipe: 600 };
+  const DUR = { base: 560, down: 560, media: 700, stamp: 300, char: 620 };
   // Paso entre elementos que entran juntos en pantalla.
   const STEP = { base: 55, down: 55, media: 90, stamp: 32 };
   const MAX_DELAY = 420;
@@ -120,11 +124,27 @@
                          (a.boundingClientRect.left - b.boundingClientRect.left));
     let t = 0;
     for (const e of batch) {
-      const kind = pending.get(e.target).kind;
+      // Un mismo elemento puede llegar dos veces en la misma tanda: la segunda ya no está pendiente.
+      const it = pending.get(e.target);
+      if (!it) continue;
+      const kind = it.kind;
       reveal(e.target, Math.min(t, MAX_DELAY), false);
       t += STEP[kind] || STEP.base;
     }
   }, { rootMargin: '0px 0px -6% 0px' });
+
+  // Un scroll muy rápido (o un salto a un ancla) puede pasar por encima de un elemento sin que el
+  // observador lo vea entrar: al terminar el scroll, lo que quedó arriba se muestra sin animar.
+  const sweep = () => {
+    for (const el of [...pending.keys()]) {
+      if (el.getBoundingClientRect().bottom <= 0) reveal(el, 0, true);
+    }
+  };
+  if ('onscrollend' in window) window.addEventListener('scrollend', sweep, { passive: true });
+  else {
+    let sweepT;
+    window.addEventListener('scroll', () => { clearTimeout(sweepT); sweepT = setTimeout(sweep, 150); }, { passive: true });
+  }
 
   // Observa un elemento y corre `show` cuando entra (sin tocar sus clases).
   function watch(el, kind, show) {
@@ -146,7 +166,9 @@
     chars.forEach((c, i) => play(c, 'char', delay + (reverse ? n - 1 - i : i) * step, instant));
   }
 
-  /* ---------- Hero: entrada de ~0,9 s, sin esperar al scroll ---------- */
+  /* ---------- Hero ----------
+     Chips, cinta, intro, stats y nav entran con @keyframes en CSS (primer pintado, sin JS).
+     Aquí solo el nombre: se parte en letras y entra sin esperar al scroll. */
 
   const heroLines = $$('.hero__line');
   heroLines.forEach((line, i) => {
@@ -157,26 +179,17 @@
     line._delay = i * 90;
     line._reverse = i === 1;
   });
-  const strip = document.querySelector('.hero__strip');
-  const heroSeq = [
-    ...$$('.hero__top > *').map((el, i) => [el, 'stamp', 240 + i * 40]),
-    [document.querySelector('.hero__badge'), 'stamp', 320],
-    [document.querySelector('.hero__intro'), 'base', 300],
-    ...$$('.hero__stats .stat').map((el, i) => [el, 'stamp', 380 + i * 45]),
-    [document.querySelector('.nav'), 'down', 420],
-  ].filter(([el]) => el);
-  if (strip) { strip.classList.add('rv', 'rv--wipe'); }
-  heroSeq.forEach(([el, kind]) => { el.classList.add('rv'); if (kind !== 'base') el.classList.add('rv--' + kind); });
 
-  // Todo armado: se libera el resguardo del CSS y arranca en el próximo frame.
+  // Letras armadas: se libera el resguardo del CSS y arrancan en el próximo frame.
   root.classList.add('rv-ready');
   requestAnimationFrame(() => requestAnimationFrame(() => {
     heroLines.forEach(l => playChars(l._chars, l._delay, false, 16, l._reverse));
-    if (strip) play(strip, 'wipe', 160, false);
-    heroSeq.forEach(([el, kind, d]) => play(el, kind, d, false));
   }));
 
-  /* ---------- Títulos gigantes: letras desde la línea base ---------- */
+  /* ---------- Títulos gigantes: letras desde la línea base ----------
+     Se parten en letras recién cuando se acercan al viewport (~800 px): los que están
+     lejos no cuestan nada al cargar. Los que quedaron por encima (recarga a mitad de
+     página) los deja visibles el propio observador de apariciones. */
 
   function setupTitle(el) {
     if (el.querySelector('.char')) return;
@@ -186,9 +199,18 @@
     const chars = targets.flatMap(l => splitChars(l));
     chars.forEach(c => c.classList.add('rv', 'rv--char'));
     watch(el, 'char', (d, instant) => playChars(chars, d, instant, 22));
+    // Cada letra es un inline-block (sin kerning entre ellas): se vuelve a medir el renglón.
+    if (window.JSFfit && window.JSFfit.fit) window.JSFfit.fit([el]);
   }
   const titles = $$('.giant-title[data-split], .footer__cta-text[data-split]');
-  titles.forEach(setupTitle);
+  const splitIO = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      splitIO.unobserve(e.target);
+      setupTitle(e.target);
+    }
+  }, { rootMargin: '800px 0px' });
+  titles.forEach(el => splitIO.observe(el));
 
   /* ---------- Bloques ---------- */
 
@@ -259,7 +281,7 @@
 
   /* ---------- Atado al scroll (GSAP) ---------- */
 
-  // El manifiesto se parte ya (queda en tinta tenue); GSAP lo entinta con el scroll.
+  // El manifiesto se parte ya (queda en tinta tenue por CSS, sin destello); GSAP lo entinta con el scroll.
   const manifesto = document.querySelector('[data-words]');
   if (manifesto) splitWords(manifesto);
 
@@ -270,8 +292,9 @@
     if (manifestoTween) { manifestoTween.scrollTrigger?.kill(); manifestoTween.kill(); }
     const words = el.querySelector('.word') ? el.querySelectorAll('.word') : splitWords(el);
     // Frente de tinta angosto: cada palabra se entinta rápido y la siguiente la sigue de cerca.
-    manifestoTween = gsap.to(words, {
-      opacity: 1, duration: 0.24, stagger: 0.05, ease: 'none',
+    // --ink (0 → 1) mezcla en CSS color y resaltador: sigue el tema y no baja el contraste.
+    manifestoTween = gsap.fromTo(words, { '--ink': 0 }, {
+      '--ink': 1, duration: 0.24, stagger: 0.05, ease: 'none',
       scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 55%', scrub: true },
     });
   }
@@ -295,14 +318,20 @@
       .catch(() => root.classList.add('no-gsap')); // sin GSAP: el manifiesto queda entintado
   });
 
+  // Varios avisos en el mismo frame (fuente, ajuste, idioma) = un solo refresh.
+  let refreshQueued = false;
+  function queueRefresh() {
+    if (refreshQueued || !hasGsap) return;
+    refreshQueued = true;
+    requestAnimationFrame(() => { refreshQueued = false; ScrollTrigger.refresh(); });
+  }
+
   function setupScroll() {
     hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
     if (!hasGsap) { root.classList.add('no-gsap'); return; }
     gsap.registerPlugin(ScrollTrigger);
     // fit.js avisa cuando el layout es definitivo (fuente cargada): se re-miden los triggers.
-    window.addEventListener('jsf:layout-settled', () => {
-      requestAnimationFrame(() => ScrollTrigger.refresh());
-    });
+    window.addEventListener('jsf:layout-settled', queueRefresh);
 
     setupManifesto();
 
@@ -369,10 +398,12 @@
 
   window.JSF = {
     refreshSplits() {
+      // Los títulos que ya estaban partidos y aún no aparecieron se vuelven a partir;
+      // los que todavía no se partieron los toma el observador al acercarse.
       titles.forEach(el => { if (pending.has(el)) setupTitle(el); });
       const m = document.querySelector('[data-words]');
       if (m && !m.querySelector('.word')) { if (hasGsap) setupManifesto(); else splitWords(m); }
-      if (hasGsap) ScrollTrigger.refresh();
+      queueRefresh();
     },
   };
 })();
