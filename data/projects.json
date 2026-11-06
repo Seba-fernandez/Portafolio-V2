@@ -38,6 +38,10 @@
     "estudio": {
       "es": "Estudio",
       "en": "Study project"
+    },
+    "concepto": {
+      "es": "Concepto de marca",
+      "en": "Brand concept"
     }
   },
   "focus": {
@@ -68,6 +72,10 @@
     "diseno": {
       "es": "Diseño visual",
       "en": "Visual design"
+    },
+    "motion": {
+      "es": "Animación",
+      "en": "Motion"
     }
   },
   "projects": [
@@ -96,19 +104,19 @@
         "en": "Returning client · Product evolution"
       },
       "context": {
-        "es": "Grupo CESPAD no tenía presencia online propia y su oferta ya excedía el pádel. Convertí la primera landing en una experiencia orientada a descubrir sus deportes, entender cada servicio y llegar al canal de contacto adecuado.",
-        "en": "Grupo CESPAD had no online presence of its own and its offer had outgrown padel. I turned the first landing into an experience built to discover its sports, understand each service and reach the right contact channel."
+        "es": "Grupo CESPAD no tenía sitio propio y ya ofrecía mucho más que pádel. Transformé aquella primera landing en un sitio donde cada deporte tiene su lugar, cada servicio se entiende rápido y cada consulta llega directo al WhatsApp que corresponde.",
+        "en": "Grupo CESPAD had no website of its own and already offered much more than padel. I turned that first landing into a site where every sport has its place, every service is quick to understand and every inquiry goes straight to the right WhatsApp."
       },
       "solved": {
         "es": [
-          "Arquitectura de contenido por deporte",
-          "CTAs directos a WhatsApp para contactos con intención alta",
+          "Contenido ordenado por deporte, para que cada visitante encuentre lo suyo",
+          "Botones de WhatsApp justo donde aparecen las ganas de consultar",
           "Formulario con validación de los datos esenciales",
           "HTML semántico y datos estructurados para la búsqueda local"
         ],
         "en": [
-          "Sport-based content architecture",
-          "Direct WhatsApp CTAs for high-intent contacts",
+          "Content organized by sport, so every visitor finds what they came for",
+          "WhatsApp buttons right where people feel like asking",
           "A form that validates the essential data",
           "Semantic HTML and structured data for local search"
         ]
@@ -225,19 +233,19 @@
         "en": "Personal product · React + AI"
       },
       "context": {
-        "es": "Nació para resolver un problema propio: registrar práctica y obtener devoluciones sin repetir diagnósticos manuales.",
-        "en": "Built to solve a problem of my own: tracking practice and getting feedback without repeating manual diagnostics."
+        "es": "La hice para mí: quería registrar cada práctica de oratoria y recibir una devolución sin tener que analizarme a mano cada vez.",
+        "en": "I built it for myself: I wanted to log every public-speaking practice and get feedback without analyzing myself by hand every time."
       },
       "solved": {
         "es": [
           "Interfaz de checklist para registrar cada práctica",
           "Persistencia local entre sesiones",
-          "Asistencia de IA para acelerar el feedback"
+          "Devolución con IA después de cada práctica"
         ],
         "en": [
           "A checklist interface to log every practice",
           "Local persistence between sessions",
-          "AI assistance to speed up feedback"
+          "AI feedback after every practice"
         ]
       },
       "stack": [
@@ -256,6 +264,73 @@
       "casa": {
         "prop": "mic",
         "color": "#8DB596",
+        "status": "live"
+      }
+    },
+    {
+      "id": "piccino",
+      "featured": false,
+      "accent": "peach",
+      "placeholder": "#a3674d",
+      "name": {
+        "es": "Piccino bakery",
+        "en": "Piccino bakery"
+      },
+      "type": "landing",
+      "origin": "concepto",
+      "focus": [
+        "diseno",
+        "motion",
+        "perf"
+      ],
+      "badge": {
+        "es": "Branding",
+        "en": "Branding"
+      },
+      "kicker": {
+        "es": "Galletas de autor · Diseño y animación",
+        "en": "Signature cookies · Design and motion"
+      },
+      "context": {
+        "es": "Piccino hace galletas de autor en Córdoba y vende por Instagram. Le diseñé una landing de marca donde la galleta siempre es más grande que el texto: paneles en diagonal con los colores de su cuenta, sabores que caen torcidos y se acomodan, y una cookie que se va mordiendo mientras bajás.",
+        "en": "Piccino bakes signature cookies in Córdoba and sells them on Instagram. I designed a brand landing where the cookie is always bigger than the type: angled panels in the colors of its account, flavors that drop in crooked and settle, and a cookie that gets bitten as you scroll."
+      },
+      "solved": {
+        "es": [
+          "Paleta sacada del Instagram real de la marca: marrón, terracota, arena y crema",
+          "Seis sabores, cada uno en su panel, con la galleta que se acomoda al entrar en pantalla",
+          "Una mordida cuadro por cuadro, atada al scroll y precargada para que nunca aparezca un hueco",
+          "La entrada del hero es CSS puro: arranca en el primer cuadro, sin esperar al JavaScript",
+          "Fotos en AVIF en cuatro tamaños, y todo quieto y legible con “reducir movimiento”"
+        ],
+        "en": [
+          "Palette taken from the brand’s real Instagram: brown, terracotta, sand and cream",
+          "Six flavors, each on its own panel, with the cookie settling into place as it comes into view",
+          "A frame-by-frame bite tied to the scroll and preloaded so a gap never shows",
+          "The hero entrance is pure CSS: it starts on the first frame without waiting for JavaScript",
+          "AVIF photos in four sizes, and everything still and readable with “reduce motion”"
+        ]
+      },
+      "note": {
+        "es": "Diseñada y publicada en un día. Más de 90 de velocidad en el celular y 100 en accesibilidad. Las fotos de las galletas están generadas con IA y quedan listas para cambiarlas por las reales.",
+        "en": "Designed and shipped in a day. Over 90 on mobile speed and 100 on accessibility. The cookie photos are AI-generated and ready to be swapped for real ones."
+      },
+      "stack": [
+        "Astro",
+        "anime.js",
+        "CSS",
+        "AVIF",
+        "Vercel"
+      ],
+      "live": "https://piccino-bakery.vercel.app/",
+      "code": "https://github.com/Seba-fernandez/Piccino-Bakery",
+      "alt": {
+        "es": "la landing de Piccino bakery",
+        "en": "the Piccino bakery landing page"
+      },
+      "casa": {
+        "prop": "box",
+        "color": "#B4552F",
         "status": "live"
       }
     },
@@ -283,8 +358,8 @@
         "en": "First delivery · Starting point"
       },
       "context": {
-        "es": "Primera presencia digital para una propuesta de pádel. El objetivo era simple y concreto, sin sumar complejidad técnica innecesaria.",
-        "en": "The first digital presence for a padel offering. The goal was simple and concrete, without adding unnecessary technical complexity."
+        "es": "Primera presencia digital para una propuesta de pádel. Tenía que explicar el servicio y llevar al WhatsApp, nada más.",
+        "en": "First online presence for a padel venue. It had to explain the service and lead to WhatsApp, nothing more."
       },
       "solved": {
         "es": [
@@ -299,8 +374,8 @@
         ]
       },
       "note": {
-        "es": "La expansión del negocio dejó chica esta primera versión. Ese aprendizaje derivó en Grupo CESPAD.",
-        "en": "The business expansion outgrew this first version. That learning led to Grupo CESPAD."
+        "es": "El negocio creció y esta primera versión le quedó chica: de ahí salió Grupo CESPAD.",
+        "en": "The business grew and outgrew this first version: that is where Grupo CESPAD came from."
       },
       "stack": [
         "HTML5",
@@ -394,8 +469,8 @@
         "en": "Study project · Images and design"
       },
       "context": {
-        "es": "Proyecto de estudio enfocado en compresión de imágenes y diseño: una landing de alto impacto para un festival EDM, con video de fondo, lineup y tickets.",
-        "en": "A study project focused on image compression and design: a high-impact landing for an EDM festival, with a background video, lineup and tickets."
+        "es": "Proyecto de estudio sobre compresión de imágenes y diseño: la landing de un festival EDM que tenía que pegar fuerte sin tardar en cargar, con video de fondo, lineup y tickets.",
+        "en": "Study project on image compression and design: the landing page for an EDM festival that had to hit hard without loading slowly, with background video, lineup and tickets."
       },
       "solved": {
         "es": [
