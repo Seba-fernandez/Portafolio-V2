@@ -308,15 +308,36 @@
       document.head.appendChild(s);
     });
   }
+  // GSAP solo hace falta para lo que responde al scroll o al puntero (manifiesto, cintas, cursor):
+  // se descarga en un momento libre sin ejecutarse, y se ejecuta recién con la primera interacción.
+  // Así la carga inicial no paga su arranque.
+  const VENDOR = ['js/vendor/gsap.min.js', 'js/vendor/ScrollTrigger.min.js'];
   function whenIdle(fn) {
-    const go = () => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 900 }) : setTimeout(fn, 200));
+    const go = () => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 300));
     if (document.readyState === 'complete') go(); else window.addEventListener('load', go, { once: true });
   }
-  whenIdle(() => {
-    Promise.all([loadScript('js/vendor/gsap.min.js'), loadScript('js/vendor/ScrollTrigger.min.js')])
+  whenIdle(() => VENDOR.forEach((href) => {
+    const l = document.createElement('link');
+    l.rel = 'prefetch'; l.as = 'script'; l.href = href;
+    document.head.appendChild(l);
+  }));
+  let started = false;
+  const EVENTS = ['scroll', 'wheel', 'touchstart', 'pointermove', 'keydown'];
+  const y0 = window.scrollY;
+  function start(e) {
+    // Un "scroll" sin movimiento real (lo dispara el navegador al acomodar la página) no cuenta.
+    // Tampoco un movimiento de puntero sin desplazamiento (algunos navegadores lo emiten al cargar).
+    if (started || (e && e.type === 'scroll' && window.scrollY === y0)) return;
+    if (e && e.type === 'pointermove' && !(e.movementX || e.movementY)) return;
+    started = true;
+    EVENTS.forEach((ev) => window.removeEventListener(ev, start, { passive: true }));
+    Promise.all(VENDOR.map(loadScript))
       .then(setupScroll)
       .catch(() => root.classList.add('no-gsap')); // sin GSAP: el manifiesto queda entintado
-  });
+  }
+  EVENTS.forEach((ev) => window.addEventListener(ev, start, { passive: true }));
+  // Si la página abre ya scrolleada (recarga a mitad o un link con #), arranca enseguida.
+  if (window.scrollY > 0 || location.hash) whenIdle(start);
 
   // Varios avisos en el mismo frame (fuente, ajuste, idioma) = un solo refresh.
   let refreshQueued = false;
@@ -335,9 +356,13 @@
 
     setupManifesto();
 
+    // Parallax y onda: si el navegador anima con el scroll en CSS (animation-timeline), lo hace él en
+    // el compositor; GSAP queda solo como respaldo para los que no lo soportan.
+    const cssScroll = CSS.supports('animation-timeline: view()');
+
     // Parallax de capturas: recorrido corto, pegado al scroll (sin arrastre).
     const mm = gsap.matchMedia();
-    mm.add('(min-width: 701px)', () => {
+    if (!cssScroll) mm.add('(min-width: 701px)', () => {
       $$('.case').forEach(c => {
         const st = { trigger: c, start: 'top bottom', end: 'bottom top', scrub: true };
         const d = c.querySelector('.shot-d');
@@ -349,29 +374,37 @@
 
     // Onda: se dibuja como un trazo, al ritmo del scroll
     const wave = document.querySelector('.wave__path');
-    if (wave) {
-      const len = wave.getTotalLength();
+    if (wave && !cssScroll) {
+      const len = 1; // pathLength="1"
       gsap.fromTo(wave,
         { strokeDasharray: len, strokeDashoffset: len },
         { strokeDashoffset: 0, ease: 'none',
           scrollTrigger: { trigger: '.wave', start: 'top 95%', end: 'top 50%', scrub: true } });
     }
 
-    // Cintas: se inclinan apenas con la velocidad del scroll y vuelven firmes
+    // Cintas: se inclinan apenas con la velocidad del scroll y vuelven firmes enseguida.
+    // Solo se tocan las que están en pantalla; las de afuera además pausan su animación.
     const skewed = $$('.marquee, .hero__strip, .band');
     if (skewed.length) {
-      const setters = skewed.map(m => gsap.quickSetter(m, 'skewX', 'deg'));
-      const clamp = gsap.utils.clamp(-4, 4);
+      const setters = new Map(skewed.map(m => [m, gsap.quickSetter(m, 'skewX', 'deg')]));
+      const onScreen = new Set();
+      const vis = new IntersectionObserver(entries => entries.forEach(e => {
+        e.target.classList.toggle('is-off', !e.isIntersecting);
+        if (e.isIntersecting) onScreen.add(e.target);
+        else { onScreen.delete(e.target); setters.get(e.target)(0); }
+      }));
+      skewed.forEach(m => vis.observe(m));
+      const clamp = gsap.utils.clamp(-3, 3);
       let target = 0, current = 0;
-      ScrollTrigger.create({ onUpdate(self) { target = clamp(self.getVelocity() / -450); } });
+      ScrollTrigger.create({ onUpdate(self) { target = clamp(self.getVelocity() / -500); } });
       gsap.ticker.add(() => {
-        target *= 0.85;
-        current += (target - current) * 0.25;
+        target *= 0.7;
+        current += (target - current) * 0.5;
         if (Math.abs(current) < 0.02 && Math.abs(target) < 0.02) {
-          if (current !== 0) { current = 0; setters.forEach(s => s(0)); }
+          if (current !== 0) { current = 0; onScreen.forEach(m => setters.get(m)(0)); }
           return;
         }
-        setters.forEach(s => s(current));
+        onScreen.forEach(m => setters.get(m)(current));
       });
     }
 
