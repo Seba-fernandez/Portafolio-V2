@@ -107,9 +107,9 @@
   --ease-pop: cubic-bezier(0.3, 1.25, 0.5, 1);   /* un toque de resorte, apenas perceptible */
   --t-ui:    0.18s;    /* hover, color */
   --t-press: 0.09s;    /* al apretar */
-  --t-in:    0.56s;    /* apariciones */
+  --t-in:    0.42s;    /* apariciones */
   --t-stamp: 0.3s;     /* sellos (chips, etiquetas) */
-  --stagger: 45ms;
+  --stagger: 35ms;
   --shift:   10px;
 }
 
@@ -360,11 +360,11 @@ p { text-wrap: pretty; }
   transition-delay: var(--d, 0ms);
 }
 .rv--down  { transform: translate3d(0, calc(var(--shift) * -1), 0); }
-.rv--media { transform: translate3d(0, calc(var(--shift) * 1.8), 0); transition-duration: 0.7s; }
+.rv--media { transform: translate3d(0, calc(var(--shift) * 1.8), 0); transition-duration: 0.52s; }
 /* Sello (hanko): se apoya de golpe y asienta. Para chips, etiquetas y badges. */
 .rv--stamp { transform: scale(1.12); transition-duration: 0.14s, var(--t-stamp); }
 /* Letras de los títulos: suben desde la línea base, enmascaradas por su renglón */
-.rv--char  { opacity: 1; transform: translate3d(0, 104%, 0); transition-duration: 0s, 0.62s; }
+.rv--char  { opacity: 1; transform: translate3d(0, 104%, 0); transition-duration: 0s, 0.46s; }
 .rv.is-in  { opacity: 1; transform: none; }
 .rv-now, .rv-now::before { transition: none !important; }
 

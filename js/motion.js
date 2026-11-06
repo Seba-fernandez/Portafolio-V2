@@ -80,10 +80,10 @@
   /* ---------- Motor de apariciones ---------- */
 
   // Duración de cada tipo (ms), para limpiar las clases al terminar.
-  const DUR = { base: 560, down: 560, media: 700, stamp: 300, char: 620 };
+  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 460 };
   // Paso entre elementos que entran juntos en pantalla.
-  const STEP = { base: 55, down: 55, media: 90, stamp: 32 };
-  const MAX_DELAY = 420;
+  const STEP = { base: 40, down: 40, media: 70, stamp: 26 };
+  const MAX_DELAY = 280;
 
   const pending = new Map(); // elemento → { kind, show }
 
@@ -131,7 +131,7 @@
       reveal(e.target, Math.min(t, MAX_DELAY), false);
       t += STEP[kind] || STEP.base;
     }
-  }, { rootMargin: '0px 0px -6% 0px' });
+  }, { rootMargin: '0px 0px -2% 0px' });
 
   // Un scroll muy rápido (o un salto a un ancla) puede pasar por encima de un elemento sin que el
   // observador lo vea entrar: al terminar el scroll, lo que quedó arriba se muestra sin animar.
@@ -198,7 +198,7 @@
     if (!lines.length) el.style.overflow = 'hidden';
     const chars = targets.flatMap(l => splitChars(l));
     chars.forEach(c => c.classList.add('rv', 'rv--char'));
-    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 22));
+    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 16));
     // Cada letra es un inline-block (sin kerning entre ellas): se vuelve a medir el renglón.
     if (window.JSFfit && window.JSFfit.fit) window.JSFfit.fit([el]);
   }
