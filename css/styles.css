@@ -62,7 +62,7 @@
   --shadow:  var(--slate);
   --ink-bg:  var(--slate);
   --ink-fg:  var(--naples);
-  --glass:   rgba(251, 230, 160, 0.82);
+  --glass:   rgba(251, 230, 160, 0.96);
   --phone:   var(--slate);
 
   /* Banda oscura (archivo, marquee) */
@@ -125,7 +125,7 @@
   --shadow:  #061412;
   --ink-bg:  var(--naples);
   --ink-fg:  var(--slate);
-  --glass:   rgba(17, 47, 44, 0.82);
+  --glass:   rgba(17, 47, 44, 0.96);
   --phone:   #061412;
 
   --band-bg:    #0A1F1D;
@@ -400,9 +400,26 @@ p { text-wrap: pretty; }
 .js:not(.rv-ready) .hero__line { opacity: 0; animation: rv-safety 0s 2.5s both; }
 @keyframes rv-safety { to { opacity: 1; } }
 
-/* Parallax de capturas: motion.js mueve --py (translate, independiente del transform del reveal) */
+/* Parallax de capturas: lo mueve el propio scroll (animation-timeline), en el compositor y en el
+   mismo cuadro que el scroll, sin JS ni retraso. Usa `translate`, independiente del transform del reveal.
+   Sin soporte (Firefox), motion.js lo hace con GSAP moviendo --py. */
 @property --py { syntax: "<length>"; inherits: false; initial-value: 0px; }
 .shot-d, .shot-m { translate: 0 var(--py); }
+@keyframes px-d { from { translate: 0 14px; } to { translate: 0 -14px; } }
+@keyframes px-m { from { translate: 0 44px; } to { translate: 0 -28px; } }
+@keyframes wave-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@supports (animation-timeline: view()) {
+  @media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
+    .case { view-timeline: --case block; }
+    .js .shot-d { animation: px-d linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
+    .js .shot-m { animation: px-m linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .wave__path { stroke-dasharray: 1; animation: wave-draw linear both; animation-timeline: view(); animation-range: entry 5% cover 50%; }
+  }
+}
+/* Las cintas fuera de pantalla no se animan (motion.js marca .is-off) */
+.is-off .marquee__track, .is-off .band__track, .is-off.hero__strip .hero__strip-inner { animation-play-state: paused; }
 
 /* Cintas que se inclinan con la velocidad del scroll: capa propia, sin repintar */
 .marquee, .band, .hero__strip { will-change: transform; }
@@ -478,9 +495,9 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   width: min(100% - 2 * clamp(0.75rem, 3vw, 2rem), var(--max-w));
   display: flex; align-items: center; gap: 0.5rem;
   padding: 0.35rem 0.35rem 0.35rem 1.1rem;
+  /* Sin backdrop-filter: desenfocar lo que pasa por detrás obligaba a la GPU a recalcularlo en
+     cada cuadro del scroll. Un fondo casi opaco se ve igual y no cuesta nada. */
   background: var(--glass);
-  -webkit-backdrop-filter: blur(14px) saturate(1.3);
-  backdrop-filter: blur(14px) saturate(1.3);
   border: 2px solid var(--line);
   border-radius: 999px;
   box-shadow: 4px 4px 0 var(--shadow);
