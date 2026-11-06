@@ -316,7 +316,9 @@
     const go = () => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 300));
     if (document.readyState === 'complete') go(); else window.addEventListener('load', go, { once: true });
   }
-  whenIdle(() => VENDOR.forEach((href) => {
+  // La descarga anticipada espera unos segundos: así no compite con lo que se ve primero.
+  const prefetch = (fn) => whenIdle(() => setTimeout(fn, 3000));
+  prefetch(() => VENDOR.forEach((href) => {
     const l = document.createElement('link');
     l.rel = 'prefetch'; l.as = 'script'; l.href = href;
     document.head.appendChild(l);

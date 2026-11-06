@@ -1105,3 +1105,16 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .js .hero__top > *, .js .hero__badge, .js .hero__stats .stat, .js .hero__intro, .js .nav, .js .hero__strip,
   .js:not(.rv-ready) .hero__line { animation: none !important; opacity: 1; }
 }
+
+/* ---------- Render diferido (como en Bagués) ----------
+   Lo que está lejos de la pantalla no se dibuja ni se mide hasta acercarse: la primera carga
+   pinta antes y las imágenes de los casos esperan su turno. contain-intrinsic-size reserva
+   un alto aproximado y después recuerda el real (auto), así el scroll no salta. */
+.case    { content-visibility: auto; contain-intrinsic-size: auto 1700px; overflow-clip-margin: 4rem; }
+.archive { content-visibility: auto; contain-intrinsic-size: auto 1250px; }
+.skills  { content-visibility: auto; contain-intrinsic-size: auto 3200px; }
+.cv-all .case, .cv-all .archive, .cv-all .skills { content-visibility: visible; }
+@media (min-width: 701px) {
+  .case   { contain-intrinsic-size: auto 1100px; }
+  .skills { contain-intrinsic-size: auto 2000px; }
+}

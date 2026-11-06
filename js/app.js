@@ -49,6 +49,33 @@
   }, { passive: true });
   nav.addEventListener('focusin', () => nav.classList.remove('is-hidden'));
 
+  /* ---------- Saltos a una sección (#projects, #skills, #contact) ----------
+     Las secciones lejanas no se dibujan hasta acercarse (content-visibility en el CSS) y mientras
+     tanto ocupan un alto aproximado. Antes de saltar se dibujan todas un instante (.cv-all) para que
+     el destino quede exacto; al terminar el scroll vuelven a su modo liviano. */
+  function jumpTo(target, behavior) {
+    root.classList.add('cv-all');
+    target.scrollIntoView({ behavior, block: 'start' });
+    const done = () => root.classList.remove('cv-all');
+    if ('onscrollend' in window) window.addEventListener('scrollend', done, { once: true });
+    setTimeout(done, 1500);
+  }
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    const id = a && a.getAttribute('href').slice(1);
+    const target = id && document.getElementById(id);
+    if (!target || id === 'main' || id.startsWith('ver-')) return;
+    e.preventDefault();
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    jumpTo(target, smooth ? 'smooth' : 'instant');
+    history.pushState(null, '', '#' + id);
+  });
+  // Entrando con un #sección en la URL
+  const startId = location.hash.slice(1);
+  if (startId && !startId.startsWith('ver-') && document.getElementById(startId)) {
+    window.addEventListener('load', () => jumpTo(document.getElementById(startId), 'instant'), { once: true });
+  }
+
   /* ---------- Tema (el atributo inicial lo puso el snippet del <head>) ---------- */
 
   const themeBtn = document.getElementById('themeToggle');
