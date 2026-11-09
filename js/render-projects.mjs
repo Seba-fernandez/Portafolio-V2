@@ -59,10 +59,9 @@ export function renderProjects(html, data) {
     const make = asSpan ? tagSpan : tag;
     const out = [];
     out.push(make('tag--ink', `origin:${p.origin}`, data.origins[p.origin].es));
-    out.push(asSpan
-      ? '<span class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</span>'
-      : '<li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li>');
-    if (!asSpan) out.push(make('tag--peach', `type:${p.type}`, data.types[p.type].es));
+    // En las filas de "Más proyectos" va el estado; en los destacados ya lo dice el botón "Ver en vivo"
+    // y el tipo de web está en el subtítulo.
+    if (asSpan) out.push('<span class="tag tag--coral"><span class="dot" aria-hidden="true"></span><span data-i18n="tag.live">En línea</span></span>');
     (p.focus || []).forEach((f) => out.push(make('tag--sage', `focus:${f}`, data.focus[f].es)));
     return out.join('');
   }

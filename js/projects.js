@@ -198,7 +198,7 @@
     current = id;
     const tags = [
       `<li class="tag tag--ink">${esc(L(DATA.origins[p.origin]))}</li>`,
-      '<li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>Live</li>',
+      `<li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>${lang === 'en' ? 'Live' : 'En línea'}</li>`,
       `<li class="tag tag--peach">${esc(L(DATA.types[p.type]))}</li>`,
       ...p.focus.map(f => `<li class="tag tag--sage">${esc(L(DATA.focus[f]))}</li>`),
     ];
