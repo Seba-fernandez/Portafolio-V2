@@ -40,8 +40,8 @@
       "en": "Study project"
     },
     "concepto": {
-      "es": "Concepto de marca",
-      "en": "Brand concept"
+      "es": "Comercio local",
+      "en": "Local business"
     }
   },
   "focus": {
@@ -284,36 +284,36 @@
         "perf"
       ],
       "badge": {
-        "es": "Branding",
-        "en": "Branding"
+        "es": "Motion",
+        "en": "Motion"
       },
       "kicker": {
-        "es": "Galletas de autor · Diseño y animación",
-        "en": "Signature cookies · Design and motion"
+        "es": "Landing page · Comercio de galletas artesanales",
+        "en": "Landing page · Artisan cookie shop"
       },
       "context": {
-        "es": "Piccino hace galletas de autor en Córdoba y vende por Instagram. Diseñé para la marca un concepto de landing donde la galleta siempre es más grande que el texto: paneles en diagonal con los colores de su cuenta, sabores que caen torcidos y se acomodan, y una galleta que se va mordiendo mientras bajás.",
-        "en": "Piccino bakes signature cookies in Córdoba and sells them on Instagram. I designed a landing page concept for the brand where the cookie is always bigger than the type: angled panels in the colors of its account, flavors that drop in crooked and settle, and a cookie that gets bitten as you scroll."
+        "es": "Landing page para Piccino, un comercio de galletas artesanales de Córdoba que vende por Instagram. La galleta es la protagonista: paneles en diagonal con los colores de la marca, sabores que caen y se acomodan, y una galleta que se va mordiendo a medida que bajás. Animación fluida, scroll pulido y carga rápida en el celular.",
+        "en": "A landing page for Piccino, an artisan cookie shop in Córdoba that sells on Instagram. The cookie is the star: angled panels in the brand colors, flavors that drop in and settle, and a cookie that gets bitten as you scroll. Smooth animation, polished scrolling and fast loading on mobile."
       },
       "solved": {
         "es": [
-          "Paleta sacada del Instagram real de la marca: marrón, terracota, arena y crema",
-          "Seis sabores, cada uno en su panel, con la galleta que se acomoda al entrar en pantalla",
-          "Una mordida cuadro por cuadro, atada al scroll y precargada para que nunca aparezca un hueco",
-          "La entrada del hero es CSS puro: arranca en el primer cuadro, sin esperar al JavaScript",
-          "Fotos en AVIF en cuatro tamaños y una versión sin animaciones para quien activa “reducir movimiento”"
+          "Mordida cuadro por cuadro sincronizada con el scroll, con los cuadros precargados para que la animación nunca se corte",
+          "Seis sabores en paneles diagonales que entran con animación de anime.js al aparecer en pantalla",
+          "Entrada del hero en CSS puro: se ve animada desde el primer cuadro, sin esperar al JavaScript",
+          "Sitio en Astro con imágenes AVIF en cuatro tamaños para mantener la velocidad en el celular",
+          "Paleta tomada de la identidad de la marca y una versión sin animaciones para quien activa “reducir movimiento”"
         ],
         "en": [
-          "Palette taken from the brand’s real Instagram: brown, terracotta, sand and cream",
-          "Six flavors, each on its own panel, with the cookie settling into place as it comes into view",
-          "A frame-by-frame bite tied to the scroll and preloaded so a gap never shows",
-          "The hero entrance is pure CSS: it starts on the first frame without waiting for JavaScript",
-          "AVIF photos in four sizes, and a motion-free version for people who turn on “reduce motion”"
+          "A frame-by-frame bite synced to the scroll, with frames preloaded so the animation never stutters",
+          "Six flavors on angled panels that animate in with anime.js as they come into view",
+          "A pure-CSS hero entrance: it plays from the first frame without waiting for JavaScript",
+          "Built with Astro, with AVIF images in four sizes to keep it fast on mobile",
+          "A palette taken from the brand identity, plus a motion-free version for people who turn on “reduce motion”"
         ]
       },
       "note": {
-        "es": "Diseñada y publicada en un día. Más de 90 en PageSpeed mobile y 100 en accesibilidad. Las fotos de las galletas están generadas con IA, listas para reemplazarlas por las reales.",
-        "en": "Designed and shipped in one day. A PageSpeed mobile score above 90 and 100 in accessibility. The cookie photos are AI-generated, ready to be replaced with real ones."
+        "es": "Resultado: más de 90 en PageSpeed mobile y 100 en accesibilidad, con scroll fluido en celular y escritorio. Diseñada y publicada en un día.",
+        "en": "Result: a PageSpeed mobile score above 90 and 100 in accessibility, with smooth scrolling on mobile and desktop. Designed and shipped in one day."
       },
       "stack": [
         "Astro",
