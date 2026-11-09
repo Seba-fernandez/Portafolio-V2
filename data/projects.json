@@ -104,19 +104,19 @@
         "en": "Returning client · Product evolution"
       },
       "context": {
-        "es": "Grupo CESPAD no tenía sitio propio y ya ofrecía mucho más que pádel. Transformé aquella primera landing en un sitio donde cada deporte tiene su lugar, cada servicio se entiende rápido y cada consulta llega directo al WhatsApp que corresponde.",
-        "en": "Grupo CESPAD had no website of its own and already offered much more than padel. I turned that first landing into a site where every sport has its place, every service is quick to understand and every inquiry goes straight to the right WhatsApp."
+        "es": "Grupo CESPAD empezó con una landing de pádel, pero el negocio ya ofrecía mucho más. La convertí en un sitio donde cada deporte tiene su sección, cada servicio se entiende rápido y cada consulta llega al WhatsApp que corresponde.",
+        "en": "Grupo CESPAD started with a padel landing page, but the business already offered much more. I turned it into a site where every sport has its own section, every service is quick to understand and every inquiry reaches the right WhatsApp."
       },
       "solved": {
         "es": [
           "Contenido ordenado por deporte, para que cada visitante encuentre lo suyo",
-          "Botones de WhatsApp justo donde aparecen las ganas de consultar",
+          "Botones de WhatsApp en los puntos donde el visitante decide consultar",
           "Formulario con validación de los datos esenciales",
           "HTML semántico y datos estructurados para la búsqueda local"
         ],
         "en": [
           "Content organized by sport, so every visitor finds what they came for",
-          "WhatsApp buttons right where people feel like asking",
+          "WhatsApp buttons at the points where visitors decide to get in touch",
           "A form that validates the essential data",
           "Semantic HTML and structured data for local search"
         ]
@@ -176,19 +176,19 @@
           "Cada perfume con el nombre que la gente ya conoce, buscador que tolera errores y filtros por familia",
           "Ficha por perfume con notas, tamaños, precio y un link propio para compartir",
           "Pedido por WhatsApp sin pasarela de pago, a propósito: la venta se cierra hablando y los precios se verifican en la base",
-          "Rediseño completo, “Cada perfume, una ciudad”, con las fotos de todo el catálogo en un mismo estudio"
+          "Rediseño completo con el concepto “Cada perfume, una ciudad” y todo el catálogo fotografiado con el mismo estilo"
         ],
         "en": [
           "The panel reads the new cycle's PDFs, shows what changes and applies it only when I confirm, with a backup",
           "Every perfume under the name people already know, a search that forgives typos and filters by scent family",
           "A page per perfume with notes, sizes, price and its own shareable link",
           "Orders over WhatsApp with no payment gateway, on purpose: the sale closes in conversation and prices are checked in the database",
-          "A full redesign, “Every perfume, a city”, with the whole catalog photographed in one consistent studio look"
+          "A full redesign around the concept “Every perfume, a city”, with the whole catalog photographed in one consistent style"
         ]
       },
       "note": {
-        "es": "Resultado: el ciclo nuevo se carga en menos de media hora (antes, una o dos semanas). Más de 90 de velocidad en el celular y pruebas en Safari, Chrome y Firefox antes de cada publicación.",
-        "en": "Result: a new cycle loads in under half an hour (it used to take one or two weeks). Over 90 on mobile speed, and tested in Safari, Chrome and Firefox before every release."
+        "es": "Resultado: el ciclo nuevo se carga en menos de media hora, cuando antes llevaba una o dos semanas. Más de 90 en PageSpeed mobile y pruebas en Safari, Chrome y Firefox antes de cada publicación.",
+        "en": "Result: a new cycle loads in under half an hour, down from one or two weeks. A PageSpeed mobile score above 90, tested in Safari, Chrome and Firefox before every release."
       },
       "stack": [
         "React",
@@ -292,8 +292,8 @@
         "en": "Signature cookies · Design and motion"
       },
       "context": {
-        "es": "Piccino hace galletas de autor en Córdoba y vende por Instagram. Le diseñé una landing de marca donde la galleta siempre es más grande que el texto: paneles en diagonal con los colores de su cuenta, sabores que caen torcidos y se acomodan, y una cookie que se va mordiendo mientras bajás.",
-        "en": "Piccino bakes signature cookies in Córdoba and sells them on Instagram. I designed a brand landing where the cookie is always bigger than the type: angled panels in the colors of its account, flavors that drop in crooked and settle, and a cookie that gets bitten as you scroll."
+        "es": "Piccino hace galletas de autor en Córdoba y vende por Instagram. Diseñé para la marca un concepto de landing donde la galleta siempre es más grande que el texto: paneles en diagonal con los colores de su cuenta, sabores que caen torcidos y se acomodan, y una galleta que se va mordiendo mientras bajás.",
+        "en": "Piccino bakes signature cookies in Córdoba and sells them on Instagram. I designed a landing page concept for the brand where the cookie is always bigger than the type: angled panels in the colors of its account, flavors that drop in crooked and settle, and a cookie that gets bitten as you scroll."
       },
       "solved": {
         "es": [
@@ -301,19 +301,19 @@
           "Seis sabores, cada uno en su panel, con la galleta que se acomoda al entrar en pantalla",
           "Una mordida cuadro por cuadro, atada al scroll y precargada para que nunca aparezca un hueco",
           "La entrada del hero es CSS puro: arranca en el primer cuadro, sin esperar al JavaScript",
-          "Fotos en AVIF en cuatro tamaños, y todo quieto y legible con “reducir movimiento”"
+          "Fotos en AVIF en cuatro tamaños y una versión sin animaciones para quien activa “reducir movimiento”"
         ],
         "en": [
           "Palette taken from the brand’s real Instagram: brown, terracotta, sand and cream",
           "Six flavors, each on its own panel, with the cookie settling into place as it comes into view",
           "A frame-by-frame bite tied to the scroll and preloaded so a gap never shows",
           "The hero entrance is pure CSS: it starts on the first frame without waiting for JavaScript",
-          "AVIF photos in four sizes, and everything still and readable with “reduce motion”"
+          "AVIF photos in four sizes, and a motion-free version for people who turn on “reduce motion”"
         ]
       },
       "note": {
-        "es": "Diseñada y publicada en un día. Más de 90 de velocidad en el celular y 100 en accesibilidad. Las fotos de las galletas están generadas con IA y quedan listas para cambiarlas por las reales.",
-        "en": "Designed and shipped in a day. Over 90 on mobile speed and 100 on accessibility. The cookie photos are AI-generated and ready to be swapped for real ones."
+        "es": "Diseñada y publicada en un día. Más de 90 en PageSpeed mobile y 100 en accesibilidad. Las fotos de las galletas están generadas con IA, listas para reemplazarlas por las reales.",
+        "en": "Designed and shipped in one day. A PageSpeed mobile score above 90 and 100 in accessibility. The cookie photos are AI-generated, ready to be replaced with real ones."
       },
       "stack": [
         "Astro",
@@ -358,7 +358,7 @@
         "en": "First delivery · Starting point"
       },
       "context": {
-        "es": "Primera presencia digital para una propuesta de pádel. Tenía que explicar el servicio y llevar al WhatsApp, nada más.",
+        "es": "Primera presencia digital para un negocio de pádel. Tenía que explicar el servicio y llevar al WhatsApp, nada más.",
         "en": "First online presence for a padel venue. It had to explain the service and lead to WhatsApp, nothing more."
       },
       "solved": {
@@ -469,8 +469,8 @@
         "en": "Study project · Images and design"
       },
       "context": {
-        "es": "Proyecto de estudio sobre compresión de imágenes y diseño: la landing de un festival EDM que tenía que pegar fuerte sin tardar en cargar, con video de fondo, lineup y tickets.",
-        "en": "Study project on image compression and design: the landing page for an EDM festival that had to hit hard without loading slowly, with background video, lineup and tickets."
+        "es": "Proyecto de estudio sobre compresión de imágenes y diseño: la landing de un festival EDM con video de fondo, lineup y tickets, que tenía que impactar sin cargar lento.",
+        "en": "A study project on image compression and design: the landing page for an EDM festival, with background video, lineup and tickets, that had to make an impact without loading slowly."
       },
       "solved": {
         "es": [
