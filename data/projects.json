@@ -164,19 +164,17 @@
         "en": "Perfume store · Started as an internal system, now a store and admin panel"
       },
       "context": {
-        "es": "Grupo Wolf, el emprendimiento familiar, vende perfumes Bagués por catálogo, y el catálogo cambia cada mes: más de cien aromas, precios que se mueven, perfumes que entran y salen. Actualizar todo a mano llevaba una o dos semanas. Lo resolví con una tienda y un panel propios: el ciclo nuevo se carga desde los PDF del proveedor y cada pedido llega listo por WhatsApp.",
-        "en": "Grupo Wolf, our family business, sells Bagués perfumes from a catalog that changes every month: over a hundred scents, shifting prices, perfumes coming and going. Updating everything by hand took one or two weeks. I solved it with a custom store and admin panel: the new cycle loads from the supplier's PDFs and every order arrives ready over WhatsApp."
+        "es": "Grupo Wolf, el emprendimiento familiar, vende perfumes Bagués por catálogo, y el catálogo cambia cada mes: más de cien aromas, precios que se mueven, perfumes que entran y salen. Actualizar todo a mano llevaba una o dos semanas. Lo resolví con una tienda y un panel propios: el ciclo nuevo se carga desde el panel y cada pedido llega listo por WhatsApp.",
+        "en": "Grupo Wolf, our family business, sells Bagués perfumes from a catalog that changes every month: over a hundred scents, shifting prices, perfumes coming and going. Updating everything by hand took one or two weeks. I solved it with a custom store and admin panel: the new cycle loads from the panel and every order arrives ready over WhatsApp."
       },
       "solved": {
         "es": [
-          "El panel lee los PDF del ciclo nuevo, muestra qué cambia y lo aplica cuando confirmo, guardando antes una copia de seguridad",
           "Cada perfume con el nombre que la gente ya conoce, buscador que tolera errores y filtros por familia",
           "Ficha por perfume con notas, tamaños, precio y un link propio para compartir",
           "Pedido por WhatsApp sin pago online, a propósito: la venta se cierra conversando y los precios se controlan en el sistema",
           "Rediseño completo con el concepto “Cada perfume, una ciudad” y todo el catálogo fotografiado con el mismo estilo"
         ],
         "en": [
-          "The panel reads the new cycle's PDFs, shows what changes and applies it when I confirm, saving a backup first",
           "Every perfume under the name people already know, a search that forgives typos and filters by scent family",
           "A page per perfume with notes, sizes, price and its own shareable link",
           "Orders over WhatsApp with no online payment, on purpose: the sale closes in conversation and prices are checked by the system",
@@ -184,8 +182,8 @@
         ]
       },
       "note": {
-        "es": "Resultado: el ciclo nuevo se carga en menos de media hora, cuando antes llevaba una o dos semanas. Más de 90/100 en la prueba de velocidad de Google en celular, y pruebas en Safari, Chrome y Firefox antes de cada publicación.",
-        "en": "Result: a new cycle loads in under half an hour, down from one or two weeks. Over 90/100 on Google's mobile speed test, and tested in Safari, Chrome and Firefox before every release."
+        "es": "Resultado: el ciclo nuevo se carga en menos de media hora, cuando antes llevaba una o dos semanas. 96/100 en la prueba de velocidad de Google en celular, y pruebas en Safari, Chrome y Firefox antes de cada publicación.",
+        "en": "Result: a new cycle loads in under half an hour, down from one or two weeks. 96/100 on Google's mobile speed test, and tested in Safari, Chrome and Firefox before every release."
       },
       "stack": [
         "React",
@@ -309,8 +307,8 @@
         ]
       },
       "note": {
-        "es": "Resultado: más de 90/100 en la prueba de velocidad de Google en celular y 100/100 en accesibilidad, con scroll fluido en celular y escritorio. Diseñada y publicada en un día.",
-        "en": "Result: over 90/100 on Google's mobile speed test and 100/100 on accessibility, with smooth scrolling on mobile and desktop. Designed and shipped in one day."
+        "es": "Resultado: scroll fluido en celular y escritorio. Diseñada y publicada en un día.",
+        "en": "Result: smooth scrolling on mobile and desktop. Designed and shipped in one day."
       },
       "stack": [
         "Astro",

@@ -1,6 +1,6 @@
 # JSF® — Portfolio
 
-Personal portfolio of **Juan Sebastián Fernandez**, web developer based in Córdoba, Argentina.
+Personal portfolio of **Juan Sebastián Fernandez**, software developer based in Córdoba, Argentina.
 Brutalist editorial design, kinetic typography and a palette taken from Sanzo Wada's
 *A Dictionary of Color Combinations* (No. 166) — built with performance, accessibility and
 clear user flows as implementation criteria.
