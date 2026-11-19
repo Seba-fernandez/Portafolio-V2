@@ -39,7 +39,7 @@
       "es": "Estudio",
       "en": "Study project"
     },
-    "concepto": {
+    "comercio": {
       "es": "Comercio local",
       "en": "Local business"
     }
@@ -272,7 +272,7 @@
         "en": "Piccino bakery"
       },
       "type": "landing",
-      "origin": "concepto",
+      "origin": "comercio",
       "focus": [
         "diseno",
         "motion",
