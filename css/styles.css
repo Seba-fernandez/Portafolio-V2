@@ -1350,3 +1350,31 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .nav::after { display: none; }
   .case__info { translate: none !important; }
 }
+
+/* ---------- Salida del hero y deriva de los títulos gigantes ----------
+   Atadas al scroll con animation-timeline: las resuelve el navegador, sin JS.
+   El hero espera a .rv-ready para no pisar el reveal de las letras, que hasta
+   ese momento mantiene las líneas en opacity: 0. */
+@keyframes hero-exit  { to { translate: 0 -7%; opacity: 0.45; } }
+@keyframes giant-pan  { from { translate: -2.5% 0; } to { translate: 2.5% 0; } }
+
+@supports (animation-timeline: view()) {
+  @media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .js.rv-ready .hero__title {
+      animation: hero-exit linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 92%;
+    }
+  }
+  @media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
+    /* Solo el contenedor: las letras siguen usando transform para el reveal. */
+    .js .giant-title {
+      animation: giant-pan linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__title, .giant-title { translate: none !important; opacity: 1 !important; }
+}

@@ -161,7 +161,7 @@
     'xp1.1': 'I help build applied AI products alongside the founder.',
     'xp1.2': 'I take part in the full cycle of each delivery: analysis, design, development, testing and release.',
     'xp1.3': 'I build with TypeScript, Next.js and React, and integrate language models with credentials and validation kept on the server side.',
-    'xp2.when': 'Since March 2026 · Client projects',
+    'xp2.when': 'Since April 2026 · Client projects',
     'xp2.role': 'End-to-end development',
     'xp2.1': 'Client discovery, scope definition and technical proposal.',
     'xp2.2': 'Development, deploy, domain and DNS, structured data and Google Search Console.',

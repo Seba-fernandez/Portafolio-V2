@@ -32,7 +32,7 @@ Archivo is loaded from Google Fonts. No framework or build step is needed to dep
 │   ├── render-projects.mjs # Shared renderer used by the build script and the panel
 │   └── motion.js           # GSAP layer: kinetic type, parallax, reveals
 ├── img/p/                  # Project screenshots, desktop + mobile, responsive WebP
-└── og-2026.png             # 1200×630 social preview (real capture of the site; new name = fresh preview on WhatsApp/LinkedIn)
+└── og-2026-11.png          # 1200×630 social preview (real capture of the site; new name = fresh preview on WhatsApp/LinkedIn)
 ```
 
 ## Private panel (`/panel`)
