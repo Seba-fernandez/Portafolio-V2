@@ -410,7 +410,7 @@ p { text-wrap: pretty; }
 @keyframes px-m { from { translate: 0 44px; } to { translate: 0 -28px; } }
 @keyframes wave-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @supports (animation-timeline: view()) {
-  @media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
     .case { view-timeline: --case block; }
     .js .shot-d { animation: px-d linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
     .js .shot-m { animation: px-m linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
@@ -1169,9 +1169,9 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   from { clip-path: ellipse(152% 140% at var(--mx, 50%) var(--my, 50%)); }
   to   { clip-path: ellipse(0%   0%   at var(--mx, 50%) var(--my, 50%)); }
 }
-.js .btn:hover::before, .js .btn:focus-visible::before,
-.js .pill-btn:hover::before, .js .pill-btn:focus-visible::before,
-.js .footer__links a:hover::before, .js .footer__links a:focus-visible::before {
+.js .btn:hover::before, .js .btn:focus-visible::before, .js .btn:active::before,
+.js .pill-btn:hover::before, .js .pill-btn:focus-visible::before, .js .pill-btn:active::before,
+.js .footer__links a:hover::before, .js .footer__links a:focus-visible::before, .js .footer__links a:active::before {
   animation: liquid-in 0.34s var(--ease-liquid) forwards;
 }
 /* Al salir el puntero la tinta se retira: .is-liq-out lo pone motion.js, así la
@@ -1355,7 +1355,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    Atadas al scroll con animation-timeline: las resuelve el navegador, sin JS.
    El hero espera a .rv-ready para no pisar el reveal de las letras, que hasta
    ese momento mantiene las líneas en opacity: 0. */
-@keyframes hero-exit  { to { translate: 0 -7%; opacity: 0.45; } }
+@keyframes hero-exit  { to { translate: 0 -12%; opacity: 0.28; } }
 @keyframes giant-pan  { from { translate: -2.5% 0; } to { translate: 2.5% 0; } }
 
 @supports (animation-timeline: view()) {
@@ -1366,7 +1366,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
       animation-range: exit 0% exit 92%;
     }
   }
-  @media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
     /* Solo el contenedor: las letras siguen usando transform para el reveal. */
     .js .giant-title {
       animation: giant-pan linear both;
@@ -1377,4 +1377,51 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero__title, .giant-title { translate: none !important; opacity: 1 !important; }
+}
+
+/* ═════════ 06 · PROFUNDIDAD EN LOS CASOS ═════════
+   La seccion de proyectos ocupa casi toda la pagina, asi que es donde el scroll
+   tiene que notarse. Todo atado a animation-timeline y en el compositor. */
+
+/* La captura se descubre de abajo hacia arriba a medida que entra.
+   Va sobre .shot-btn, que ya recorta y no lleva la sombra dura: asi el barrido
+   no come la sombra. El `round` conserva el radio del marco. */
+/* Sin `round`: .shot-btn ya recorta con overflow:hidden y su border-radius,
+   asi que las esquinas siguen redondeadas igual. */
+@keyframes shot-wipe {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0% 0); }
+}
+/* Y arranca agrandada, encogiendo hasta su tamaño. Solo donde no hay hover:
+   en escritorio el zoom al pasar el mouse sigue siendo del usuario. */
+@keyframes shot-zoom { from { scale: 1.16; } to { scale: 1; } }
+/* El numero del caso se mueve en contra de la captura */
+@keyframes num-drift { from { translate: 0 14px; } to { translate: 0 -14px; } }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* En celular .shot-d esta oculto y se ve la maqueta de telefono: van las dos.
+       Usa la linea --case del propio caso, la misma que ya mueve el parallax. */
+    .js .shot-d .shot-btn, .js .shot-m .shot-btn {
+      animation: shot-wipe linear both;
+      animation-timeline: --case;
+      animation-range: cover 2% cover 30%;
+    }
+    .js .case__num {
+      animation: num-drift linear both;
+      animation-timeline: --case;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+  @media (hover: none) and (prefers-reduced-motion: no-preference) {
+    .js .shot-btn img {
+      animation: shot-zoom linear both;
+      animation-timeline: --case;
+      animation-range: cover 0% cover 38%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shot-btn { clip-path: none !important; }
+  .shot-btn img, .case__num { scale: 1 !important; translate: none !important; }
 }
