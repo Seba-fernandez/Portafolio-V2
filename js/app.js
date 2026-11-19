@@ -155,6 +155,7 @@
     'sk.tools': 'Tools',
     'sk.learning': 'Learning',
     'sk.ai': 'AI-assisted dev',
+    'xp.head': 'Experience',
     'xp1.when': 'Present · Whokena',
     'xp1.role': 'Software Developer · Applied AI',
     'xp1.1': 'I help build applied AI products alongside the founder.',

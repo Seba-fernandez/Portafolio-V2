@@ -105,6 +105,7 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);     /* expo-out: llega rápido, sin rebote */
   --ease-ui:  cubic-bezier(0.3, 0.7, 0.2, 1);    /* hover y estados */
   --ease-pop: cubic-bezier(0.3, 1.25, 0.5, 1);   /* un toque de resorte, apenas perceptible */
+  --ease-liquid: cubic-bezier(0.38, 0.72, 0.28, 1); /* tinta: entra decidida y el frente cruza a la vista */
   --t-ui:    0.18s;    /* hover, color */
   --t-press: 0.09s;    /* al apretar */
   --t-in:    0.42s;    /* apariciones */
@@ -980,6 +981,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .skills-grid { gap: var(--s-5) var(--s-3); }
   .xp { grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
 }
+/* Seis columnas entran en dos filas parejas de tres: con auto-fit entraban cinco
+   y "En formación" quedaba sola abajo, dejando un hueco muerto. */
+@media (min-width: 701px)  { .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .skills-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* ---------- Footer ---------- */
 .footer {
@@ -1112,9 +1117,236 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    un alto aproximado y después recuerda el real (auto), así el scroll no salta. */
 .case    { content-visibility: auto; contain-intrinsic-size: auto 1700px; overflow-clip-margin: 4rem; }
 .archive { content-visibility: auto; contain-intrinsic-size: auto 1250px; }
-.skills  { content-visibility: auto; contain-intrinsic-size: auto 3200px; }
+.skills  { content-visibility: auto; contain-intrinsic-size: auto 3600px; }
 .cv-all .case, .cv-all .archive, .cv-all .skills { content-visibility: visible; }
 @media (min-width: 701px) {
   .case   { contain-intrinsic-size: auto 1100px; }
-  .skills { contain-intrinsic-size: auto 2000px; }
+  .skills { contain-intrinsic-size: auto 2300px; }
+}
+
+/* ═════════ 05 · CAPA INMERSIVA (2026) ═════════
+   Todo lo que sigue se apoya en las mismas reglas del resto del sitio:
+   solo transform/translate/scale/opacity/clip-path (compositor), animaciones
+   atadas al scroll con animation-timeline cuando el navegador la soporta
+   (las hace el propio navegador, sin JS y sin retraso), y estado final visible
+   cuando no hay soporte, no hay JS o se pidió "reducir movimiento". */
+
+/* ---------- Botones líquidos ----------
+   La tinta entra desde donde está el puntero (js/motion.js escribe --mx/--my) y
+   se abre con clip-path: ellipse(). Los dos radios crecen desfasados, así el
+   borde ondula como líquido en vez de ser un círculo. clip-path se compone en el
+   compositor: no repinta ni mide el layout.
+   El texto va por encima (z-index) y el relleno viejo (background) queda intacto,
+   así que sin soporte de clip-path el botón se comporta como antes. */
+.btn, .pill-btn, .footer__links a {
+  position: relative;
+  isolation: isolate;
+}
+.btn, .pill-btn, .footer__links a { overflow: hidden; }
+.btn > *, .pill-btn > *, .footer__links a > * { position: relative; z-index: 1; }
+
+.btn::before, .pill-btn::before, .footer__links a::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: var(--liq, var(--coral));
+  clip-path: ellipse(0% 0% at var(--mx, 50%) var(--my, 50%));
+  pointer-events: none;
+}
+/* 9 fotogramas: el radio horizontal va adelante y el vertical lo persigue, así el
+   frente ondula. Los pasos están repartidos parejo en el espacio y la curva de
+   tiempo (no expo) hace que el barrido se vea, en vez de completarse al instante. */
+@keyframes liquid-in {
+  0%   { clip-path: ellipse(0%    0%    at var(--mx, 50%) var(--my, 50%)); }
+  12%  { clip-path: ellipse(20%   26%   at var(--mx, 50%) var(--my, 50%)); }
+  25%  { clip-path: ellipse(42%   36%   at var(--mx, 50%) var(--my, 50%)); }
+  38%  { clip-path: ellipse(60%   56%   at var(--mx, 50%) var(--my, 50%)); }
+  50%  { clip-path: ellipse(80%   66%   at var(--mx, 50%) var(--my, 50%)); }
+  62%  { clip-path: ellipse(98%   84%   at var(--mx, 50%) var(--my, 50%)); }
+  75%  { clip-path: ellipse(116%  96%   at var(--mx, 50%) var(--my, 50%)); }
+  88%  { clip-path: ellipse(134%  118%  at var(--mx, 50%) var(--my, 50%)); }
+  100% { clip-path: ellipse(152%  140%  at var(--mx, 50%) var(--my, 50%)); }
+}
+@keyframes liquid-out {
+  from { clip-path: ellipse(152% 140% at var(--mx, 50%) var(--my, 50%)); }
+  to   { clip-path: ellipse(0%   0%   at var(--mx, 50%) var(--my, 50%)); }
+}
+.js .btn:hover::before, .js .btn:focus-visible::before,
+.js .pill-btn:hover::before, .js .pill-btn:focus-visible::before,
+.js .footer__links a:hover::before, .js .footer__links a:focus-visible::before {
+  animation: liquid-in 0.34s var(--ease-liquid) forwards;
+}
+/* Al salir el puntero la tinta se retira: .is-liq-out lo pone motion.js, así la
+   salida no se dispara en la primera carga ni al perder el foco por teclado. */
+.js .btn.is-liq-out::before, .js .pill-btn.is-liq-out::before, .js .footer__links a.is-liq-out::before {
+  animation: liquid-out 0.22s var(--ease-ui) forwards;
+}
+/* Cada botón elige su tinta, respetando el contraste que ya tenía en hover */
+.btn            { --liq: var(--coral); }
+.btn:hover,  .btn:focus-visible  { color: var(--slate); }
+.btn--ghost     { --liq: var(--sage); }
+.pill-btn       { --liq: var(--coral); }
+.archive .pill-btn:hover, .archive .pill-btn:focus-visible { color: var(--slate); }
+.fchip--focus   { --liq: var(--naples); }
+.footer__links a { --liq: var(--slate); }
+.footer__links a:hover, .footer__links a:focus-visible { color: var(--naples); }
+/* El sólido del hover ya no hace falta: lo trae la tinta (y sin JS sigue estando) */
+.js .btn--ghost:hover, .js .btn--ghost:focus-visible,
+.js .footer__links a:hover, .js .footer__links a:focus-visible,
+.js .archive .pill-btn:hover, .js .archive .pill-btn:focus-visible { background: transparent; }
+.js .btn--ghost:hover, .js .btn--ghost:focus-visible { box-shadow: 4px 4px 0 var(--fg); }
+/* El estado activo del chip no es un hover: queda sólido */
+.pill-btn.is-on, .fchip--focus.is-on { --liq: transparent; }
+
+/* Imán: motion.js acerca el botón al puntero con transform (propiedad distinta
+   de `translate`, que es la que usa el hover de CSS: no se pisan). */
+.btn, .pill-btn { will-change: auto; }
+.js .btn.is-magnet, .js .pill-btn.is-magnet { will-change: transform; }
+
+/* ---------- Skills: iconos que se dibujan y lista que reacciona ---------- */
+.sk-ico {
+  width: 1.15em; height: 1.15em; flex: none;
+  fill: none; stroke: currentColor;
+  stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round;
+  transition: rotate 0.3s var(--ease-pop), scale 0.3s var(--ease-pop);
+}
+.skills-col:hover .sk-ico, .skills-col:focus-within .sk-ico { rotate: -12deg; scale: 1.18; }
+
+/* El trazo se dibuja solo cuando la columna entra en pantalla. Sin soporte
+   (o con "reducir movimiento") el icono ya está dibujado. */
+@keyframes sk-draw { from { stroke-dashoffset: 42; } to { stroke-dashoffset: 0; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .sk-ico > * {
+      stroke-dasharray: 42;
+      animation: sk-draw 1s var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+  }
+}
+
+/* Cada habilidad reacciona al puntero: marcador que se abre y texto que avanza */
+.skills-col li {
+  position: relative;
+  padding-left: 0;
+  transition: padding-left var(--t-ui) var(--ease-ui), color var(--t-ui);
+}
+.skills-col li::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  width: 0.5rem; height: 0.5rem; border-radius: 50%;
+  background: var(--coral);
+  translate: -0.1rem -50%;
+  scale: 0;
+  transition: scale 0.26s var(--ease-pop);
+}
+.skills-col li:hover { padding-left: 1.1rem; }
+.skills-col li:hover::before { scale: 1; }
+
+/* ---------- Experiencia: riel con progreso atado al scroll ---------- */
+.xp-head {
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  width: min(100% - 2 * var(--gutter), var(--max-w)); margin-inline: auto;
+  padding-top: var(--s-7);
+}
+.xp-track {
+  position: relative;
+  width: min(100% - 2 * var(--gutter), var(--max-w)); margin-inline: auto;
+}
+/* Riel tenue de fondo */
+.xp-track::before {
+  content: ""; position: absolute; z-index: 0;
+  left: 0; top: var(--s-5); bottom: var(--s-4);
+  width: 3px; border-radius: 3px;
+  background: var(--rule);
+}
+/* Progreso: se llena con el scroll. transform-origin arriba, solo scaleY. */
+.xp-track::after {
+  content: ""; position: absolute; z-index: 1;
+  left: 0; top: var(--s-5); bottom: var(--s-4);
+  width: 3px; border-radius: 3px;
+  background: var(--coral);
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+}
+@keyframes xp-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .xp-track::after {
+      animation: xp-fill linear both;
+      animation-timeline: view();
+      animation-range: entry 60% exit 35%;
+    }
+  }
+}
+/* Sin animación atada al scroll el riel queda entero (no a medias) */
+@supports not (animation-timeline: view()) { .xp-track::after { transform: scaleY(1); } }
+
+.xp-track .xp { padding-left: calc(var(--s-3) + 0.75rem); }
+/* Nodo de cada etapa, sobre el riel */
+.xp__when { position: relative; z-index: 2; }
+.xp__when::before {
+  content: ""; position: absolute;
+  left: calc((var(--s-3) + 0.75rem) * -1 - 0.33rem); top: 50%;
+  width: 1.05rem; height: 1.05rem; border-radius: 50%;
+  translate: 0 -50%;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 3px var(--fg);
+  rotate: 1.5deg; /* compensa la rotación del chip */
+}
+/* El nodo se enciende al llegar a su etapa */
+@keyframes xp-node { to { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); scale: 1.15; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .xp__when::before {
+      animation: xp-node 0.01s var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 85% entry 100%;
+    }
+  }
+}
+@media (max-width: 700px) {
+  .xp-head { padding-top: var(--s-6); }
+  .xp-track .xp { padding-left: var(--s-3); }
+  .xp__when::before { left: calc(var(--s-3) * -1 - 0.33rem); }
+}
+
+/* ---------- Progreso de lectura en la nav ---------- */
+.nav::after {
+  content: ""; position: absolute; z-index: 1;
+  left: 1.1rem; right: 1.1rem; bottom: 0; height: 2px;
+  border-radius: 2px; background: var(--coral);
+  transform-origin: 0 50%; transform: scaleX(0);
+  pointer-events: none;
+}
+@keyframes nav-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@supports (animation-timeline: scroll(root)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .nav::after { animation: nav-progress linear both; animation-timeline: scroll(root); }
+  }
+}
+
+/* ---------- Profundidad en los casos ----------
+   El texto deriva apenas en contra de la captura pegajosa: da relieve sin mover
+   nada del layout. Usa `translate`, que no choca con el `transform` del reveal. */
+@keyframes case-drift { from { translate: 0 20px; } to { translate: 0 -20px; } }
+@supports (animation-timeline: view()) {
+  @media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+    .js .case__info {
+      animation: case-drift linear both;
+      animation-timeline: view();
+      animation-range: entry 25% exit 75%;
+    }
+  }
+}
+
+/* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
+  .js .btn--ghost:hover, .js .btn--ghost:focus-visible { background: var(--sage); }
+  .js .footer__links a:hover, .js .footer__links a:focus-visible { background: var(--slate); }
+  .js .archive .pill-btn:hover, .js .archive .pill-btn:focus-visible { background: var(--coral); }
+  .sk-ico > * { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  .xp-track::after { transform: scaleY(1); }
+  .xp__when::before { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); }
+  .nav::after { display: none; }
+  .case__info { translate: none !important; }
 }

@@ -357,6 +357,7 @@
     window.addEventListener('jsf:layout-settled', queueRefresh);
 
     setupManifesto();
+    setupMagnet();
 
     // Parallax y onda: si el navegador anima con el scroll en CSS (animation-timeline), lo hace él en
     // el compositor; GSAP queda solo como respaldo para los que no lo soportan.
@@ -426,6 +427,112 @@
         }, { passive: true });
       }
     }
+  }
+
+  /* ---------- Botones líquidos ----------
+     La tinta de CSS se abre desde donde entró el puntero: acá solo se escribe
+     --mx/--my (un rect por entrada, nada en cada frame) y se marca la salida.
+     Con teclado la tinta entra desde el centro. */
+
+  const LIQ = '.btn, .pill-btn, .footer__links a';
+  const OUT_MS = 220;
+  const outTimers = new WeakMap();
+
+  function liqEnter(el, e) {
+    const t = outTimers.get(el);
+    if (t) { clearTimeout(t); outTimers.delete(el); }
+    el.classList.remove('is-liq-out');
+    if (e) {
+      const r = el.getBoundingClientRect();
+      if (r.width && r.height) {
+        el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      }
+    } else {
+      el.style.setProperty('--mx', '50%');
+      el.style.setProperty('--my', '50%');
+    }
+  }
+
+  function liqLeave(el) {
+    el.classList.add('is-liq-out');
+    outTimers.set(el, setTimeout(() => {
+      el.classList.remove('is-liq-out');
+      outTimers.delete(el);
+    }, OUT_MS));
+  }
+
+  // pointerenter/leave no burbujean: se delega con pointerover/pointerout.
+  document.addEventListener('pointerover', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (!el || el.contains(e.relatedTarget)) return;
+    liqEnter(el, e);
+    if (magnet) magnet(el);
+  }, { passive: true });
+
+  document.addEventListener('pointerout', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (!el || el.contains(e.relatedTarget)) return;
+    liqLeave(el);
+  }, { passive: true });
+
+  // Teclado: la tinta entra centrada y se retira al salir del foco.
+  document.addEventListener('focusin', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (el) liqEnter(el, null);
+  }, { passive: true });
+  document.addEventListener('focusout', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (el) liqLeave(el);
+  }, { passive: true });
+
+  /* ---------- Imán (solo puntero fino, con GSAP ya cargado) ----------
+     El botón se acerca al puntero hasta 4 px y vuelve con un resorte corto.
+     Escribe `transform`, que es otra propiedad que el `translate` del hover de
+     CSS: los dos se componen y ninguno pisa al otro. */
+
+  let magnet = null;
+  const MAG = 4;
+
+  function setupMagnet() {
+    if (!hasGsap || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const tweens = new WeakMap();
+    const get = (el) => {
+      let q = tweens.get(el);
+      if (!q) {
+        q = {
+          x: gsap.quickTo(el, 'x', { duration: 0.26, ease: 'power3.out' }),
+          y: gsap.quickTo(el, 'y', { duration: 0.26, ease: 'power3.out' }),
+        };
+        tweens.set(el, q);
+      }
+      return q;
+    };
+    magnet = (el) => {
+      if (el.dataset.magnet) return;
+      el.dataset.magnet = '1';
+      el.classList.add('is-magnet');
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const q = get(el);
+      const move = (ev) => {
+        q.x(gsap.utils.clamp(-MAG, MAG, (ev.clientX - cx) / (r.width / 2) * MAG));
+        q.y(gsap.utils.clamp(-MAG, MAG, (ev.clientY - cy) / (r.height / 2) * MAG));
+      };
+      const off = (ev) => {
+        if (el.contains(ev.relatedTarget)) return;
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerout', off);
+        delete el.dataset.magnet;
+        gsap.to(el, {
+          x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.75)',
+          onComplete: () => el.classList.remove('is-magnet'),
+        });
+      };
+      el.addEventListener('pointermove', move, { passive: true });
+      el.addEventListener('pointerout', off, { passive: true });
+    };
   }
 
   /* ---------- API mínima para app.js (cambio de idioma) ---------- */
