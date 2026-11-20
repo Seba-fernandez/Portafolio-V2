@@ -1637,3 +1637,42 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* El bloque de color detrás de la captura ya no necesita salirse tanto */
 .case__media::before { inset: 10% 10% 1.5rem -1.5%; }
 .case:nth-of-type(even) .case__media::before { inset: 10% 10% 1.5rem -1.5%; }
+
+/* ---------- Escala de espacios ----------
+   Medido: 18 valores verticales distintos, y el mismo 72 px hacía cuatro
+   trabajos diferentes. Peor: había más aire entre filas de Skills (72) que
+   entre tarjetas de proyecto (48), o sea que la página agrupaba al revés.
+   Un solo valor por función, con los tokens que ya existen. */
+.case { margin-bottom: var(--s-4); }          /* entre tarjetas: 32 -> era 48 suelto */
+.work .case:first-of-type { margin-top: var(--s-4); }
+.skills-grid { row-gap: var(--s-5); }         /* filas de Skills: menos que entre secciones */
+.xp { padding-top: var(--s-5); }              /* filas de Experiencia: igual que Skills */
+
+/* ---------- Jerarquía tipográfica ----------
+   Medido: "Skills" salía a 282 px y el nombre del hero a 175. Una lista de chips
+   era el elemento más grande de la página. Pasa porque el ajuste al ancho estira
+   las palabras cortas: "Skills" tiene 6 letras y "Proyectos" 9. El tope
+   data-fit-max lo corrige sin tocar el motor de ajuste.
+
+   Y Experiencia, que es lo que mira un reclutador, tenía el encabezado más chico
+   de la página (41,6 px), más chico que los roles que cuelgan de él (48 px). */
+.xp-head {
+  font-size: clamp(2rem, 5.6vw, 4.5rem);
+  font-stretch: 125%;
+}
+.xp__role {
+  font-size: clamp(1.2rem, 2.5vw, 2.05rem);
+  font-weight: 800;
+  font-stretch: 90%;
+}
+/* La empresa deja de ser la línea más débil del bloque */
+.xp__when { font-weight: 800; }
+
+/* Los títulos de caso pasan al lado condensado del eje de ancho de Archivo.
+   El sistema ya usa el ancho por rol (80 etiquetas, 90 tags, 100 texto, 118
+   roles, 125 display) pero nunca el lado angosto en tamaños grandes: todo lo
+   grande era ancho y pesado. Condensado para los casos y expandido para las
+   secciones vuelve el contraste intencional.
+   Ojo: el mínimo real es 75%. El 62% solo existe en el archivo de rango
+   extendido, que no cubre las letras latinas básicas. */
+.case__title { font-stretch: 78%; font-weight: 800; }
