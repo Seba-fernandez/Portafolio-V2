@@ -1439,3 +1439,64 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .shot-btn { clip-path: none !important; }
   .shot-btn img, .case__num { scale: 1 !important; translate: none !important; }
 }
+
+/* ═════════ 07 · ERGONOMÍA DE LECTURA ═════════
+   Medido con navegador: la página ocupaba 15,2 pantallas en celular, Skills sola
+   5,2, y en escritorio el 57-69% de cada celda de Skills quedaba en blanco. */
+
+/* ---------- Skills en chips ----------
+   35 ítems en columnas de una línea cada uno desperdiciaban casi dos tercios del
+   ancho. En chips, el mismo contenido fluye y ocupa la mitad del alto. */
+.skills-col ul { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.skills-col li {
+  padding: 0.32rem 0.72rem;
+  border-bottom: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 2px var(--line);
+  font-size: 0.9rem; font-weight: 600; line-height: 1.3;
+  transition: box-shadow var(--t-ui) var(--ease-ui), color var(--t-ui) var(--ease-ui),
+              background-color var(--t-ui) var(--ease-ui);
+}
+/* El marcador de punto de la versión anterior ya no aplica a un chip */
+.skills-col li::before { content: none; }
+.skills-col li:hover, .skills-col li:focus-within {
+  padding-left: 0.72rem;
+  background: var(--coral); color: var(--slate);
+  box-shadow: inset 0 0 0 2px var(--slate);
+}
+/* "En formación" se distingue sin leer el encabezado */
+.skills-col:last-child li { box-shadow: inset 0 0 0 2px var(--coral); }
+
+/* ---------- "Qué resolví": los dos primeros y el resto en el lugar ----------
+   <details> nativo: anda sin JS y el navegador ya le da teclado y lectura. */
+.case__more { margin-top: var(--s-3); }
+.case__more > summary {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.4rem 0.9rem; border-radius: 999px;
+  box-shadow: inset 0 0 0 2px var(--line);
+  font-size: var(--small); font-weight: 800; font-stretch: 90%;
+  text-transform: uppercase; letter-spacing: 0.02em;
+  cursor: pointer; list-style: none;
+  transition: box-shadow var(--t-ui) var(--ease-ui), background-color var(--t-ui) var(--ease-ui);
+}
+.case__more > summary::-webkit-details-marker { display: none; }
+.case__more > summary::after {
+  content: "↓"; font-size: 0.9em; transition: rotate 0.3s var(--ease-pop);
+}
+.case__more[open] > summary::after { rotate: 180deg; }
+.case__more > summary:hover, .case__more > summary:focus-visible {
+  background: var(--sage); box-shadow: inset 0 0 0 2px var(--slate);
+}
+.case__more > summary:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+.case__more-list { margin-top: 0; }
+
+/* ---------- Largo de línea ----------
+   A 768 px el texto de los casos corría a 80-92 caracteres y en 1440 los ítems de
+   Experiencia llegaban a 101. Lo cómodo es 45-75. En los anchos donde ya entraban
+   estos topes no hacen nada, porque la columna es más angosta que el tope. */
+.case__context, .case__solved li, .case__note { max-width: 58ch; }
+@media (min-width: 1024px) { .xp__list { max-width: 56ch; } }
+
+/* Experiencia: el alto lo marcaba el padding, no el texto */
+.xp__list li { padding-top: 0.42rem; padding-bottom: 0.42rem; }
+.xp__list li::before { top: 0.75rem; }

@@ -68,9 +68,19 @@ export function renderProjects(html, data) {
 
   function featured(p, i) {
     const alt = L(p.alt) || L(p.name);
-    const solved = (p.solved.es || [])
-      .map((t, j) => `<li><span class="case__n" aria-hidden="true">${num(j)}</span><span data-pf="${p.id}:solved:${j}">${esc(t)}</span></li>`)
-      .join('\n              ');
+    // Los dos primeros puntos quedan a la vista y el resto se abre en el lugar con
+    // <details>: funciona sin JS y el navegador ya le da teclado y accesibilidad.
+    const solvedItems = (p.solved.es || [])
+      .map((t, j) => `<li><span class="case__n" aria-hidden="true">${num(j)}</span><span data-pf="${p.id}:solved:${j}">${esc(t)}</span></li>`);
+    const solved = solvedItems.slice(0, 2).join('\n              ');
+    const rest = solvedItems.length > 2
+      ? `\n            <details class="case__more">
+              <summary><span data-i18n="btn.more">Ver los otros</span>&nbsp;${solvedItems.length - 2}</summary>
+              <ol class="case__more-list" start="3">
+                ${solvedItems.slice(2).join('\n                ')}
+              </ol>
+            </details>`
+      : '';
     const badge = L(p.badge)
       ? `\n            <span class="tag tag--coral tag--lg"><span data-pf="${p.id}:badge">${esc(L(p.badge))}</span> ✦</span>`
       : '';
@@ -122,7 +132,7 @@ export function renderProjects(html, data) {
             <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· ${p.solved.es.length}</p>
             <ol>
               ${solved}
-            </ol>
+            </ol>${rest}
           </div>${note}
           <div class="case__stack">
             <span class="label" aria-hidden="true">Stack</span>
