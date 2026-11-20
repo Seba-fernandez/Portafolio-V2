@@ -1400,44 +1400,80 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* La captura se descubre de abajo hacia arriba a medida que entra.
    Va sobre .shot-btn, que ya recorta y no lleva la sombra dura: asi el barrido
    no come la sombra. El `round` conserva el radio del marco. */
-/* Sin `round`: .shot-btn ya recorta con overflow:hidden y su border-radius,
-   asi que las esquinas siguen redondeadas igual. */
-@keyframes shot-wipe {
-  from { clip-path: inset(0 0 100% 0); }
-  to   { clip-path: inset(0 0 0% 0); }
-}
-/* Y arranca agrandada, encogiendo hasta su tamaño. Solo donde no hay hover:
-   en escritorio el zoom al pasar el mouse sigue siendo del usuario. */
-@keyframes shot-zoom { from { scale: 1.16; } to { scale: 1; } }
-/* El numero del caso se mueve en contra de la captura */
+/* El número del caso se mueve en contra de la captura */
 @keyframes num-drift { from { translate: 0 14px; } to { translate: 0 -14px; } }
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* En celular .shot-d esta oculto y se ve la maqueta de telefono: van las dos.
-       Usa la linea --case del propio caso, la misma que ya mueve el parallax. */
-    .js .shot-d .shot-btn, .js .shot-m .shot-btn {
-      animation: shot-wipe linear both;
-      animation-timeline: --case;
-      animation-range: cover 2% cover 30%;
-    }
     .js .case__num {
       animation: num-drift linear both;
       animation-timeline: --case;
       animation-range: cover 0% cover 100%;
     }
   }
-  @media (hover: none) and (prefers-reduced-motion: no-preference) {
-    .js .shot-btn img {
-      animation: shot-zoom linear both;
-      animation-timeline: --case;
-      animation-range: cover 0% cover 38%;
+}
+/* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
+  .js .btn--ghost:hover, .js .btn--ghost:focus-visible { background: var(--sage); }
+  .js .footer__links a:hover, .js .footer__links a:focus-visible { background: var(--slate); }
+  .js .archive .pill-btn:hover, .js .archive .pill-btn:focus-visible { background: var(--coral); }
+  .sk-ico > * { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  .xp-track::after { transform: scaleY(1); }
+  .xp__when::before { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); }
+  .nav::after { display: none; }
+  .case__info { translate: none !important; }
+}
+
+/* ---------- Salida del hero y deriva de los títulos gigantes ----------
+   Atadas al scroll con animation-timeline: las resuelve el navegador, sin JS.
+   El hero espera a .rv-ready para no pisar el reveal de las letras, que hasta
+   ese momento mantiene las líneas en opacity: 0. */
+@keyframes hero-exit  { to { translate: 0 -12%; opacity: 0.28; } }
+@keyframes giant-pan  { from { translate: -2.5% 0; } to { translate: 2.5% 0; } }
+
+@supports (animation-timeline: view()) {
+  @media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .js.rv-ready .hero__title {
+      animation: hero-exit linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 92%;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Solo el contenedor: las letras siguen usando transform para el reveal. */
+    .js .giant-title {
+      animation: giant-pan linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
     }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .shot-btn { clip-path: none !important; }
-  .shot-btn img, .case__num { scale: 1 !important; translate: none !important; }
+  .hero__title, .giant-title { translate: none !important; opacity: 1 !important; }
+}
+
+/* ═════════ 06 · PROFUNDIDAD EN LOS CASOS ═════════
+   La seccion de proyectos ocupa casi toda la pagina, asi que es donde el scroll
+   tiene que notarse. Todo atado a animation-timeline y en el compositor. */
+
+/* La captura se descubre de abajo hacia arriba a medida que entra.
+   Va sobre .shot-btn, que ya recorta y no lleva la sombra dura: asi el barrido
+   no come la sombra. El `round` conserva el radio del marco. */
+/* El numero del caso se mueve en contra de la captura */
+@keyframes num-drift { from { translate: 0 14px; } to { translate: 0 -14px; } }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .case__num {
+      animation: num-drift linear both;
+      animation-timeline: --case;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case__num { translate: none !important; }
 }
 
 /* ═════════ 07 · ERGONOMÍA DE LECTURA ═════════
@@ -1500,3 +1536,104 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* Experiencia: el alto lo marcaba el padding, no el texto */
 .xp__list li { padding-top: 0.42rem; padding-bottom: 0.42rem; }
 .xp__list li::before { top: 0.75rem; }
+
+/* ---------- Cabecera del caso en una sola línea ----------
+   Antes eran tres bloques apilados antes del título: número + sello, etiquetas y
+   subtítulo. Ahora el número y el título van juntos arriba (que es lo que se
+   escanea) y todo lo demás envuelve en una sola línea, sin perder información. */
+.case__head { align-items: baseline; gap: 0.75rem; }
+.case__head .case__title { margin: 0; }
+.case__meta {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 0.45rem 0.6rem;
+  margin-top: 0.6rem;
+}
+.case__meta .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.case__meta .case__kicker { color: var(--muted); }
+/* El número comparte renglón con el título en vez de empujarlo abajo */
+.case__head .case__num { font-size: clamp(1.4rem, 5vw, 2.2rem); line-height: 1; opacity: 0.55; }
+
+/* ---------- Chips con prueba ----------
+   Un chip con evidencia se toca y se abre en el lugar mostrando dónde se usó esa
+   tecnología de verdad. En celular y tablet no hay hover, así que tocar es la
+   única forma de llegar al detalle: por eso el control es un botón y no un
+   tooltip. Sin JS el detalle se muestra siempre, que es el estado seguro. */
+.chip--proof { position: relative; }
+.chip--proof .chip__btn {
+  font: inherit; color: inherit; background: none; border: 0;
+  padding: 0; margin: 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.35rem;
+}
+/* El punto avisa que ese chip tiene algo detrás */
+.chip--proof .chip__btn::after {
+  content: ""; width: 0.36rem; height: 0.36rem; border-radius: 50%;
+  background: var(--coral); flex: none;
+  transition: scale 0.25s var(--ease-pop);
+}
+.chip--proof .chip__btn[aria-expanded="true"]::after { scale: 1.6; background: var(--slate); }
+.chip--proof .chip__btn:focus-visible { outline: 3px solid var(--coral); outline-offset: 5px; border-radius: 999px; }
+
+/* Abierto: el chip toma la fila entera para que el detalle se lea cómodo */
+.skills-col li.chip--proof:has(.chip__btn[aria-expanded="true"]) {
+  flex-basis: 100%;
+  background: var(--coral); color: var(--slate);
+  box-shadow: inset 0 0 0 2px var(--slate);
+}
+.js .chip__proof {
+  display: none;
+  margin: 0.4rem 0 0.1rem;
+  font-size: 0.86rem; font-weight: 500; line-height: 1.4;
+  max-width: 54ch;
+}
+.js .chip__btn[aria-expanded="true"] + .chip__proof { display: block; }
+
+/* La tinta barre el chip al abrirlo, igual que en los botones */
+@keyframes chip-ink {
+  0%   { clip-path: ellipse(0%   0%   at 8% 50%); }
+  30%  { clip-path: ellipse(42%  58%  at 8% 50%); }
+  60%  { clip-path: ellipse(88%  92%  at 8% 50%); }
+  100% { clip-path: ellipse(150% 150% at 8% 50%); }
+}
+@keyframes chip-text { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .js .skills-col li.chip--proof:has(.chip__btn[aria-expanded="true"]) {
+    animation: chip-ink 0.34s var(--ease-liquid) both;
+  }
+  .js .chip__btn[aria-expanded="true"] + .chip__proof {
+    animation: chip-text 0.3s 0.08s var(--ease-out) both;
+  }
+}
+
+/* ---------- Menos líneas ----------
+   Dentro de un caso se veían: la regla de 3 px del caso, otra de 2 px sobre
+   "Qué resolví" y una línea debajo de cada punto. Son 6 reglas por caso, 18 en
+   la página, más 8 en Experiencia. El orden lo da el espacio y la numeración,
+   no hace falta dibujar cada separación. */
+.case__solved li { border-bottom: 0; padding: 0.55rem 0; }
+.case__solved ol { border-top-width: 2px; }
+.xp__list li { border-top: 0; }
+/* Sin la línea, el renglón de cada ítem lo marca su propia flecha */
+.xp__list li { padding-left: var(--s-4); }
+.xp__list li::before { top: 0.55rem; }
+.xp__list { display: grid; gap: 0.15rem; }
+
+/* ---------- Cada proyecto es un bloque, no un tramo de columna ----------
+   Hero, manifiesto y proyectos eran siete pantallas seguidas del mismo fondo,
+   separadas solo por una regla: por eso se perdía la sensación de secciones y
+   cada caso se sentía interminable. Ahora cada caso tiene su propio piso, su
+   borde y su sombra dura, y se separan por aire en vez de por líneas. */
+.case {
+  border-top: 0;
+  background: var(--surface);
+  background-image: var(--paper-grain), var(--paper-fibers);
+  box-shadow: inset 0 0 0 3px var(--line), 8px 8px 0 var(--shadow);
+  border-radius: var(--r-lg);
+  padding-inline: clamp(1.1rem, 3.5vw, 3rem);
+  padding-block: clamp(2.2rem, 5vw, 4rem);
+  margin-bottom: var(--s-5);
+  /* overflow queda visible: la captura de escritorio es sticky dentro del caso */
+}
+.case:last-of-type { margin-bottom: 0; }
+/* El bloque de color detrás de la captura ya no necesita salirse tanto */
+.case__media::before { inset: 10% 10% 1.5rem -1.5%; }
+.case:nth-of-type(even) .case__media::before { inset: 10% 10% 1.5rem -1.5%; }

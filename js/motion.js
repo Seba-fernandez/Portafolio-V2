@@ -535,6 +535,19 @@
     };
   }
 
+  /* ---------- Chips con prueba ----------
+     Un solo chip abierto por vez: si no, la grilla salta y se pierde el hilo.
+     El <button> ya trae teclado; acá solo se alterna aria-expanded. */
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest?.('.chip__btn');
+    if (!btn) return;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    for (const other of document.querySelectorAll('.chip__btn[aria-expanded="true"]')) {
+      if (other !== btn) other.setAttribute('aria-expanded', 'false');
+    }
+    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+  });
+
   /* ---------- API mínima para app.js (cambio de idioma) ---------- */
   // Al cambiar de idioma el texto se reemplaza: se vuelve a partir lo que aún no apareció.
 
