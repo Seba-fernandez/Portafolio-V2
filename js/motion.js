@@ -80,7 +80,7 @@
   /* ---------- Motor de apariciones ---------- */
 
   // Duración de cada tipo (ms), para limpiar las clases al terminar.
-  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 460 };
+  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 700 };
   // Paso entre elementos que entran juntos en pantalla.
   const STEP = { base: 40, down: 40, media: 70, stamp: 26 };
   const MAX_DELAY = 280;
@@ -161,7 +161,7 @@
   const rvAll = (sel, kind, ctx) => $$(sel, ctx).forEach(el => rv(el, kind));
 
   // Letras: cada una con su retardo; `reverse` las escalona de derecha a izquierda.
-  function playChars(chars, delay, instant, step = 16, reverse = false) {
+  function playChars(chars, delay, instant, step = 20, reverse = false) {
     const n = chars.length;
     chars.forEach((c, i) => play(c, 'char', delay + (reverse ? n - 1 - i : i) * step, instant));
   }
@@ -183,7 +183,7 @@
   // Letras armadas: se libera el resguardo del CSS y arrancan en el próximo frame.
   root.classList.add('rv-ready');
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    heroLines.forEach(l => playChars(l._chars, l._delay, false, 16, l._reverse));
+    heroLines.forEach(l => playChars(l._chars, l._delay, false, 20, l._reverse));
   }));
 
   /* ---------- Títulos gigantes: letras desde la línea base ----------
@@ -198,7 +198,7 @@
     if (!lines.length) el.style.overflow = 'hidden';
     const chars = targets.flatMap(l => splitChars(l));
     chars.forEach(c => c.classList.add('rv', 'rv--char'));
-    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 16));
+    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 20));
     // Cada letra es un inline-block (sin kerning entre ellas): se vuelve a medir el renglón.
     if (window.JSFfit && window.JSFfit.fit) window.JSFfit.fit([el]);
   }
