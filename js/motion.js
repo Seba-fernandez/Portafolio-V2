@@ -35,7 +35,7 @@
       const span = document.createElement('span');
       span.className = 'char';
       span.setAttribute('aria-hidden', 'true');
-      span.textContent = ch === ' ' ? ' ' : ch;
+      span.textContent = ch === ' ' ? '\u00A0' : ch;  // nbsp: inline-block colapsa el espacio normal
       frag.appendChild(span);
     }
     el.appendChild(frag);
@@ -80,7 +80,7 @@
   /* ---------- Motor de apariciones ---------- */
 
   // Duración de cada tipo (ms), para limpiar las clases al terminar.
-  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 460 };
+  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 700 };
   // Paso entre elementos que entran juntos en pantalla.
   const STEP = { base: 40, down: 40, media: 70, stamp: 26 };
   const MAX_DELAY = 280;
@@ -161,7 +161,7 @@
   const rvAll = (sel, kind, ctx) => $$(sel, ctx).forEach(el => rv(el, kind));
 
   // Letras: cada una con su retardo; `reverse` las escalona de derecha a izquierda.
-  function playChars(chars, delay, instant, step = 16, reverse = false) {
+  function playChars(chars, delay, instant, step = 20, reverse = false) {
     const n = chars.length;
     chars.forEach((c, i) => play(c, 'char', delay + (reverse ? n - 1 - i : i) * step, instant));
   }
@@ -183,7 +183,7 @@
   // Letras armadas: se libera el resguardo del CSS y arrancan en el próximo frame.
   root.classList.add('rv-ready');
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    heroLines.forEach(l => playChars(l._chars, l._delay, false, 16, l._reverse));
+    heroLines.forEach(l => playChars(l._chars, l._delay, false, 20, l._reverse));
   }));
 
   /* ---------- Títulos gigantes: letras desde la línea base ----------
@@ -198,7 +198,7 @@
     if (!lines.length) el.style.overflow = 'hidden';
     const chars = targets.flatMap(l => splitChars(l));
     chars.forEach(c => c.classList.add('rv', 'rv--char'));
-    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 16));
+    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 20));
     // Cada letra es un inline-block (sin kerning entre ellas): se vuelve a medir el renglón.
     if (window.JSFfit && window.JSFfit.fit) window.JSFfit.fit([el]);
   }
@@ -357,6 +357,7 @@
     window.addEventListener('jsf:layout-settled', queueRefresh);
 
     setupManifesto();
+    setupMagnet();
 
     // Parallax y onda: si el navegador anima con el scroll en CSS (animation-timeline), lo hace él en
     // el compositor; GSAP queda solo como respaldo para los que no lo soportan.
@@ -426,6 +427,113 @@
         }, { passive: true });
       }
     }
+  }
+
+  /* ---------- Botones líquidos ----------
+     La tinta de CSS se abre desde donde entró el puntero: acá solo se escribe
+     --mx/--my (un rect por entrada, nada en cada frame) y se marca la salida.
+     Con teclado la tinta entra desde el centro. */
+
+  const LIQ = '.btn, .pill-btn, .footer__links a';
+  const OUT_MS = 220;
+  const outTimers = new WeakMap();
+
+  function liqEnter(el, e) {
+    const t = outTimers.get(el);
+    if (t) { clearTimeout(t); outTimers.delete(el); }
+    el.classList.remove('is-liq-out');
+    if (e) {
+      const r = el.getBoundingClientRect();
+      if (r.width && r.height) {
+        el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      }
+    } else {
+      el.style.setProperty('--mx', '50%');
+      el.style.setProperty('--my', '50%');
+    }
+  }
+
+  function liqLeave(el) {
+    el.classList.add('is-liq-out');
+    outTimers.set(el, setTimeout(() => {
+      el.classList.remove('is-liq-out');
+      outTimers.delete(el);
+    }, OUT_MS));
+  }
+
+  // pointerenter/leave no burbujean: se delega con pointerover/pointerout.
+  document.addEventListener('pointerover', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (!el || el.contains(e.relatedTarget)) return;
+    liqEnter(el, e);
+    if (magnet) magnet(el);
+  }, { passive: true });
+
+  document.addEventListener('pointerout', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (!el || el.contains(e.relatedTarget)) return;
+    liqLeave(el);
+  }, { passive: true });
+
+  // Teclado: la tinta entra centrada y se retira al salir del foco.
+  document.addEventListener('focusin', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (el) liqEnter(el, null);
+  }, { passive: true });
+  document.addEventListener('focusout', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (el) liqLeave(el);
+  }, { passive: true });
+
+  /* ---------- Imán (solo puntero fino, con GSAP ya cargado) ----------
+     El botón se acerca al puntero hasta 4 px y vuelve con un resorte corto.
+     Escribe `transform`, que es otra propiedad que el `translate` del hover de
+     CSS: los dos se componen y ninguno pisa al otro. */
+
+  let cursorListo = false;
+  let magnet = null;
+  const MAG = 4;
+
+  function setupMagnet() {
+    if (!hasGsap || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const tweens = new WeakMap();
+    const get = (el) => {
+      let q = tweens.get(el);
+      if (!q) {
+        q = {
+          x: gsap.quickTo(el, 'x', { duration: 0.26, ease: 'power3.out' }),
+          y: gsap.quickTo(el, 'y', { duration: 0.26, ease: 'power3.out' }),
+        };
+        tweens.set(el, q);
+      }
+      return q;
+    };
+    magnet = (el) => {
+      if (el.dataset.magnet) return;
+      el.dataset.magnet = '1';
+      el.classList.add('is-magnet');
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const q = get(el);
+      const move = (ev) => {
+        q.x(gsap.utils.clamp(-MAG, MAG, (ev.clientX - cx) / (r.width / 2) * MAG));
+        q.y(gsap.utils.clamp(-MAG, MAG, (ev.clientY - cy) / (r.height / 2) * MAG));
+      };
+      const off = (ev) => {
+        if (el.contains(ev.relatedTarget)) return;
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerout', off);
+        delete el.dataset.magnet;
+        gsap.to(el, {
+          x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.75)',
+          onComplete: () => el.classList.remove('is-magnet'),
+        });
+      };
+      el.addEventListener('pointermove', move, { passive: true });
+      el.addEventListener('pointerout', off, { passive: true });
+    };
   }
 
   /* ---------- API mínima para app.js (cambio de idioma) ---------- */
