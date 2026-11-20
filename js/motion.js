@@ -35,7 +35,7 @@
       const span = document.createElement('span');
       span.className = 'char';
       span.setAttribute('aria-hidden', 'true');
-      span.textContent = ch === ' ' ? ' ' : ch;
+      span.textContent = ch === ' ' ? '\u00A0' : ch;  // nbsp: inline-block colapsa el espacio normal
       frag.appendChild(span);
     }
     el.appendChild(frag);
@@ -491,6 +491,7 @@
      Escribe `transform`, que es otra propiedad que el `translate` del hover de
      CSS: los dos se componen y ninguno pisa al otro. */
 
+  let cursorListo = false;
   let magnet = null;
   const MAG = 4;
 
@@ -534,19 +535,6 @@
       el.addEventListener('pointerout', off, { passive: true });
     };
   }
-
-  /* ---------- Chips con prueba ----------
-     Un solo chip abierto por vez: si no, la grilla salta y se pierde el hilo.
-     El <button> ya trae teclado; acá solo se alterna aria-expanded. */
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest?.('.chip__btn');
-    if (!btn) return;
-    const open = btn.getAttribute('aria-expanded') === 'true';
-    for (const other of document.querySelectorAll('.chip__btn[aria-expanded="true"]')) {
-      if (other !== btn) other.setAttribute('aria-expanded', 'false');
-    }
-    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-  });
 
   /* ---------- API mínima para app.js (cambio de idioma) ---------- */
   // Al cambiar de idioma el texto se reemplaza: se vuelve a partir lo que aún no apareció.
