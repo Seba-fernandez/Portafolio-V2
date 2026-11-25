@@ -1793,3 +1793,17 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 @media (min-width: 901px) {
   .pd__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); }
 }
+
+/* ═════════ [rediseno-2026 · nav] Link a Experiencia y arreglo del desborde en 501–504 px ═════════
+   Medido con navegador (espacio libre = ancho de la nav menos lo que ocupan logo, links y botones):
+   · Con Proyectos + Skills + Contacto la nav ya desbordaba 1,6 px a 501 px en español
+     (el corte de .nav__link--hide-xs estaba en 500 y esos tres links necesitan ~503). Corte a 519.
+   · Con Experiencia como cuarto link, los cuatro entran sin desborde desde 629 px (es) y 603 px (en).
+     Se oculta por debajo de 660 px para dejar ~35 px de aire en español. Mismo criterio que los otros
+     dos: en angostos la nav conserva Contacto. El texto no se acorta: sigue siendo la palabra completa. */
+@media (max-width: 519px) {
+  .nav__link--hide-xs { display: none; }
+}
+@media (max-width: 659px) {
+  .nav__link--hide-sm { display: none; }
+}

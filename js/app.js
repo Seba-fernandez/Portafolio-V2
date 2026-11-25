@@ -103,6 +103,7 @@
     'aria.home': 'Home · JSF · Sebastián Fernandez',
     'aria.sections': 'Sections',
     'nav.projects': 'Projects',
+    'nav.experience': 'Experience',
     'nav.contact': 'Contact',
     'theme.toDark': 'Switch to dark mode',
     'theme.toLight': 'Switch to light mode',
