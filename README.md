@@ -103,6 +103,28 @@ Static output — push to GitHub and import in [Vercel](https://vercel.com), or 
 
 ---
 
+## Professional title — naming rule
+
+The role title is **not** translated literally. Each language uses the term its own market reads correctly:
+
+| Language | Use | Never use |
+|---|---|---|
+| English | **Software Engineer** | — |
+| Spanish | **Desarrollador de Software** | *Ingeniero de Software* |
+
+Why: in English, "Software Engineer" is the standard market term and implies no academic degree.
+In Argentina, *Ingeniero* reads as a university degree (Ingeniería en Sistemas), which is not the
+case here — so the Spanish side stays on *Desarrollador de Software*.
+
+This applies everywhere the title appears: `<title>`, meta description, `og:` and `twitter:` tags,
+the hero (strip, sr-only, intro), the experience blocks, the footer, and the `EN` object in
+`js/app.js`. Spanish lives in the DOM of `index.html`; English lives in that `EN` object — change
+both or the site goes inconsistent.
+
+Related: the CV files in `cv/` and the LinkedIn profile follow the same rule.
+
+---
+
 <details>
 <summary>🇦🇷 Versión en español</summary>
 
