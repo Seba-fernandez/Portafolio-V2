@@ -144,7 +144,7 @@
     'aria.shot': 'View screenshot',
     'btn.live': 'View live ↗',
     'btn.code': 'Code',
-    'btn.more': 'Show the other',
+    'btn.case': 'See the case',
     'btn.shots': 'View screens',
     'btn.zoom': 'Enlarge',
     'band': '<span><b class="tag tag--ink">✳ Stores</b><b class="tag tag--naples">Landings</b><b class="tag tag--peach">Websites</b><b class="tag tag--sage">✳ Apps</b><b class="tag tag--ink">Local SEO</b><b class="tag tag--naples">Performance</b><b class="tag tag--peach">✳ Accessibility</b><b class="tag tag--sage">GSAP</b><b class="tag tag--ink">Mobile first</b><b class="tag tag--naples">✳ Made in Córdoba</b></span><span><b class="tag tag--ink">✳ Stores</b><b class="tag tag--naples">Landings</b><b class="tag tag--peach">Websites</b><b class="tag tag--sage">✳ Apps</b><b class="tag tag--ink">Local SEO</b><b class="tag tag--naples">Performance</b><b class="tag tag--peach">✳ Accessibility</b><b class="tag tag--sage">GSAP</b><b class="tag tag--ink">Mobile first</b><b class="tag tag--naples">✳ Made in Córdoba</b></span>',
