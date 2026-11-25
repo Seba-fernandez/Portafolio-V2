@@ -344,7 +344,7 @@
     });
   }
 
-  // GSAP llega después de la carga, en un momento libre: la entrada del hero no lo espera.
+  // GSAP se descarga recién con la primera interacción real: una visita que no toca nada no lo baja.
   function loadScript(src) {
     return new Promise((ok, fail) => {
       const s = document.createElement('script');
@@ -353,21 +353,14 @@
       document.head.appendChild(s);
     });
   }
-  // GSAP solo hace falta para lo que responde al scroll o al puntero (manifiesto, cintas, cursor):
-  // se descarga en un momento libre sin ejecutarse, y se ejecuta recién con la primera interacción.
-  // Así la carga inicial no paga su arranque.
+  // GSAP solo hace falta para lo que responde al scroll o al puntero (manifiesto, cintas, cursor).
+  // No se precarga: la primera interacción (scroll, rueda, toque, puntero o tecla) lo descarga y lo ejecuta.
+  // El scroll llega antes que el manifiesto a la pantalla, así que la animación no se pierde.
   const VENDOR = ['js/vendor/gsap.min.js', 'js/vendor/ScrollTrigger.min.js'];
   function whenIdle(fn) {
     const go = () => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 300));
     if (document.readyState === 'complete') go(); else window.addEventListener('load', go, { once: true });
   }
-  // La descarga anticipada espera unos segundos: así no compite con lo que se ve primero.
-  const prefetch = (fn) => whenIdle(() => setTimeout(fn, 3000));
-  prefetch(() => VENDOR.forEach((href) => {
-    const l = document.createElement('link');
-    l.rel = 'prefetch'; l.as = 'script'; l.href = href;
-    document.head.appendChild(l);
-  }));
   let started = false;
   const EVENTS = ['scroll', 'wheel', 'touchstart', 'pointermove', 'keydown'];
   const y0 = window.scrollY;
