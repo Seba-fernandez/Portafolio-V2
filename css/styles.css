@@ -1092,6 +1092,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .skills-col li { padding: 0.55rem 0; border-bottom: 1.5px solid var(--line); font-weight: 500; }
 
 .xp {
+  position: relative;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--s-4);
   width: min(100% - 2 * var(--gutter), var(--max-w)); margin-inline: auto;
   padding-top: var(--s-6);
@@ -1245,12 +1246,12 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .case    { content-visibility: auto; contain-intrinsic-size: auto 1400px; overflow-clip-margin: 4rem; }
 .archive { content-visibility: auto; contain-intrinsic-size: auto 1250px; }
 .skills  { content-visibility: auto; contain-intrinsic-size: auto 1470px; }
-.experience { content-visibility: auto; contain-intrinsic-size: auto 1280px; }
+.experience { content-visibility: auto; contain-intrinsic-size: auto 1300px; }
 .cv-all .case, .cv-all .archive, .cv-all .skills, .cv-all .experience { content-visibility: visible; }
 @media (min-width: 701px) {
   .case   { contain-intrinsic-size: auto 1150px; }
   .skills { contain-intrinsic-size: auto 1000px; }
-  .experience { contain-intrinsic-size: auto 970px; }
+  .experience { contain-intrinsic-size: auto 1250px; }
 }
 /* En escritorio los casos son mucho mas bajos que en tablet: el alto reservado
    se mide por content-box y los tres casos miden 995, 764 y 707 a 1440px. */
@@ -1258,7 +1259,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .case { contain-intrinsic-size: auto 850px; }
   /* Experiencia y Skills tambien cambian mucho entre tablet y escritorio:
      Experiencia pasa de 980 a 1040 y Skills de 985 a 776 (content-box). */
-  .experience { contain-intrinsic-size: auto 1040px; }
+  .experience { contain-intrinsic-size: auto 1280px; }
   .skills { contain-intrinsic-size: auto 790px; }
 }
 
@@ -1488,6 +1489,99 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 @media (max-width: 700px) {
   .xp-track .xp { padding-left: var(--s-3); }
   .xp__when::before { left: calc(var(--s-3) * -1 - 0.33rem); }
+}
+
+/* ── Experiencia: el titulo se fija mientras dura su bloque ─────────────
+   Cada .xp es la caja contenedora del sticky, asi que el chip y el titulo
+   se sueltan solos cuando entra el siguiente, sin JS ni listeners.
+   El punto del riel viaja con el chip: marca por donde vas dentro de la
+   etapa. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .xp__when,
+    .xp__role {
+      position: sticky;
+      top: calc(var(--nav-h) + var(--s-3));
+    }
+    .xp__role {
+      /* la lista pasa por debajo: sin fondo se leeria encimada */
+      background: var(--bg);
+      padding-bottom: 0.35rem;
+      z-index: 1;
+    }
+    /* El asentamiento. Fijar en seco se siente duro, asi que al entrar el
+       bloque el chip y el titulo llegan desde un poco abajo, se pasan apenas
+       y vuelven. Va ligado al scroll, no a un temporizador: si frenas a mitad,
+       la animacion frena con vos. */
+    /* Recorrido para que el sticky se sienta, pero proporcional al contenido.
+       Con una altura minima fija (probé 54vh) las etapas de pocas líneas
+       quedaban con un vacío grande y el chip se fijaba SOLO, sin su texto al
+       lado: se leía como un error. Con relleno abajo cada etapa tiene su
+       tramo de scroll y el chip nunca queda huérfano. */
+    @media (min-width: 701px) {
+      .xp { padding-bottom: clamp(2.5rem, 8vh, 6rem); }
+    }
+    .xp__centinela { position: absolute; top: 0; left: 0; width: 1px; height: 1px; }
+    /* El rebote va al fijarse, no al entrar: con view() la animacion terminaba
+       mucho antes de que el bloque llegara a la linea de pegado, y el chip se
+       clavaba en seco. Lo dispara el centinela de motion.js. */
+    .xp.is-fijada .xp__when { animation: xp-rebote 0.46s var(--ease-pop) both; }
+    .xp.is-fijada .xp__role { animation: xp-rebote-sutil 0.42s var(--ease-pop) both; }
+  }
+}
+@keyframes xp-rebote {
+  0%   { translate: 0 7px;  scale: 0.955; rotate: -1.5deg; }
+  55%  { translate: 0 -3px; scale: 1.035; rotate: -0.4deg; }
+  78%  { translate: 0 1px;  scale: 0.992; rotate: -1.9deg; }
+  100% { translate: 0 0;    scale: 1;     rotate: -1.5deg; }
+}
+@keyframes xp-rebote-sutil {
+  0%   { translate: 0 6px; opacity: 0.55; }
+  58%  { translate: 0 -2px; opacity: 1; }
+  80%  { translate: 0 1px; }
+  100% { translate: 0 0; }
+}
+
+/* ── Deriva ligada al scroll ───────────────────────────────────────────
+   Medido: el archivo respondia al scroll en 0 de 94 elementos visibles, el
+   pie en 0 de 60 y la parte baja de Skills en 1 de 91. Estaban muertos.
+
+   La clave es que el recorrido cubra el paso COMPLETO (cover), no solo la
+   entrada: con entry el bloque llega, se acomoda y despues queda clavado,
+   que es justo la sensacion de pagina estatica. Con cover el elemento sigue
+   respondiendo mientras lo estas leyendo.
+
+   Un mismo gesto en los cuatro lugares: llega desde abajo y a la izquierda,
+   se asienta, y sigue subiendo apenas. Amplitud chica a proposito: 26px de
+   recorrido total. Mas que eso marea y se nota el truco.
+   Cada elemento tiene su propia linea de tiempo, asi que el escalonado sale
+   solo. Solo translate y opacity: corre en el compositor. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .arc-row,
+    .js .skills-col,
+    .js .case__solved li {
+      animation: deriva linear both;
+      animation-timeline: view(block);
+      animation-range: cover 0% cover 100%;
+    }
+    .js .footer__cta,
+    .js .footer__links {
+      animation: deriva-pie linear both;
+      animation-timeline: view(block);
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@keyframes deriva {
+  0%   { translate: -12px 18px; opacity: 0.3; }
+  26%  { translate: 0 6px;      opacity: 1; }
+  100% { translate: 0 -8px;     opacity: 1; }
+}
+@keyframes deriva-pie {
+  0%   { translate: 0 26px; scale: 0.985; opacity: 0.35; }
+  30%  { translate: 0 6px;  scale: 1;     opacity: 1; }
+  100% { translate: 0 -10px; scale: 1;    opacity: 1; }
 }
 
 /* ---------- Progreso de lectura en la nav ---------- */

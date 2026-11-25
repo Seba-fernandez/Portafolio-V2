@@ -21,6 +21,36 @@
   let hasGsap = false;
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
+  /* ── Experiencia: avisar cuando una etapa queda fijada ────────────────
+     El sticky no tiene evento propio y las animaciones ligadas al scroll
+     terminan mucho antes de que el bloque llegue a la linea de pegado. Un
+     centinela de 1px arriba de cada etapa resuelve el momento exacto: si
+     salio por arriba, esa etapa esta fijada. Un observer para todas, sin
+     leer layout en cada frame. */
+  const marcarFijadas = () => {
+    const etapas = $$('.xp');
+    if (!etapas.length || !window.matchMedia('(min-width: 701px)').matches) return;
+    const raiz = getComputedStyle(root);
+    const navH = parseFloat(raiz.getPropertyValue('--nav-h')) || 72;
+    const tope = Math.round(navH + 20);
+    const centinelas = etapas.map(etapa => {
+      const c = document.createElement('span');
+      c.className = 'xp__centinela';
+      c.setAttribute('aria-hidden', 'true');
+      etapa.prepend(c);
+      return c;
+    });
+    const obs = new IntersectionObserver(entradas => {
+      for (const e of entradas) {
+        const etapa = e.target.parentElement;
+        if (!etapa) continue;
+        etapa.classList.toggle('is-fijada', !e.isIntersecting && e.boundingClientRect.top < tope);
+      }
+    }, { rootMargin: `-${tope}px 0px 0px 0px`, threshold: 0 });
+    centinelas.forEach(c => obs.observe(c));
+  };
+  marcarFijadas();
+
   /* ---------- Split accesible: copia sr-only + piezas aria-hidden ---------- */
 
   function splitChars(el) {

@@ -169,7 +169,7 @@
     'sk.learning': 'Learning',
     'sk.ai': 'AI-assisted dev',
     'sk.wa': 'WhatsApp links with a prefilled message',
-    'sk.tests': 'Automated testing',
+    'sk.testing': 'Testing',
     'xp.tag': "03 · Where I've worked",
     'xp.head': 'Experience',
     'xp1.when': 'Present · Whokena',
