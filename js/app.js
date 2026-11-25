@@ -75,6 +75,17 @@
   if (startId && !startId.startsWith('ver-') && document.getElementById(startId)) {
     window.addEventListener('load', () => jumpTo(document.getElementById(startId), 'instant'), { once: true });
   }
+  // Un hash que cambia sin pasar por el clic de arriba (pegarlo en la barra,
+  // volver con el navegador) no vuelve a disparar load, asi que el salto lo
+  // hacia el navegador solo, sin dibujar antes las secciones diferidas: el
+  // destino quedaba corrido hasta 284 px. El clic propio usa pushState, que no
+  // dispara hashchange, asi que no hay doble salto.
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.slice(1);
+    if (!id || id.startsWith('ver-')) return;
+    const target = document.getElementById(id);
+    if (target) jumpTo(target, 'instant');
+  });
 
   /* ---------- Tema (el atributo inicial lo puso el snippet del <head>) ---------- */
 
