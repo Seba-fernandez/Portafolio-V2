@@ -51,16 +51,31 @@
     sr.className = 'sr-only';
     sr.textContent = text;
     frag.appendChild(sr);
+    // Un <mark> de varias palabras se clonaba por palabra: el resaltado salía
+    // partido en pastillas con un hueco entre cada una, y el relleno lateral de
+    // cada clon despegaba la puntuación que venía después. Ahora el espacio va
+    // DENTRO del resaltado y solo los extremos de la tirada llevan relleno.
     const push = (txt, wrapper) => {
-      txt.split(/(\s+)/).forEach(part => {
-        if (!part) return;
-        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+      const partes = txt.split(/(\s+)/).filter(Boolean);
+      const conTexto = partes.reduce((a, p, i) => (/^\s+$/.test(p) ? a : a.concat(i)), []);
+      const primero = conTexto[0];
+      const ultimo = conTexto[conTexto.length - 1];
+      partes.forEach((part, i) => {
+        if (/^\s+$/.test(part)) {
+          // Dentro de una tirada resaltada el espacio ya viaja pegado a la palabra
+          // anterior, así que acá no se emite nada.
+          if (!(wrapper && i > primero && i < ultimo)) frag.appendChild(document.createTextNode(' '));
+          return;
+        }
         const w = document.createElement('span');
         w.className = 'word';
         w.setAttribute('aria-hidden', 'true');
         if (wrapper) {
           const clone = wrapper.cloneNode(false);
-          clone.textContent = part;
+          const sigueOtra = i < ultimo;
+          clone.textContent = sigueOtra ? part + '\u00A0' : part;
+          if (i !== primero) clone.classList.add('mk--sigue');
+          if (sigueOtra) clone.classList.add('mk--continua');
           w.appendChild(clone);
         } else {
           w.textContent = part;

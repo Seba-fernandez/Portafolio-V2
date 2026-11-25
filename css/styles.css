@@ -719,6 +719,18 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   border-radius: 0.22em;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
+/* El relleno lateral empujaba la coma y el punto que seguían al resaltado, y se
+   leía como un espacio de más. Con margen negativo del mismo valor el color
+   sobresale pero el texto no se corre: la puntuación queda pegada. */
+.manifesto__text .mk { margin-inline: -0.18em; }
+/* Bordes internos de un resaltado de varias palabras: sin relleno ni margen,
+   para que las palabras queden a distancia normal y el fondo siga de largo. */
+.manifesto__text .mk--sigue   { padding-left: 0;  margin-left: 0; }
+.manifesto__text .mk--continua { padding-right: 0; margin-right: 0; }
+/* Y sin esquinas redondeadas hacia adentro: dos pastillas pegadas dejaban una
+   costura visible. Solo los extremos de la tirada van redondeados. */
+.manifesto__text .mk--sigue   { border-start-start-radius: 0; border-end-start-radius: 0; }
+.manifesto__text .mk--continua { border-start-end-radius: 0; border-end-end-radius: 0; }
 .mk--coral { --mk: var(--coral); }
 .mk--sage  { --mk: var(--sage); }
 .mk--peach { --mk: var(--peach); }
