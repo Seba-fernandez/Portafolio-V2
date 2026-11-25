@@ -99,30 +99,30 @@
         "en": "Version 3.0"
       },
       "kicker": {
-        "es": "Tienda de perfumes · Empezó como sistema interno, hoy es tienda y panel",
-        "en": "Perfume store · Started as an internal system, now a store and admin panel"
+        "es": "Tienda y panel de gestión para un negocio familiar de perfumes",
+        "en": "Store and admin panel for a family perfume business"
       },
       "context": {
-        "es": "Grupo Wolf, el emprendimiento familiar, vende perfumes Bagués por catálogo, y el catálogo cambia cada mes: más de cien aromas, precios que se mueven, perfumes que entran y salen. Actualizar todo a mano llevaba una o dos semanas. Lo resolví con una tienda y un panel propios: el ciclo nuevo se carga desde el panel y cada pedido llega listo por WhatsApp.",
-        "en": "Grupo Wolf, our family business, sells Bagués perfumes from a catalog that changes every month: over a hundred scents, shifting prices, perfumes coming and going. Updating everything by hand took one or two weeks. I solved it with a custom store and admin panel: the new cycle loads from the panel and every order arrives ready over WhatsApp."
+        "es": "Grupo Wolf vende perfumes Bagués por catálogo, que cambia cada mes y tiene más de cien aromas. Actualizarlo a mano llevaba una o dos semanas. Armé una tienda con panel propio: el catálogo nuevo se carga desde ahí y cada pedido llega por WhatsApp.",
+        "en": "Grupo Wolf sells Bagués perfumes from a monthly catalog of over a hundred scents. Updating it by hand took one or two weeks. I built a store with its own admin panel: the new catalog loads there and every order arrives over WhatsApp."
       },
       "solved": {
         "es": [
-          "Cada perfume con el nombre que la gente ya conoce, buscador que tolera errores y filtros por familia",
-          "Ficha por perfume con notas, tamaños, precio y un link propio para compartir",
-          "Pedido por WhatsApp sin pago online, a propósito: la venta se cierra conversando y los precios se controlan en el sistema",
-          "Rediseño completo con el concepto “Cada perfume, una ciudad” y todo el catálogo fotografiado con el mismo estilo"
+          "Renombré cada perfume como lo conoce la gente y sumé un buscador que tolera errores de tipeo",
+          "Cada perfume tiene su ficha con notas, tamaños y precio, y un link para compartirla",
+          "El pedido se cierra por WhatsApp, sin pago online, y los precios los controla el sistema",
+          "Rediseñé la tienda bajo la idea “Cada perfume, una ciudad” y fotografié todo el catálogo con el mismo estilo"
         ],
         "en": [
-          "Every perfume under the name people already know, a search that forgives typos and filters by scent family",
-          "A page per perfume with notes, sizes, price and its own shareable link",
-          "Orders over WhatsApp with no online payment, on purpose: the sale closes in conversation and prices are checked by the system",
-          "A full redesign around the concept “Every perfume, a city”, with the whole catalog photographed in one consistent style"
+          "I renamed every perfume the way people know it and added a search that forgives typos",
+          "Every perfume has its own page with notes, sizes and price, plus a link to share it",
+          "Orders close over WhatsApp with no online payment, and the system controls the prices",
+          "I redesigned the store around the idea “Every perfume, a city” and photographed the whole catalog in one consistent style"
         ]
       },
       "note": {
-        "es": "Resultado: el ciclo nuevo se carga en menos de media hora, cuando antes llevaba una o dos semanas. 96/100 en la prueba de velocidad de Google en celular, y pruebas en Safari, Chrome y Firefox antes de cada publicación.",
-        "en": "Result: a new cycle loads in under half an hour, down from one or two weeks. 96/100 on Google's mobile speed test, and tested in Safari, Chrome and Firefox before every release."
+        "es": "Resultado: cargar un catálogo nuevo pasó de una o dos semanas a menos de media hora. 96/100 en la prueba de velocidad de Google en celular, y pruebas en Safari, Chrome y Firefox antes de cada publicación.",
+        "en": "Result: loading a new catalog went from one or two weeks to under half an hour. 96/100 on Google's mobile speed test, and tested in Safari, Chrome and Firefox before every release."
       },
       "stack": [
         "React",
@@ -164,25 +164,25 @@
         "en": "Redesign 2.0"
       },
       "kicker": {
-        "es": "Canchas de césped sintético · Segunda versión del sitio",
-        "en": "Synthetic turf courts · Second version of the site"
+        "es": "Sitio de canchas de césped sintético que lleva las consultas a WhatsApp",
+        "en": "Website for a synthetic turf court business that routes inquiries to WhatsApp"
       },
       "context": {
-        "es": "Grupo CESPAD no tenía sitio propio y ya ofrecía mucho más que pádel. Partí de la primera landing que le había hecho, Greenset, y la convertí en un sitio donde cada deporte tiene su sección, cada servicio se entiende rápido y cada consulta llega al WhatsApp que corresponde.",
-        "en": "Grupo CESPAD had no website of its own and already offered much more than padel. I started from the first landing page I had built for them, Greenset, and turned it into a site where every sport has its own section, every service is quick to understand and every inquiry reaches the right WhatsApp."
+        "es": "Grupo CESPAD ofrecía mucho más que pádel y no tenía sitio propio. Partí de su primera landing, Greenset, y la convertí en un sitio con una sección por deporte y cada servicio explicado con claridad.",
+        "en": "Grupo CESPAD offered much more than padel and had no website of its own. I started from its first landing page, Greenset, and turned it into a site with a section for each sport and every service clearly explained."
       },
       "solved": {
         "es": [
-          "Contenido ordenado por deporte, para que cada visitante encuentre lo suyo",
-          "Botones de WhatsApp en los puntos donde el visitante decide consultar",
-          "Formulario con validación de los datos esenciales",
-          "Preparado para aparecer en Google cuando buscan en la zona"
+          "Ordené el contenido por deporte: cada visitante llega directo a lo suyo",
+          "Puse botones de WhatsApp donde el visitante decide consultar, y cada uno va al número que corresponde",
+          "El formulario valida los datos esenciales antes de enviarse",
+          "Preparé el sitio para aparecer en Google cuando buscan canchas en la zona"
         ],
         "en": [
-          "Content organized by sport, so every visitor finds what they came for",
-          "WhatsApp buttons at the points where visitors decide to get in touch",
-          "A form that validates the essential data",
-          "Built to show up on Google when people search nearby"
+          "I organized the content by sport: every visitor goes straight to what they need",
+          "I placed WhatsApp buttons where visitors decide to get in touch, each one going to the right number",
+          "The form validates the essential data before it is sent",
+          "I set the site up to appear on Google when people search for courts nearby"
         ]
       },
       "stack": [
@@ -224,23 +224,23 @@
         "en": "React + AI"
       },
       "kicker": {
-        "es": "App para practicar oratoria con devolución automática",
-        "en": "An app to practice public speaking with automatic feedback"
+        "es": "App con IA para ensayar discursos y mejorar al hablar en público",
+        "en": "AI app for rehearsing speeches and improving at public speaking"
       },
       "context": {
-        "es": "La hice para mí: quería registrar cada práctica de oratoria y recibir una devolución sin tener que analizarme a mano cada vez.",
-        "en": "I built it for myself: I wanted to log every public-speaking practice and get feedback without analyzing myself by hand every time."
+        "es": "Mejorar al hablar en público requiere una devolución que casi nunca hay a mano. Armé una app que evalúa cada ensayo con una lista de control y, al terminar, una IA devuelve su análisis.",
+        "en": "Getting better at public speaking takes feedback that is rarely at hand. I built an app that scores each rehearsal against a checklist and, when it ends, an AI returns its analysis."
       },
       "solved": {
         "es": [
-          "Interfaz de checklist para registrar cada práctica",
-          "Guarda tus prácticas aunque cierres la app",
-          "Devolución con IA después de cada práctica"
+          "Una lista de control evalúa cada ensayo con los mismos criterios",
+          "Al terminar cada ensayo, la IA devuelve su análisis",
+          "El historial queda guardado en el navegador y sigue ahí al reabrir la app"
         ],
         "en": [
-          "A checklist interface to log every practice",
-          "Keeps your practice log even after you close the app",
-          "AI feedback after every practice"
+          "A checklist scores every rehearsal against the same criteria",
+          "When each rehearsal ends, the AI returns its analysis",
+          "The history is saved in the browser and is still there when the app reopens"
         ]
       },
       "stack": [
@@ -283,27 +283,25 @@
         "en": "Motion"
       },
       "kicker": {
-        "es": "Landing page · Comercio de galletas artesanales",
-        "en": "Landing page · Artisan cookie shop"
+        "es": "Página para una marca de galletas artesanales que vende por Instagram",
+        "en": "Website for an artisan cookie brand that sells on Instagram"
       },
       "context": {
-        "es": "Landing page para Piccino, un comercio de galletas artesanales de Córdoba que vende por Instagram. La galleta es la protagonista: paneles en diagonal con los colores de la marca, sabores que caen y se acomodan, y una galleta que se va mordiendo a medida que bajás. Animación fluida, scroll pulido y carga rápida en el celular.",
-        "en": "A landing page for Piccino, an artisan cookie shop in Córdoba that sells on Instagram. The cookie is the star: angled panels in the brand colors, flavors that drop in and settle, and a cookie that gets bitten as you scroll. Smooth animation, polished scrolling and fast loading on mobile."
+        "es": "Página para Piccino, una marca de galletas artesanales de Córdoba que vende por Instagram. La galleta es la protagonista: paneles en diagonal con los colores de la marca, sabores que caen y se acomodan, y una galleta que se muerde a medida que baja la página.",
+        "en": "A page for Piccino, an artisan cookie brand from Córdoba that sells on Instagram. The cookie is the star: angled panels in the brand colors, flavors that drop in and settle, and a cookie that gets bitten as the page scrolls down."
       },
       "solved": {
         "es": [
-          "Mordida cuadro por cuadro sincronizada con el scroll, con los cuadros precargados para que la animación nunca se corte",
-          "Seis sabores en paneles diagonales que se animan al aparecer en pantalla",
-          "La portada se anima apenas abre la página, sin esperas",
-          "Imágenes livianas que se adaptan a cada pantalla, para que cargue rápido en el celular",
-          "Paleta tomada de la identidad de la marca y una versión sin animaciones para quien activa “reducir movimiento”"
+          "Precargué los cuadros de la mordida: la animación acompaña el scroll sin cortes",
+          "La portada se anima apenas abre la página y los seis sabores entran en paneles diagonales al aparecer",
+          "Optimicé las imágenes para cada pantalla: la página carga rápido en el celular",
+          "Tomé la paleta de la identidad de la marca y agregué una versión sin animaciones para quien activa “reducir movimiento”"
         ],
         "en": [
-          "A frame-by-frame bite synced to the scroll, with frames preloaded so the animation never stutters",
-          "Six flavors on angled panels that animate as they come into view",
-          "The cover animates the moment the page opens, with no waiting",
-          "Lightweight images that adapt to every screen, so it loads fast on mobile",
-          "A palette taken from the brand identity, plus a motion-free version for people who turn on “reduce motion”"
+          "I preloaded the bite frames: the animation follows the scroll with no stutter",
+          "The cover animates the moment the page opens, and the six flavors enter on angled panels as they appear",
+          "I optimized the images for every screen: the page loads fast on mobile",
+          "I took the palette from the brand identity and added a motion-free version for people who turn on “reduce motion”"
         ]
       },
       "note": {
@@ -349,23 +347,23 @@
         "en": "Version 1.0"
       },
       "kicker": {
-        "es": "Primera entrega · Punto de partida",
-        "en": "First delivery · Starting point"
+        "es": "Landing de un negocio de pádel · Primera versión",
+        "en": "Landing page for a padel business · First version"
       },
       "context": {
-        "es": "Primera presencia digital para un negocio de pádel. Tenía que explicar el servicio y llevar al WhatsApp, nada más.",
-        "en": "First online presence for a padel business. It had to explain the service and lead to WhatsApp, nothing more."
+        "es": "Primera presencia en internet para un negocio de pádel: explica el servicio y lleva la consulta a WhatsApp.",
+        "en": "First online presence for a padel business: it explains the service and leads the inquiry to WhatsApp."
       },
       "solved": {
         "es": [
-          "Explicar el servicio de un vistazo",
-          "Verse confiable en el celular",
-          "Abrir un camino de contacto claro por WhatsApp"
+          "El servicio se entiende de un vistazo",
+          "Se ve confiable en el celular",
+          "Un camino de contacto claro por WhatsApp"
         ],
         "en": [
-          "Explain the service at a glance",
-          "Look trustworthy on a phone",
-          "Open a clear contact path over WhatsApp"
+          "The service is clear at a glance",
+          "It looks trustworthy on a phone",
+          "A clear contact path over WhatsApp"
         ]
       },
       "note": {
@@ -406,23 +404,23 @@
         "js"
       ],
       "kicker": {
-        "es": "Proyecto de estudio · Multipágina",
-        "en": "Study project · Multi-page"
+        "es": "Sitio de cinco páginas con blog, cursos y contacto",
+        "en": "Five-page site with a blog, courses and contact"
       },
       "context": {
-        "es": "Proyecto de estudio para practicar la estructura de un sitio multipágina en HTML: blog, listado de cursos y contacto con validación de formulario.",
-        "en": "A study project to practice the structure of a multi-page HTML site: blog, course listing and a contact form with validation."
+        "es": "Sitio de cinco páginas en HTML con blog, listado de cursos y un formulario de contacto que valida los datos.",
+        "en": "A five-page HTML site with a blog, a course listing and a contact form that validates the data."
       },
       "solved": {
         "es": [
-          "Navegación entre 5 páginas con una estructura compartida",
+          "Navegación entre las 5 páginas con una estructura común",
           "Listado de cursos y entradas del blog",
-          "Formulario que revisa los datos antes de enviarlos"
+          "El formulario revisa los datos antes de enviarlos"
         ],
         "en": [
-          "Navigation across 5 pages with a shared structure",
+          "Navigation across the 5 pages with a shared structure",
           "Course listing and blog posts",
-          "A form that checks the data before sending it"
+          "The form checks the data before sending it"
         ]
       },
       "stack": [
@@ -460,25 +458,25 @@
         "diseno"
       ],
       "kicker": {
-        "es": "Proyecto de estudio · Imágenes y diseño",
-        "en": "Study project · Images and design"
+        "es": "Landing de un festival de música electrónica, con video de fondo",
+        "en": "Landing page for an electronic music festival, with background video"
       },
       "context": {
-        "es": "Proyecto de estudio sobre compresión de imágenes y diseño: la landing de un festival EDM con video de fondo, lineup y tickets, que tenía que impactar sin cargar lento.",
-        "en": "A study project on image compression and design: the landing page for an EDM festival, with background video, lineup and tickets, that had to make an impact without loading slowly."
+        "es": "Landing de un festival de música electrónica con video de fondo, programación y entradas. Tenía que impactar sin cargar lento: comprimí las imágenes y cuidé la carga del video.",
+        "en": "Landing page for an electronic music festival, with background video, lineup and tickets. It had to impress without loading slowly: I compressed the images and tuned how the video loads."
       },
       "solved": {
         "es": [
-          "Imágenes livianas que cargan a medida que bajás",
-          "Video de fondo que no frena la carga de la página",
-          "Lineup de 2 días y 2 escenarios en grilla",
-          "Estilos ordenados por secciones para que sea fácil de mantener"
+          "Imágenes livianas que cargan a medida que se avanza por la página",
+          "El video de fondo no frena la carga de la página",
+          "Programación de 2 días y 2 escenarios en una grilla",
+          "Estilos separados por sección, fáciles de mantener"
         ],
         "en": [
-          "Lightweight images that load as you scroll",
+          "Lightweight images that load as the page scrolls",
           "A background video that does not slow down the page",
-          "A 2-day, 2-stage lineup grid",
-          "Styles organized by section so it stays easy to maintain"
+          "A 2-day, 2-stage lineup in a grid",
+          "Styles separated by section, easy to maintain"
         ]
       },
       "stack": [
