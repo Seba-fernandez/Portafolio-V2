@@ -1,4 +1,6 @@
 {
+  "buildCommand": "node scripts/build.mjs",
+  "outputDirectory": "dist",
   "redirects": [
     { "source": "/panel", "destination": "/panel/", "permanent": true }
   ],
@@ -17,6 +19,14 @@
     },
     {
       "source": "/js/vendor/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/css/(.*).css",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/js/(.*).js",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {

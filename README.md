@@ -13,7 +13,8 @@ clear user flows as implementation criteria.
 
 Vanilla **HTML5 · CSS3 · JavaScript ES6+**, with [GSAP](https://gsap.com) + ScrollTrigger
 for motion over **native scrolling**. Animation libraries are vendored locally (`js/vendor/`);
-Archivo is loaded from Google Fonts. No framework or build step is needed to deploy.
+Archivo is loaded from Google Fonts. No framework and no dependencies: the only build step is
+`scripts/build.mjs`, which Vercel runs on every deploy (see Deploy).
 
 ## Structure
 
@@ -21,7 +22,8 @@ Archivo is loaded from Google Fonts. No framework or build step is needed to dep
 ├── index.html              # Semantic markup, one commented block per section
 ├── data/projects.json      # Single source of truth for every project (ES + EN), in page order
 ├── scripts/
-│   └── build-projects.mjs  # Writes featured cases, archive rows and modal data into index.html
+│   ├── build-projects.mjs  # Writes featured cases, archive rows and modal data into index.html
+│   └── build.mjs           # Deploy build: hashed names for css/ and js/, output in dist/
 ├── css/styles.css          # Tokens, base, components, sections
 ├── panel/                  # Private admin panel (see below)
 ├── js/
@@ -99,7 +101,10 @@ npx serve .
 
 ## Deploy
 
-Static output — push to GitHub and import in [Vercel](https://vercel.com), or `vercel --prod`.
+Push to GitHub and import in [Vercel](https://vercel.com), or `vercel --prod`. Vercel runs
+`node scripts/build.mjs` (set in `vercel.json`) and publishes `dist/`. Hashed files are cached
+forever; `index.html` is revalidated on every visit. `dist/` is in `.gitignore`: never edit it.
+Locally, `npx serve .` still serves the source as it is, with the unhashed names.
 
 ---
 
@@ -108,7 +113,7 @@ Static output — push to GitHub and import in [Vercel](https://vercel.com), or 
 
 Portfolio personal de Juan Sebastián Fernandez (Córdoba, AR). Diseño editorial brutalist con
 tipografía cinética y la combinación Nº 166 del diccionario de color de Sanzo Wada, en
-HTML/CSS/JS vanilla + GSAP, sin build step para publicar.
+HTML/CSS/JS vanilla + GSAP, sin dependencias. Vercel corre `node scripts/build.mjs` al publicar (nombres con hash y caché).
 
 **Sumar un proyecto:** desde el panel privado en `/panel` (token de GitHub con permiso de
 escritura solo sobre este repo), o a mano: editar `data/projects.json`, agregar las capturas en
