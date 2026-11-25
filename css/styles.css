@@ -535,6 +535,33 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   white-space: nowrap;
 }
 .nav__logo sup { font-size: 0.55em; }
+/* Logo que se abre. Dos capas en el mismo lugar: las iniciales se desvanecen y el
+   nombre aparece (medido en everyday-practice.com, ~200 ms). El nombre va
+   superpuesto y no en el flujo: no empuja nada, no cambia el ancho de la nav y no
+   puede provocar scroll horizontal. Solo se activa donde sobra lugar hasta los
+   links: el nombre mide 254 px y a 700 px ya tapa los links, así que se activa desde
+   760 px (768 deja 56 px libres en español). Por debajo el logo queda como era. */
+.nav__logo { position: relative; }
+.nav__logo-full { display: none; }
+@media (min-width: 760px) {
+  .nav__logo-full {
+    display: flex; align-items: center; position: absolute; inset: 0 auto 0 0;
+    opacity: 0; pointer-events: none;
+  }
+  .nav__logo:focus-visible { outline: 0; }
+  .nav__logo:focus-visible .nav__logo-short { opacity: 0; }
+  .nav__logo:focus-visible .nav__logo-full {
+    opacity: 1; pointer-events: auto;
+    outline: 3px solid currentColor; outline-offset: 3px; border-radius: 4px;
+  }
+}
+@media (min-width: 760px) and (hover: hover) {
+  .nav__logo:hover .nav__logo-short { opacity: 0; }
+  .nav__logo:hover .nav__logo-full { opacity: 1; pointer-events: auto; }
+}
+@media (min-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .nav__logo-short, .nav__logo-full { transition: opacity 0.2s var(--ease); }
+}
 .nav__links { display: flex; gap: 0.15rem; }
 .nav__link {
   display: inline-flex; align-items: center; min-height: 2.75rem;

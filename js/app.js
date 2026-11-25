@@ -100,7 +100,7 @@
   const EN = {
     'skip': 'Skip to content',
     'aria.nav': 'Main navigation',
-    'aria.home': 'Home · JSF',
+    'aria.home': 'Home · JSF · Sebastián Fernandez',
     'aria.sections': 'Sections',
     'nav.projects': 'Projects',
     'nav.contact': 'Contact',
