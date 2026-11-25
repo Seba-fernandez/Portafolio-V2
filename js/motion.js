@@ -419,11 +419,20 @@
         const yTo = gsap.quickTo(cursor, 'y', { duration: 0.16, ease: 'power3' });
         window.addEventListener('pointermove', e => { xTo(e.clientX); yTo(e.clientY); }, { passive: true });
         const hot = 'a, button, [data-open]';
+        // Al crecer pasa de disco a anillo: un disco de 42px sobre un boton de
+        // 152x48, con mix-blend-mode difference, invertia el rotulo justo en el
+        // medio y lo dejaba ilegible. Hueco deja ver el texto.
         document.addEventListener('pointerover', e => {
-          if (e.target.closest(hot)) gsap.to(cursor, { scale: 2.6, duration: 0.2, ease: 'power3.out' });
+          if (e.target.closest(hot)) {
+            cursor.classList.add('is-hot');
+            gsap.to(cursor, { scale: 2.6, duration: 0.2, ease: 'power3.out' });
+          }
         }, { passive: true });
         document.addEventListener('pointerout', e => {
-          if (e.target.closest(hot) && !e.relatedTarget?.closest?.(hot)) gsap.to(cursor, { scale: 1, duration: 0.2, ease: 'power3.out' });
+          if (e.target.closest(hot) && !e.relatedTarget?.closest?.(hot)) {
+            cursor.classList.remove('is-hot');
+            gsap.to(cursor, { scale: 1, duration: 0.2, ease: 'power3.out' });
+          }
         }, { passive: true });
       }
     }
