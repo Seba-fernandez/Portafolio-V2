@@ -1671,3 +1671,13 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 @media (max-width: 700px) {
   .shot-m .shot-label { top: auto; bottom: 0.85rem; left: 0.85rem; }
 }
+
+/* ═════════ [rediseno-2026 · estructura] Experiencia como sección propia y modal de capturas ═════════
+   Agregado al final a pedido: no toca ninguna regla anterior. */
+.experience { padding-block: var(--s-6) 0; scroll-margin-top: var(--nav-h); }
+/* El encabezado ya no cuelga de Skills: el aire de arriba lo da .section-head */
+.experience .xp-head { padding-top: 0; padding-bottom: var(--s-3); }
+/* Modal: la captura toma casi todo el ancho; la columna de datos queda mínima */
+@media (min-width: 901px) {
+  .pd__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); }
+}
