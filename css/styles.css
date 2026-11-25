@@ -1507,16 +1507,21 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    etapa. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .xp__when,
-    .xp__role {
-      position: sticky;
-      top: calc(var(--nav-h) + var(--s-3));
-    }
-    .xp__role {
-      /* la lista pasa por debajo: sin fondo se leeria encimada */
-      background: var(--bg);
-      padding-bottom: 0.35rem;
-      z-index: 1;
+    /* Solo desde 701px. Abajo de eso la grilla colapsa a UNA columna, asi que
+       el chip y el titulo caen uno sobre otro y los dos sticky se pisan: en
+       celular el chip tapaba el titulo del puesto. Ahi no hay dos columnas
+       que mantener alineadas, asi que no hay nada que fijar. */
+    /* Solo desde 701px. Abajo de eso la grilla colapsa a UNA columna, asi que
+       el chip y el titulo caen uno sobre otro y los dos sticky se pisan: en
+       celular el chip tapaba el titulo del puesto.
+       Y se fija SOLO el chip, no el titulo. El chip vive en su propia
+       columna, asi que nada le pasa por debajo. El titulo comparte columna
+       con la lista: fijado, tapaba sus propios puntos al pasar. */
+    @media (min-width: 701px) {
+      .xp__when {
+        position: sticky;
+        top: calc(var(--nav-h) + var(--s-3));
+      }
     }
     /* El asentamiento. Fijar en seco se siente duro, asi que al entrar el
        bloque el chip y el titulo llegan desde un poco abajo, se pasan apenas
@@ -1535,7 +1540,6 @@ html.is-locked, html.is-locked body { overflow: hidden; }
        mucho antes de que el bloque llegara a la linea de pegado, y el chip se
        clavaba en seco. Lo dispara el centinela de motion.js. */
     .xp.is-fijada .xp__when { animation: xp-rebote 0.46s var(--ease-pop) both; }
-    .xp.is-fijada .xp__role { animation: xp-rebote-sutil 0.42s var(--ease-pop) both; }
   }
 }
 @keyframes xp-rebote {
