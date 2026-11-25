@@ -1717,7 +1717,9 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .case__meta .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .case__meta .case__kicker { color: var(--muted); }
 /* El número comparte renglón con el título en vez de empujarlo abajo */
-.case__head .case__num { font-size: clamp(1.4rem, 5vw, 2.2rem); line-height: 1; opacity: 0.55; }
+/* 0.55 dejaba el numero en 2,99:1 a 390 px, justo abajo del 3:1 que pide el
+   texto grande. 0.62 lo sube a 3,4 sin que deje de leerse como secundario. */
+.case__head .case__num { font-size: clamp(1.4rem, 5vw, 2.2rem); line-height: 1; opacity: 0.62; }
 
 
 /* ---------- Menos líneas ----------
