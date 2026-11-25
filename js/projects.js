@@ -196,32 +196,14 @@
   function fill(id) {
     const p = byId[id];
     current = id;
-    const tags = [
-      `<li class="tag tag--ink">${esc(L(DATA.origins[p.origin]))}</li>`,
-      `<li class="tag tag--coral"><span class="dot" aria-hidden="true"></span>${lang === 'en' ? 'Live' : 'En línea'}</li>`,
-      `<li class="tag tag--peach">${esc(L(DATA.types[p.type]))}</li>`,
-      ...p.focus.map(f => `<li class="tag tag--sage">${esc(L(DATA.focus[f]))}</li>`),
-    ];
-    $('.pd__tags').innerHTML = tags.join('');
-    $('.pd__kicker').textContent = L(p.kicker);
     $('.pd__title').textContent = L(p.name);
-    $('.pd__context').textContent = L(p.context);
-    const solved = p.solved[lang] || p.solved.es;
-    $('.pd__count').textContent = solved.length;
-    $('.pd__solved').innerHTML = solved.map((t, i) =>
-      `<li><span class="case__n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><span>${esc(t)}</span></li>`).join('');
-    const note = $('.pd__note');
-    note.hidden = !p.note;
-    note.textContent = p.note ? L(p.note) : '';
-    $('.pd__stack').innerHTML = p.stack.map(s => `<li>${esc(s)}</li>`).join('');
+    // Una sola línea de contexto: el kicker. El texto largo ya está en la tarjeta.
+    $('.pd__context').textContent = L(p.kicker);
     $('.pd__live').href = p.live;
-    const code = $('.pd__code');
-    code.hidden = !p.code;
-    if (p.code) code.href = p.code;
 
     $('.pd__stage').style.setProperty('--ph', p.placeholder);
     mWrap.style.setProperty('--ph', p.placeholder);
-    dImg.sizes = '(min-width: 901px) 58vw, 100vw';
+    dImg.sizes = '(min-width: 901px) 70vw, 100vw';
     dImg.srcset = srcset(id, 'd', D_W);
     dImg.src = `img/p/${id}-d-1440.webp`;
     dImg.alt = UI[lang].desk + L(p.alt);
@@ -289,7 +271,7 @@
     if (!id || warmed.has(id)) return;
     warmed.add(id);
     const d = new Image();
-    d.sizes = '(min-width: 901px) 58vw, 100vw';
+    d.sizes = '(min-width: 901px) 70vw, 100vw';
     d.srcset = srcset(id, 'd', D_W);
     const m = new Image();
     m.sizes = '(min-width: 901px) 18rem, 60vw';
