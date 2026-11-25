@@ -1172,11 +1172,13 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    un alto aproximado y después recuerda el real (auto), así el scroll no salta. */
 .case    { content-visibility: auto; contain-intrinsic-size: auto 1700px; overflow-clip-margin: 4rem; }
 .archive { content-visibility: auto; contain-intrinsic-size: auto 1250px; }
-.skills  { content-visibility: auto; contain-intrinsic-size: auto 3600px; }
-.cv-all .case, .cv-all .archive, .cv-all .skills { content-visibility: visible; }
+.skills  { content-visibility: auto; contain-intrinsic-size: auto 1470px; }
+.experience { content-visibility: auto; contain-intrinsic-size: auto 1280px; }
+.cv-all .case, .cv-all .archive, .cv-all .skills, .cv-all .experience { content-visibility: visible; }
 @media (min-width: 701px) {
   .case   { contain-intrinsic-size: auto 1100px; }
-  .skills { contain-intrinsic-size: auto 2300px; }
+  .skills { contain-intrinsic-size: auto 1000px; }
+  .experience { contain-intrinsic-size: auto 970px; }
 }
 
 /* ═════════ 05 · CAPA INMERSIVA (2026) ═════════
