@@ -80,67 +80,6 @@
   },
   "projects": [
     {
-      "id": "cespad",
-      "featured": true,
-      "accent": "sage",
-      "placeholder": "#303530",
-      "name": {
-        "es": "Grupo CESPAD",
-        "en": "Grupo CESPAD"
-      },
-      "type": "sitio",
-      "origin": "cliente",
-      "focus": [
-        "conversion",
-        "seo"
-      ],
-      "badge": {
-        "es": "Rediseño 2.0",
-        "en": "Redesign 2.0"
-      },
-      "kicker": {
-        "es": "Canchas de césped sintético · Segunda versión del sitio",
-        "en": "Synthetic turf courts · Second version of the site"
-      },
-      "context": {
-        "es": "Grupo CESPAD no tenía sitio propio y ya ofrecía mucho más que pádel. Partí de la primera landing que le había hecho, Greenset, y la convertí en un sitio donde cada deporte tiene su sección, cada servicio se entiende rápido y cada consulta llega al WhatsApp que corresponde.",
-        "en": "Grupo CESPAD had no website of its own and already offered much more than padel. I started from the first landing page I had built for them, Greenset, and turned it into a site where every sport has its own section, every service is quick to understand and every inquiry reaches the right WhatsApp."
-      },
-      "solved": {
-        "es": [
-          "Contenido ordenado por deporte, para que cada visitante encuentre lo suyo",
-          "Botones de WhatsApp en los puntos donde el visitante decide consultar",
-          "Formulario con validación de los datos esenciales",
-          "Preparado para aparecer en Google cuando buscan en la zona"
-        ],
-        "en": [
-          "Content organized by sport, so every visitor finds what they came for",
-          "WhatsApp buttons at the points where visitors decide to get in touch",
-          "A form that validates the essential data",
-          "Built to show up on Google when people search nearby"
-        ]
-      },
-      "stack": [
-        "HTML5",
-        "CSS3",
-        "JS ES6+",
-        "Schema.org",
-        "WhatsApp API",
-        "Vercel"
-      ],
-      "live": "https://grupo-cespad-actualizacion.vercel.app/",
-      "code": "https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion",
-      "alt": {
-        "es": "el sitio Grupo CESPAD",
-        "en": "the Grupo CESPAD website"
-      },
-      "casa": {
-        "prop": "racket",
-        "color": "#FF6A2B",
-        "status": "live"
-      }
-    },
-    {
       "id": "bagues",
       "featured": true,
       "accent": "coral",
@@ -202,6 +141,67 @@
       "casa": {
         "prop": "perfume",
         "color": "#C9B6E4",
+        "status": "live"
+      }
+    },
+    {
+      "id": "cespad",
+      "featured": true,
+      "accent": "sage",
+      "placeholder": "#303530",
+      "name": {
+        "es": "Grupo CESPAD",
+        "en": "Grupo CESPAD"
+      },
+      "type": "sitio",
+      "origin": "cliente",
+      "focus": [
+        "conversion",
+        "seo"
+      ],
+      "badge": {
+        "es": "Rediseño 2.0",
+        "en": "Redesign 2.0"
+      },
+      "kicker": {
+        "es": "Canchas de césped sintético · Segunda versión del sitio",
+        "en": "Synthetic turf courts · Second version of the site"
+      },
+      "context": {
+        "es": "Grupo CESPAD no tenía sitio propio y ya ofrecía mucho más que pádel. Partí de la primera landing que le había hecho, Greenset, y la convertí en un sitio donde cada deporte tiene su sección, cada servicio se entiende rápido y cada consulta llega al WhatsApp que corresponde.",
+        "en": "Grupo CESPAD had no website of its own and already offered much more than padel. I started from the first landing page I had built for them, Greenset, and turned it into a site where every sport has its own section, every service is quick to understand and every inquiry reaches the right WhatsApp."
+      },
+      "solved": {
+        "es": [
+          "Contenido ordenado por deporte, para que cada visitante encuentre lo suyo",
+          "Botones de WhatsApp en los puntos donde el visitante decide consultar",
+          "Formulario con validación de los datos esenciales",
+          "Preparado para aparecer en Google cuando buscan en la zona"
+        ],
+        "en": [
+          "Content organized by sport, so every visitor finds what they came for",
+          "WhatsApp buttons at the points where visitors decide to get in touch",
+          "A form that validates the essential data",
+          "Built to show up on Google when people search nearby"
+        ]
+      },
+      "stack": [
+        "HTML5",
+        "CSS3",
+        "JS ES6+",
+        "Schema.org",
+        "WhatsApp API",
+        "Vercel"
+      ],
+      "live": "https://grupo-cespad-actualizacion.vercel.app/",
+      "code": "https://github.com/Seba-fernandez/Grupo-Cespad-actualizacion",
+      "alt": {
+        "es": "el sitio Grupo CESPAD",
+        "en": "the Grupo CESPAD website"
+      },
+      "casa": {
+        "prop": "racket",
+        "color": "#FF6A2B",
         "status": "live"
       }
     },
