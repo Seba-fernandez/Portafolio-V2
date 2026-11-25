@@ -68,14 +68,16 @@ export function renderProjects(html, data) {
 
   function featured(p, i) {
     const alt = L(p.alt) || L(p.name);
-    const solved = (p.solved.es || [])
-      .map((t, j) => `<li><span class="case__n" aria-hidden="true">${num(j)}</span><span data-pf="${p.id}:solved:${j}">${esc(t)}</span></li>`)
-      .join('\n              ');
+    // Los dos primeros puntos quedan a la vista y el resto se abre en el lugar con
+    // <details>: funciona sin JS y el navegador ya le da teclado y accesibilidad.
+    const solvedItems = (p.solved.es || [])
+      .map((t, j) => `<li><span class="case__n" aria-hidden="true">${num(j)}</span><span data-pf="${p.id}:solved:${j}">${esc(t)}</span></li>`);
+    const solved = solvedItems.join('\n                ');
     const badge = L(p.badge)
       ? `\n            <span class="tag tag--coral tag--lg"><span data-pf="${p.id}:badge">${esc(L(p.badge))}</span> ✦</span>`
       : '';
     const kicker = L(p.kicker)
-      ? `\n          <p class="label case__kicker" data-pf="${p.id}:kicker">${esc(L(p.kicker))}</p>`
+      ? `\n            <span class="label case__kicker" data-pf="${p.id}:kicker">${esc(L(p.kicker))}</span>`
       : '';
     const note = L(p.note)
       ? `\n          <p class="case__note" data-pf="${p.id}:note">${esc(L(p.note))}</p>`
@@ -99,7 +101,7 @@ export function renderProjects(html, data) {
             <figcaption class="tag tag--ink shot-label" data-i18n="label.desktop">Desktop</figcaption>
           </figure>
           <figure class="shot-m">
-            <figcaption class="tag tag--coral shot-label" data-i18n="label.mobile">Mobile</figcaption>
+            <figcaption class="tag tag--ink shot-label" data-i18n="label.mobile">Mobile</figcaption>
             <button class="phone shot-btn" type="button" data-open="${p.id}" data-shot-pref="m" style="--ph: ${esc(p.placeholder || '#112F2C')}">
               <span class="sr-only" data-i18n="btn.zoom">Ampliar</span>
               <picture>
@@ -113,25 +115,35 @@ export function renderProjects(html, data) {
         </div>
         <div class="case__info">
           <div class="case__head">
-            <span class="case__num" aria-hidden="true">${num(i)}</span>${badge}
-          </div>
-          <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags">${tagsFor(p, false)}</ul>${kicker}
-          <h3 class="case__title" id="t-${p.id}" data-pf="${p.id}:name">${esc(L(p.name))}</h3>
-          <p class="case__context" data-pf="${p.id}:context">${esc(L(p.context))}</p>
-          <div class="case__solved">
-            <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· ${p.solved.es.length}</p>
-            <ol>
-              ${solved}
-            </ol>
-          </div>${note}
-          <div class="case__stack">
-            <span class="label" aria-hidden="true">Stack</span>
-            <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack">${(p.stack || []).map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
-          </div>
-          <div class="case__actions">
-            <a class="btn" href="${esc(p.live)}" target="_blank" rel="noopener"><span data-i18n="btn.live">Ver en vivo ↗</span>${who}</a>${code}
-            <button class="btn btn--ghost" type="button" data-open="${p.id}"><span data-i18n="btn.shots">Ver capturas</span>${who}</button>
-          </div>
+            <span class="case__num" aria-hidden="true">${num(i)}</span>
+            <h3 class="case__title" id="t-${p.id}" data-pf="${p.id}:name">${esc(L(p.name))}</h3>
+          </div>${kicker}${note}
+          <details class="case__detalle">
+            <summary class="case__abrir">
+              <span data-i18n="btn.case">Ver el caso</span>${who}
+              <span class="case__abrir-ico" aria-hidden="true">+</span>
+            </summary>
+            <div class="case__cuerpo">
+              <div class="case__meta">${badge}
+                <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags">${tagsFor(p, false)}</ul>
+              </div>
+              <p class="case__context" data-pf="${p.id}:context">${esc(L(p.context))}</p>
+              <div class="case__solved">
+                <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· ${p.solved.es.length}</p>
+                <ol>
+                ${solved}
+                </ol>
+              </div>
+              <div class="case__stack">
+                <span class="label" aria-hidden="true">Stack</span>
+                <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack">${(p.stack || []).map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
+              </div>
+              <div class="case__actions">
+                <a class="btn" href="${esc(p.live)}" target="_blank" rel="noopener"><span data-i18n="btn.live">Ver en vivo ↗</span>${who}</a>${code}
+                <button class="btn btn--ghost" type="button" data-open="${p.id}"><span data-i18n="btn.shots">Ver capturas</span>${who}</button>
+              </div>
+            </div>
+          </details>
         </div>
       </article>`;
   }

@@ -75,6 +75,17 @@
   if (startId && !startId.startsWith('ver-') && document.getElementById(startId)) {
     window.addEventListener('load', () => jumpTo(document.getElementById(startId), 'instant'), { once: true });
   }
+  // Un hash que cambia sin pasar por el clic de arriba (pegarlo en la barra,
+  // volver con el navegador) no vuelve a disparar load, asi que el salto lo
+  // hacia el navegador solo, sin dibujar antes las secciones diferidas: el
+  // destino quedaba corrido hasta 284 px. El clic propio usa pushState, que no
+  // dispara hashchange, asi que no hay doble salto.
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.slice(1);
+    if (!id || id.startsWith('ver-')) return;
+    const target = document.getElementById(id);
+    if (target) jumpTo(target, 'instant');
+  });
 
   /* ---------- Tema (el atributo inicial lo puso el snippet del <head>) ---------- */
 
@@ -100,20 +111,21 @@
   const EN = {
     'skip': 'Skip to content',
     'aria.nav': 'Main navigation',
-    'aria.home': 'Home · JSF',
+    'aria.home': 'Home · JSF · Sebastián Fernandez',
     'aria.sections': 'Sections',
     'nav.projects': 'Projects',
+    'nav.experience': 'Experience',
     'nav.contact': 'Contact',
     'theme.toDark': 'Switch to dark mode',
     'theme.toLight': 'Switch to light mode',
     'aria.hero': 'Introduction',
     'hero.avail': 'Open to work',
     'hero.badge': 'SEE PROJECTS ✳ MADE IN CÓRDOBA ✳',
-    'hero.sr': ', Frontend Developer with a product mindset',
-    'hero.strip': 'Frontend Developer ✳ Product-minded ✳ UX · Performance · Accessibility ✳ ',
-    'hero.intro': '<strong>Frontend Developer with a product mindset.</strong> I turn business needs into fast, clear and accessible web experiences, from idea to launch.',
+    'hero.sr': ', Software Engineer focused on applied AI and product',
+    'hero.strip': 'Software Engineer ✳ Applied AI ✳ Product · Performance · Accessibility ✳ ',
+    'hero.intro': '<strong>Software Engineer · Applied AI, product and web performance.</strong> I work with clients end to end: I understand the problem, build the solution and leave it running in production.',
     'aria.stats': 'Quick facts',
-    'hero.years': 'years',
+    'hero.years': 'years of training and practice',
     'hero.ux': '& performance',
     'hero.live': 'live projects',
     'marquee': '<span><i class="c-naples">Fast websites</i> ✳ <i class="c-coral">Accessible</i> ✳ <i class="c-sage">Clear UX</i> ✳ <i class="c-peach">HTML · CSS · JS · React</i> ✳ <i class="c-naples">Made in Córdoba</i> ✳ </span><span><i class="c-naples">Fast websites</i> ✳ <i class="c-coral">Accessible</i> ✳ <i class="c-sage">Clear UX</i> ✳ <i class="c-peach">HTML · CSS · JS · React</i> ✳ <i class="c-naples">Made in Córdoba</i> ✳ </span>',
@@ -132,6 +144,7 @@
     'aria.shot': 'View screenshot',
     'btn.live': 'View live ↗',
     'btn.code': 'Code',
+    'btn.case': 'See the case',
     'btn.shots': 'View screens',
     'btn.zoom': 'Enlarge',
     'band': '<span><b class="tag tag--ink">✳ Stores</b><b class="tag tag--naples">Landings</b><b class="tag tag--peach">Websites</b><b class="tag tag--sage">✳ Apps</b><b class="tag tag--ink">Local SEO</b><b class="tag tag--naples">Performance</b><b class="tag tag--peach">✳ Accessibility</b><b class="tag tag--sage">GSAP</b><b class="tag tag--ink">Mobile first</b><b class="tag tag--naples">✳ Made in Córdoba</b></span><span><b class="tag tag--ink">✳ Stores</b><b class="tag tag--naples">Landings</b><b class="tag tag--peach">Websites</b><b class="tag tag--sage">✳ Apps</b><b class="tag tag--ink">Local SEO</b><b class="tag tag--naples">Performance</b><b class="tag tag--peach">✳ Accessibility</b><b class="tag tag--sage">GSAP</b><b class="tag tag--ink">Mobile first</b><b class="tag tag--naples">✳ Made in Córdoba</b></span>',
@@ -144,7 +157,7 @@
     'archive.byFocus': 'Focus',
     'aria.byType': 'Filter by website type',
     'aria.byFocus': 'Filter by focus',
-    'skills.tag': '03 · What I work with',
+    'skills.tag': '04 · What I work with',
     'sk.lang': 'Languages',
     'sk.semantic': 'Semantic HTML5',
     'sk.forms': 'Form validation',
@@ -155,14 +168,26 @@
     'sk.tools': 'Tools',
     'sk.learning': 'Learning',
     'sk.ai': 'AI-assisted dev',
-    'xp.when': 'Since Dec. 2024 · Freelance',
-    'xp.role': 'Independent Frontend Developer',
-    'xp.1': 'I turn business needs into websites that are live in production today.',
-    'xp.2': 'I design the user flow so people reach the inquiry or the purchase in as few steps as possible.',
-    'xp.3': 'Every delivery is responsive, uses semantic HTML, follows accessibility guidelines and is tested across browsers.',
-    'xp.4': 'I version with Git and GitHub, deploy on Vercel or Netlify and work from Figma when the project calls for it.',
+    'sk.wa': 'WhatsApp links with a prefilled message',
+    'sk.testing': 'Testing',
+    'xp.tag': "03 · Where I've worked",
+    'xp.head': 'Experience',
+    'xp1.when': 'Present · Whokena',
+    'xp1.role': 'Software Engineer · Applied AI',
+    'xp1.1': 'I help build applied AI products alongside the founder.',
+    'xp1.2': 'I take part in the full cycle of each delivery: analysis, design, development, testing and release.',
+    'xp1.3': 'I build with TypeScript, Next.js and React, and integrate language models with credentials and validation kept on the server side.',
+    'xp2.when': 'Since April 2026 · Client projects',
+    'xp2.role': 'End-to-end development',
+    'xp2.1': 'Client discovery, scope definition and technical proposal.',
+    'xp2.2': 'Development, deploy, domain and DNS, structured data and Google Search Console.',
+    'xp2.3': 'Technical report and training so the client can manage their own site.',
+    'xp2.4': 'Performance measured before and after every change.',
+    'xp3.when': '2024 - 2025 · Training and personal projects',
+    'xp3.role': 'Practice and own tools',
+    'xp3.1': 'Courses, practice and building my own tools before my first client.',
     'footer.badge': 'OPEN TO WORK ✳ REMOTE · CÓRDOBA ✳',
-    'footer.tag': '04 · Contact · Open to junior frontend roles, remote or in Córdoba, and to freelance projects',
+    'footer.tag': '05 · Contact · Open to software development roles, remote or in Córdoba, and to freelance projects',
     'footer.cta': "Let's talk",
     'footer.copy': 'Copy email',
     'footer.copied': 'Copied ✓',

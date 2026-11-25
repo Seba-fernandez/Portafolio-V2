@@ -21,6 +21,36 @@
   let hasGsap = false;
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
+  /* ── Experiencia: avisar cuando una etapa queda fijada ────────────────
+     El sticky no tiene evento propio y las animaciones ligadas al scroll
+     terminan mucho antes de que el bloque llegue a la linea de pegado. Un
+     centinela de 1px arriba de cada etapa resuelve el momento exacto: si
+     salio por arriba, esa etapa esta fijada. Un observer para todas, sin
+     leer layout en cada frame. */
+  const marcarFijadas = () => {
+    const etapas = $$('.xp');
+    if (!etapas.length || !window.matchMedia('(min-width: 701px)').matches) return;
+    const raiz = getComputedStyle(root);
+    const navH = parseFloat(raiz.getPropertyValue('--nav-h')) || 72;
+    const tope = Math.round(navH + 20);
+    const centinelas = etapas.map(etapa => {
+      const c = document.createElement('span');
+      c.className = 'xp__centinela';
+      c.setAttribute('aria-hidden', 'true');
+      etapa.prepend(c);
+      return c;
+    });
+    const obs = new IntersectionObserver(entradas => {
+      for (const e of entradas) {
+        const etapa = e.target.parentElement;
+        if (!etapa) continue;
+        etapa.classList.toggle('is-fijada', !e.isIntersecting && e.boundingClientRect.top < tope);
+      }
+    }, { rootMargin: `-${tope}px 0px 0px 0px`, threshold: 0 });
+    centinelas.forEach(c => obs.observe(c));
+  };
+  marcarFijadas();
+
   /* ---------- Split accesible: copia sr-only + piezas aria-hidden ---------- */
 
   function splitChars(el) {
@@ -35,7 +65,7 @@
       const span = document.createElement('span');
       span.className = 'char';
       span.setAttribute('aria-hidden', 'true');
-      span.textContent = ch === ' ' ? ' ' : ch;
+      span.textContent = ch === ' ' ? '\u00A0' : ch;  // nbsp: inline-block colapsa el espacio normal
       frag.appendChild(span);
     }
     el.appendChild(frag);
@@ -51,16 +81,31 @@
     sr.className = 'sr-only';
     sr.textContent = text;
     frag.appendChild(sr);
+    // Un <mark> de varias palabras se clonaba por palabra: el resaltado salía
+    // partido en pastillas con un hueco entre cada una, y el relleno lateral de
+    // cada clon despegaba la puntuación que venía después. Ahora el espacio va
+    // DENTRO del resaltado y solo los extremos de la tirada llevan relleno.
     const push = (txt, wrapper) => {
-      txt.split(/(\s+)/).forEach(part => {
-        if (!part) return;
-        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+      const partes = txt.split(/(\s+)/).filter(Boolean);
+      const conTexto = partes.reduce((a, p, i) => (/^\s+$/.test(p) ? a : a.concat(i)), []);
+      const primero = conTexto[0];
+      const ultimo = conTexto[conTexto.length - 1];
+      partes.forEach((part, i) => {
+        if (/^\s+$/.test(part)) {
+          // Dentro de una tirada resaltada el espacio ya viaja pegado a la palabra
+          // anterior, así que acá no se emite nada.
+          if (!(wrapper && i > primero && i < ultimo)) frag.appendChild(document.createTextNode(' '));
+          return;
+        }
         const w = document.createElement('span');
         w.className = 'word';
         w.setAttribute('aria-hidden', 'true');
         if (wrapper) {
           const clone = wrapper.cloneNode(false);
-          clone.textContent = part;
+          const sigueOtra = i < ultimo;
+          clone.textContent = sigueOtra ? part + '\u00A0' : part;
+          if (i !== primero) clone.classList.add('mk--sigue');
+          if (sigueOtra) clone.classList.add('mk--continua');
           w.appendChild(clone);
         } else {
           w.textContent = part;
@@ -80,7 +125,7 @@
   /* ---------- Motor de apariciones ---------- */
 
   // Duración de cada tipo (ms), para limpiar las clases al terminar.
-  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 460 };
+  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 700 };
   // Paso entre elementos que entran juntos en pantalla.
   const STEP = { base: 40, down: 40, media: 70, stamp: 26 };
   const MAX_DELAY = 280;
@@ -161,7 +206,7 @@
   const rvAll = (sel, kind, ctx) => $$(sel, ctx).forEach(el => rv(el, kind));
 
   // Letras: cada una con su retardo; `reverse` las escalona de derecha a izquierda.
-  function playChars(chars, delay, instant, step = 16, reverse = false) {
+  function playChars(chars, delay, instant, step = 20, reverse = false) {
     const n = chars.length;
     chars.forEach((c, i) => play(c, 'char', delay + (reverse ? n - 1 - i : i) * step, instant));
   }
@@ -183,7 +228,7 @@
   // Letras armadas: se libera el resguardo del CSS y arrancan en el próximo frame.
   root.classList.add('rv-ready');
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    heroLines.forEach(l => playChars(l._chars, l._delay, false, 16, l._reverse));
+    heroLines.forEach(l => playChars(l._chars, l._delay, false, 20, l._reverse));
   }));
 
   /* ---------- Títulos gigantes: letras desde la línea base ----------
@@ -198,7 +243,7 @@
     if (!lines.length) el.style.overflow = 'hidden';
     const chars = targets.flatMap(l => splitChars(l));
     chars.forEach(c => c.classList.add('rv', 'rv--char'));
-    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 16));
+    watch(el, 'char', (d, instant) => playChars(chars, d, instant, 20));
     // Cada letra es un inline-block (sin kerning entre ellas): se vuelve a medir el renglón.
     if (window.JSFfit && window.JSFfit.fit) window.JSFfit.fit([el]);
   }
@@ -299,7 +344,7 @@
     });
   }
 
-  // GSAP llega después de la carga, en un momento libre: la entrada del hero no lo espera.
+  // GSAP se descarga recién con la primera interacción real: una visita que no toca nada no lo baja.
   function loadScript(src) {
     return new Promise((ok, fail) => {
       const s = document.createElement('script');
@@ -308,21 +353,14 @@
       document.head.appendChild(s);
     });
   }
-  // GSAP solo hace falta para lo que responde al scroll o al puntero (manifiesto, cintas, cursor):
-  // se descarga en un momento libre sin ejecutarse, y se ejecuta recién con la primera interacción.
-  // Así la carga inicial no paga su arranque.
+  // GSAP solo hace falta para lo que responde al scroll o al puntero (manifiesto, cintas, cursor).
+  // No se precarga: la primera interacción (scroll, rueda, toque, puntero o tecla) lo descarga y lo ejecuta.
+  // El scroll llega antes que el manifiesto a la pantalla, así que la animación no se pierde.
   const VENDOR = ['js/vendor/gsap.min.js', 'js/vendor/ScrollTrigger.min.js'];
   function whenIdle(fn) {
     const go = () => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 300));
     if (document.readyState === 'complete') go(); else window.addEventListener('load', go, { once: true });
   }
-  // La descarga anticipada espera unos segundos: así no compite con lo que se ve primero.
-  const prefetch = (fn) => whenIdle(() => setTimeout(fn, 3000));
-  prefetch(() => VENDOR.forEach((href) => {
-    const l = document.createElement('link');
-    l.rel = 'prefetch'; l.as = 'script'; l.href = href;
-    document.head.appendChild(l);
-  }));
   let started = false;
   const EVENTS = ['scroll', 'wheel', 'touchstart', 'pointermove', 'keydown'];
   const y0 = window.scrollY;
@@ -357,6 +395,7 @@
     window.addEventListener('jsf:layout-settled', queueRefresh);
 
     setupManifesto();
+    setupMagnet();
 
     // Parallax y onda: si el navegador anima con el scroll en CSS (animation-timeline), lo hace él en
     // el compositor; GSAP queda solo como respaldo para los que no lo soportan.
@@ -418,14 +457,163 @@
         const yTo = gsap.quickTo(cursor, 'y', { duration: 0.16, ease: 'power3' });
         window.addEventListener('pointermove', e => { xTo(e.clientX); yTo(e.clientY); }, { passive: true });
         const hot = 'a, button, [data-open]';
+        // Al crecer pasa de disco a anillo: un disco de 42px sobre un boton de
+        // 152x48, con mix-blend-mode difference, invertia el rotulo justo en el
+        // medio y lo dejaba ilegible. Hueco deja ver el texto.
         document.addEventListener('pointerover', e => {
-          if (e.target.closest(hot)) gsap.to(cursor, { scale: 2.6, duration: 0.2, ease: 'power3.out' });
+          if (e.target.closest(hot)) {
+            cursor.classList.add('is-hot');
+            gsap.to(cursor, { scale: 2.6, duration: 0.2, ease: 'power3.out' });
+          }
         }, { passive: true });
         document.addEventListener('pointerout', e => {
-          if (e.target.closest(hot) && !e.relatedTarget?.closest?.(hot)) gsap.to(cursor, { scale: 1, duration: 0.2, ease: 'power3.out' });
+          if (e.target.closest(hot) && !e.relatedTarget?.closest?.(hot)) {
+            cursor.classList.remove('is-hot');
+            gsap.to(cursor, { scale: 1, duration: 0.2, ease: 'power3.out' });
+          }
         }, { passive: true });
       }
     }
+  }
+
+  /* ---------- Botones líquidos ----------
+     La tinta de CSS se abre desde donde entró el puntero: acá solo se escribe
+     --mx/--my (un rect por entrada, nada en cada frame) y se marca la salida.
+     Con teclado la tinta entra desde el centro. */
+
+  const LIQ = '.btn, .pill-btn, .footer__links a';
+  const OUT_MS = 220;
+  const outTimers = new WeakMap();
+
+  function liqEnter(el, e) {
+    const t = outTimers.get(el);
+    if (t) { clearTimeout(t); outTimers.delete(el); }
+    el.classList.remove('is-liq-out');
+    if (e) {
+      const r = el.getBoundingClientRect();
+      if (r.width && r.height) {
+        el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      }
+    } else {
+      el.style.setProperty('--mx', '50%');
+      el.style.setProperty('--my', '50%');
+    }
+  }
+
+  function liqLeave(el) {
+    el.classList.add('is-liq-out');
+    outTimers.set(el, setTimeout(() => {
+      el.classList.remove('is-liq-out');
+      outTimers.delete(el);
+    }, OUT_MS));
+  }
+
+  // pointerenter/leave no burbujean: se delega con pointerover/pointerout.
+  document.addEventListener('pointerover', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (!el || el.contains(e.relatedTarget)) return;
+    liqEnter(el, e);
+    if (magnet) magnet(el);
+  }, { passive: true });
+
+  document.addEventListener('pointerout', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (!el || el.contains(e.relatedTarget)) return;
+    liqLeave(el);
+  }, { passive: true });
+
+  // Teclado: la tinta entra centrada y se retira al salir del foco.
+  document.addEventListener('focusin', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (el) liqEnter(el, null);
+  }, { passive: true });
+  document.addEventListener('focusout', (e) => {
+    const el = e.target.closest?.(LIQ);
+    if (el) liqLeave(el);
+  }, { passive: true });
+
+  /* ---------- Roll del rótulo (solo los .btn sólidos "Ver en vivo") ----------
+     El rótulo real sube y se disuelve; una segunda copia ocupa su lugar. La
+     copia se genera acá y no en el HTML: así i18n sigue escribiendo un solo
+     texto y la copia se vuelve a armar a partir de él cada vez que cambia el
+     idioma. Va aria-hidden: para un lector de pantalla el botón dice lo mismo. */
+
+  const ROLL = '.btn:not(.btn--ghost) [data-i18n="btn.live"]';
+
+  function buildRolls() {
+    $$(ROLL).forEach(label => {
+      // El rótulo y su copia comparten una caja (.roll): la copia se apoya sobre
+      // el rótulo con inset:0 y las dos se alinean sin depender del flex del botón.
+      let box = label.parentElement;
+      if (!box.classList.contains('roll')) {
+        box = document.createElement('span');
+        box.className = 'roll';
+        label.before(box);
+        box.appendChild(label);
+        label.classList.add('roll__out');
+      }
+      box.querySelectorAll(':scope > .roll__in').forEach(n => n.remove());
+      const copy = document.createElement('span');
+      copy.className = 'roll__in';
+      copy.setAttribute('aria-hidden', 'true');
+      copy.textContent = label.textContent;
+      box.appendChild(copy);
+    });
+  }
+
+  buildRolls();
+  // app.js dispara jsf:lang después de reescribir los textos: la copia nace del texto ya traducido.
+  window.addEventListener('jsf:lang', buildRolls);
+
+  /* ---------- Imán (solo puntero fino, con GSAP ya cargado) ----------
+     El botón se acerca al puntero hasta 4 px y vuelve con un resorte corto.
+     Escribe `transform`, que es otra propiedad que el `translate` del hover de
+     CSS: los dos se componen y ninguno pisa al otro. */
+
+  let cursorListo = false;
+  let magnet = null;
+  const MAG = 4;
+
+  function setupMagnet() {
+    if (!hasGsap || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const tweens = new WeakMap();
+    const get = (el) => {
+      let q = tweens.get(el);
+      if (!q) {
+        q = {
+          x: gsap.quickTo(el, 'x', { duration: 0.26, ease: 'power3.out' }),
+          y: gsap.quickTo(el, 'y', { duration: 0.26, ease: 'power3.out' }),
+        };
+        tweens.set(el, q);
+      }
+      return q;
+    };
+    magnet = (el) => {
+      if (el.dataset.magnet) return;
+      el.dataset.magnet = '1';
+      el.classList.add('is-magnet');
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const q = get(el);
+      const move = (ev) => {
+        q.x(gsap.utils.clamp(-MAG, MAG, (ev.clientX - cx) / (r.width / 2) * MAG));
+        q.y(gsap.utils.clamp(-MAG, MAG, (ev.clientY - cy) / (r.height / 2) * MAG));
+      };
+      const off = (ev) => {
+        if (el.contains(ev.relatedTarget)) return;
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerout', off);
+        delete el.dataset.magnet;
+        gsap.to(el, {
+          x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.75)',
+          onComplete: () => el.classList.remove('is-magnet'),
+        });
+      };
+      el.addEventListener('pointermove', move, { passive: true });
+      el.addEventListener('pointerout', off, { passive: true });
+    };
   }
 
   /* ---------- API mínima para app.js (cambio de idioma) ---------- */

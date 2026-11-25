@@ -102,9 +102,15 @@
 
   /* Movimiento: un solo lenguaje para toda la página.
      Recorridos cortos, arranque firme y asentado breve, como tinta que se apoya en papel. */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);     /* expo-out: llega rápido, sin rebote */
-  --ease-ui:  cubic-bezier(0.3, 0.7, 0.2, 1);    /* hover y estados */
-  --ease-pop: cubic-bezier(0.3, 1.25, 0.5, 1);   /* un toque de resorte, apenas perceptible */
+  /* Una sola curva firma para todo el sitio. Medida en lusion.co, donde la
+     llaman ease.lusion: arranca decidida y frena largo. Si vas a agregar una
+     transición, usá esta. Las dos de abajo son las únicas excepciones. */
+  --ease: cubic-bezier(0.35, 0, 0, 1);
+  /* Sobrepaso. SOLO para elementos que aparecen (menús, diálogos, tarjetas que
+     entran). Un elemento que ya estaba en pantalla y rebota se lee como error. */
+  --ease-pop: cubic-bezier(0.3, 1.25, 0.5, 1);
+  /* Letras: llegan largo y se asientan sin rebotar. */
+  --ease-letter: cubic-bezier(0.22, 1, 0.26, 1);
   --t-ui:    0.18s;    /* hover, color */
   --t-press: 0.09s;    /* al apretar */
   --t-in:    0.42s;    /* apariciones */
@@ -154,7 +160,7 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   overflow-x: clip;
-  transition: background-color 0.3s var(--ease-ui), color 0.3s var(--ease-ui);
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 
 ::selection { background: var(--coral); color: var(--slate); }
@@ -167,7 +173,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 h1, h2, h3 { overflow-wrap: break-word; }
 p { text-wrap: pretty; }
 
-:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 4px; }
+/* Foco: el anillo va por DENTRO del control, sobre su propio fondo y con el color
+   de su texto. Así el contraste está garantizado por construcción (es el mismo par
+   que hace legible la etiqueta) sea cual sea el fondo de atrás. El coral daba
+   2.08:1 sobre el papel, 1.87 sobre la tarjeta y 1.48 sobre sage, por debajo del
+   3:1 que pide WCAG para elementos no textuales. */
+:focus-visible { outline: 3px solid currentColor; outline-offset: -4px; border-radius: 4px; }
 
 .skip-link {
   position: absolute; left: var(--s-2); top: -100%;
@@ -227,7 +238,7 @@ p { text-wrap: pretty; }
 }
 .dot::after {
   content: ""; position: absolute; inset: 0; border-radius: 50%;
-  background: currentColor; animation: ping 1.8s var(--ease-out) infinite;
+  background: currentColor; animation: ping 1.8s var(--ease) infinite;
 }
 @keyframes ping { 70%, 100% { transform: scale(2.6); opacity: 0; } from { opacity: 0.5; } }
 
@@ -240,7 +251,7 @@ p { text-wrap: pretty; }
   border: 2px solid var(--fg);
   border-radius: 999px;
   box-shadow: 4px 4px 0 var(--coral);
-  transition: translate var(--t-ui) var(--ease-ui), box-shadow var(--t-ui) var(--ease-ui), background-color var(--t-ui), color var(--t-ui);
+  transition: translate var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease), background-color var(--t-ui), color var(--t-ui);
 }
 .btn:hover, .btn:focus-visible { translate: -2px -2px; box-shadow: 6px 6px 0 var(--coral); }
 .btn:active { translate: 2px 2px; box-shadow: 1px 1px 0 var(--coral); transition-duration: var(--t-press); }
@@ -253,7 +264,7 @@ p { text-wrap: pretty; }
   border-radius: 999px;
   box-shadow: inset 0 0 0 1.5px currentColor;
   font-size: 0.9rem; font-weight: 700; line-height: 1; white-space: nowrap;
-  transition: background-color var(--t-ui), color var(--t-ui), box-shadow var(--t-ui), translate var(--t-ui) var(--ease-ui), scale var(--t-ui) var(--ease-ui);
+  transition: background-color var(--t-ui), color var(--t-ui), box-shadow var(--t-ui), translate var(--t-ui) var(--ease), scale var(--t-ui) var(--ease);
 }
 .pill-btn:hover { translate: 0 -2px; }
 .pill-btn:active { translate: 0; scale: 0.96; transition-duration: var(--t-press); }
@@ -266,7 +277,7 @@ p { text-wrap: pretty; }
   width: 2.75rem; height: 2.75rem; border-radius: 50%;
   box-shadow: inset 0 0 0 2px currentColor;
   font-size: 1rem; font-weight: 900;
-  transition: background-color var(--t-ui), color var(--t-ui), rotate 0.28s var(--ease-out), scale var(--t-press) var(--ease-ui);
+  transition: background-color var(--t-ui), color var(--t-ui), rotate 0.28s var(--ease), scale var(--t-press) var(--ease);
 }
 .icon-btn:hover, .icon-btn:focus-visible { background: var(--coral); color: var(--slate); box-shadow: inset 0 0 0 2px var(--coral); rotate: 90deg; }
 .icon-btn:active { scale: 0.92; }
@@ -341,6 +352,15 @@ p { text-wrap: pretty; }
     width: 16px; height: 16px; border-radius: 50%;
     background: var(--naples); mix-blend-mode: difference;
     pointer-events: none; z-index: 500;
+    transition: background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+  }
+  /* Sobre un elemento interactivo el punto crece a 2,6x. Lleno, ese disco de
+     42px tapaba el rotulo de los botones chicos e invertia el texto por el
+     mix-blend-mode. Vaciado, el texto se sigue leyendo y el gesto queda igual.
+     El borde se escala con el elemento: 1.5px pasan a 3.9px a 2,6x. */
+  .js .cursor.is-hot {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--naples);
   }
 }
 
@@ -356,20 +376,33 @@ p { text-wrap: pretty; }
 .rv {
   opacity: 0;
   transform: translate3d(0, var(--shift), 0);
-  transition: opacity var(--t-in) var(--ease-out), transform var(--t-in) var(--ease-out);
+  transition: opacity var(--t-in) var(--ease), transform var(--t-in) var(--ease);
   transition-delay: var(--d, 0ms);
 }
 .rv--down  { transform: translate3d(0, calc(var(--shift) * -1), 0); }
 .rv--media { transform: translate3d(0, calc(var(--shift) * 1.8), 0); transition-duration: 0.52s; }
 /* Sello (hanko): se apoya de golpe y asienta. Para chips, etiquetas y badges. */
 .rv--stamp { transform: scale(1.12); transition-duration: 0.14s, var(--t-stamp); }
-/* Letras de los títulos: suben desde la línea base, enmascaradas por su renglón */
-.rv--char  { opacity: 1; transform: translate3d(0, 104%, 0); transition-duration: 0s, 0.46s; }
+/* Letras de los títulos: suben desde la línea base, enmascaradas por su renglón.
+   La subida ahora llega con un giro corto sobre la base, encogida de ancho y
+   desenfocada, y se asienta. El scaleX hace el mismo efecto que animar el eje de
+   ancho de Archivo, pero sin recalcular el layout en cada cuadro: la fuente es
+   variable (wdth 62-125%) y mover ese eje por letra jitterea. */
+.rv--char {
+  opacity: 1;
+  transform-origin: 50% 100%;
+  transform: translate3d(0, 104%, 0) scaleX(0.84) rotate(3.2deg);
+  filter: blur(4px);
+  transition-property: opacity, transform, filter;
+  transition-duration: 0s, 0.62s, 0.4s;
+  transition-timing-function: linear, var(--ease-letter), ease-out;
+}
+.rv--char.is-in { transform: none; filter: blur(0); }
 .rv.is-in  { opacity: 1; transform: none; }
 .rv-now, .rv-now::before { transition: none !important; }
 
 /* El bloque de color detrás de las capturas se apoya primero, después las capturas encima */
-.case__media.rv-paper::before { opacity: 0; scale: 0.96; transition: opacity 0.3s var(--ease-out), scale 0.6s var(--ease-out); }
+.case__media.rv-paper::before { opacity: 0; scale: 0.96; transition: opacity 0.3s var(--ease), scale 0.6s var(--ease); }
 .case__media.rv-paper.is-in::before { opacity: 1; scale: 1; }
 
 /* Entrada del hero en CSS puro: arranca en el primer pintado, sin esperar al JS.
@@ -378,7 +411,7 @@ p { text-wrap: pretty; }
    es el mismo del rotate y GSAP la reescribe al inclinarla). Solo transform/opacity/clip-path, así no
    pisan el `rotate` de .stat/.avail/.badge__spin ni el `translate` de .nav. */
 .js .hero__top > *, .js .hero__badge, .js .hero__stats .stat {
-  animation: hero-in 0.14s var(--ease-out) both, hero-stamp var(--t-stamp) var(--ease-out) both;
+  animation: hero-in 0.14s var(--ease) both, hero-stamp var(--t-stamp) var(--ease) both;
   animation-delay: var(--hd, 120ms);
 }
 .js .hero__top > :nth-child(2) { --hd: 160ms; }
@@ -386,9 +419,9 @@ p { text-wrap: pretty; }
 .js .hero__stats .stat:nth-child(1) { --hd: 150ms; }
 .js .hero__stats .stat:nth-child(2) { --hd: 195ms; }
 .js .hero__stats .stat:nth-child(3) { --hd: 240ms; }
-.js .hero__intro { animation: hero-rise var(--t-in) var(--ease-out) both; }
-.js .nav { animation: hero-drop var(--t-in) var(--ease-out) 200ms both; }
-.js .hero__strip { animation: hero-wipe 0.6s var(--ease-out) 120ms backwards; }
+.js .hero__intro { animation: hero-rise var(--t-in) var(--ease) both; }
+.js .nav { animation: hero-drop var(--t-in) var(--ease) 200ms both; }
+.js .hero__strip { animation: hero-wipe 0.6s var(--ease) 120ms backwards; }
 @keyframes hero-in    { from { opacity: 0; } }
 @keyframes hero-stamp { from { transform: scale(1.12); } }
 @keyframes hero-rise  { from { opacity: 0; transform: translate3d(0, var(--shift), 0); } }
@@ -409,7 +442,7 @@ p { text-wrap: pretty; }
 @keyframes px-m { from { translate: 0 44px; } to { translate: 0 -28px; } }
 @keyframes wave-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @supports (animation-timeline: view()) {
-  @media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
     .case { view-timeline: --case block; }
     .js .shot-d { animation: px-d linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
     .js .shot-m { animation: px-m linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
@@ -449,7 +482,7 @@ p { text-wrap: pretty; }
   border-radius: 999px;
   font-size: var(--small); font-weight: 800; letter-spacing: 0.02em;
   padding: 0.8rem 1.3rem; z-index: 450;
-  transition: transform 0.32s var(--ease-out);
+  transition: transform 0.32s var(--ease);
   pointer-events: none; max-width: min(92vw, 30rem); text-align: center;
 }
 .toast.is-visible { transform: translate(-50%, 0); visibility: visible; }
@@ -470,7 +503,7 @@ p { text-wrap: pretty; }
   border-radius: var(--r-lg);
   box-shadow: 8px 8px 0 var(--coral);
   padding: var(--s-4) var(--s-3) var(--s-3);
-  animation: popIn 0.3s var(--ease-out);
+  animation: popIn 0.3s var(--ease);
 }
 @keyframes popIn { from { transform: translateY(8px) scale(0.985); opacity: 0; } }
 .mailsheet__eyebrow { color: var(--muted); margin-bottom: var(--s-1); padding-right: 3rem; }
@@ -501,7 +534,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   border: 2px solid var(--line);
   border-radius: 999px;
   box-shadow: 4px 4px 0 var(--shadow);
-  transition: translate 0.36s var(--ease-out), background-color 0.3s, border-color 0.3s;
+  transition: translate 0.36s var(--ease), background-color 0.3s, border-color 0.3s;
 }
 .nav.is-hidden { translate: 0 calc(-100% - 2rem); }
 .nav__logo {
@@ -511,6 +544,33 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   white-space: nowrap;
 }
 .nav__logo sup { font-size: 0.55em; }
+/* Logo que se abre. Dos capas en el mismo lugar: las iniciales se desvanecen y el
+   nombre aparece (medido en everyday-practice.com, ~200 ms). El nombre va
+   superpuesto y no en el flujo: no empuja nada, no cambia el ancho de la nav y no
+   puede provocar scroll horizontal. Solo se activa donde sobra lugar hasta los
+   links: el nombre mide 254 px y a 700 px ya tapa los links, así que se activa desde
+   760 px (768 deja 56 px libres en español). Por debajo el logo queda como era. */
+.nav__logo { position: relative; }
+.nav__logo-full { display: none; }
+@media (min-width: 760px) {
+  .nav__logo-full {
+    display: flex; align-items: center; position: absolute; inset: 0 auto 0 0;
+    opacity: 0; pointer-events: none;
+  }
+  .nav__logo:focus-visible { outline: 0; }
+  .nav__logo:focus-visible .nav__logo-short { opacity: 0; }
+  .nav__logo:focus-visible .nav__logo-full {
+    opacity: 1; pointer-events: auto;
+    outline: 3px solid currentColor; outline-offset: 3px; border-radius: 4px;
+  }
+}
+@media (min-width: 760px) and (hover: hover) {
+  .nav__logo:hover .nav__logo-short { opacity: 0; }
+  .nav__logo:hover .nav__logo-full { opacity: 1; pointer-events: auto; }
+}
+@media (min-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .nav__logo-short, .nav__logo-full { transition: opacity 0.2s var(--ease); }
+}
 .nav__links { display: flex; gap: 0.15rem; }
 .nav__link {
   display: inline-flex; align-items: center; min-height: 2.75rem;
@@ -528,7 +588,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   color: var(--slate);
   box-shadow: inset 0 0 0 2px var(--slate);
   font-weight: 900; font-size: 0.8rem; letter-spacing: 0.04em;
-  transition: rotate 0.3s var(--ease-out), scale var(--t-ui) var(--ease-pop);
+  transition: rotate 0.3s var(--ease), scale var(--t-ui) var(--ease);
 }
 .tool--theme { background: var(--sage); font-size: 1.1rem; }
 .tool--lang  { background: var(--coral); }
@@ -659,6 +719,18 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   border-radius: 0.22em;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
+/* El relleno lateral empujaba la coma y el punto que seguían al resaltado, y se
+   leía como un espacio de más. Con margen negativo del mismo valor el color
+   sobresale pero el texto no se corre: la puntuación queda pegada. */
+.manifesto__text .mk { margin-inline: -0.18em; }
+/* Bordes internos de un resaltado de varias palabras: sin relleno ni margen,
+   para que las palabras queden a distancia normal y el fondo siga de largo. */
+.manifesto__text .mk--sigue   { padding-left: 0;  margin-left: 0; }
+.manifesto__text .mk--continua { padding-right: 0; margin-right: 0; }
+/* Y sin esquinas redondeadas hacia adentro: dos pastillas pegadas dejaban una
+   costura visible. Solo los extremos de la tirada van redondeados. */
+.manifesto__text .mk--sigue   { border-start-start-radius: 0; border-end-start-radius: 0; }
+.manifesto__text .mk--continua { border-start-end-radius: 0; border-end-end-radius: 0; }
 .mk--coral { --mk: var(--coral); }
 .mk--sage  { --mk: var(--sage); }
 .mk--peach { --mk: var(--peach); }
@@ -669,9 +741,17 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    sin color-mix, sin GSAP o con "reducir movimiento" el texto queda entintado. */
 @supports (color: color-mix(in srgb, red 50%, blue)) {
   .js .manifesto__text .word { --ink: 0; color: color-mix(in srgb, var(--fg) calc(var(--ink) * 100%), var(--muted)); }
+  /* El resaltador barre de izquierda a derecha en vez de aparecer por opacidad,
+     y el texto recién pasa a slate cuando la marca ya lo cubre (umbral 0.9).
+     Antes el fondo iba de transparente al color mientras el texto iba de apagado
+     a oscuro: a mitad quedaba texto medio sobre fondo medio, y en tema oscuro
+     eso daba 1.06:1, o sea invisible. */
   .js .manifesto__text .word .mk {
-    background: color-mix(in srgb, var(--mk) calc(var(--ink) * 100%), transparent);
-    color: color-mix(in srgb, var(--slate) calc(var(--ink) * 100%), var(--muted));
+    background: linear-gradient(var(--mk), var(--mk)) no-repeat;
+    background-size: calc(var(--ink) * 104%) 100%;
+    color: color-mix(in srgb,
+      var(--slate) calc(clamp(0, (var(--ink) - 0.97) * 200, 1) * 100%),
+      var(--fg));
   }
   .js.no-gsap .manifesto__text .word { --ink: 1; }
 }
@@ -740,14 +820,39 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
   border-radius: calc(var(--r) - 3px);
 }
-.shot-btn { display: block; width: 100%; padding: 0; cursor: zoom-in; text-align: left; transition: scale var(--t-press) var(--ease-ui); }
+.shot-btn { display: block; width: 100%; padding: 0; cursor: zoom-in; text-align: left; transition: scale var(--t-press) var(--ease); }
 .shot-btn:active { scale: 0.992; }
-.shot-btn img { transition: scale 0.4s var(--ease-out), filter var(--t-ui); }
+.shot-btn img { transition: scale 0.4s var(--ease), filter var(--t-ui); }
 .shot-d .shot-btn { overflow: hidden; border-radius: calc(var(--r) - 3px); }
 .shot-d .shot-btn:hover img { scale: 1.025; }
 .phone.shot-btn { overflow: hidden; }
 .phone.shot-btn:hover img { scale: 1.03; }
-.shot-btn:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
+/* La captura es una foto dentro de un marco gris oscuro: ningún color único
+   contrasta siempre. Anillo doble por dentro, claro y oscuro, así uno de los dos
+   se ve sobre cualquier imagen. El outline transparente conserva el indicador
+   nativo en modo de alto contraste forzado. */
+.shot-btn { position: relative; }
+/* El anillo iba como box-shadow inset, que se pinta con el fondo del boton y
+   quedaba DEBAJO de la <img>: con teclado no se veia foco en ninguna de las 6
+   capturas. Ahora va en un ::after por encima de la imagen. El outline
+   transparente se queda para el modo de alto contraste forzado. */
+.shot-btn:focus-visible {
+  outline: 3px solid transparent;
+  outline-offset: -3px;
+}
+.shot-btn:focus-visible::after {
+  content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 3px var(--bg), inset 0 0 0 6px var(--fg);
+}
+/* El telefono es distinto: tiene marco propio y la etiqueta MOBILE encima, asi
+   que un anillo por dentro queda tapado en dos de los cuatro lados. Va por
+   fuera, donde nada lo cubre. */
+.phone.shot-btn:focus-visible::after { display: none; }
+.phone.shot-btn:focus-visible {
+  outline: 3px solid var(--fg);
+  outline-offset: 4px;
+}
 .shot-label { position: absolute; z-index: 3; top: -0.85rem; left: 1rem; box-shadow: inset 0 0 0 1.5px var(--slate); }
 .shot-m {
   position: absolute; z-index: 2;
@@ -777,11 +882,14 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   line-height: 1.45;
 }
 .case__n { font-weight: 900; font-variant-numeric: tabular-nums; }
+/* El resultado: lo ultimo que se ve sin abrir, y lo unico coral de la
+   tarjeta. Si todo lleva color, nada resalta. */
 .case__note {
-  background: var(--peach); color: var(--slate);
+  background: var(--coral); color: var(--slate);
   padding: 0.85rem 1rem; border-radius: var(--r-sm);
   box-shadow: inset 0 0 0 2px var(--slate);
-  font-size: 0.95rem; line-height: 1.5;
+  font-size: 0.95rem; line-height: 1.5; font-weight: 600;
+  margin-top: var(--s-3);
 }
 .case__stack { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 .case__stack > .label { color: var(--muted); margin-right: 0.25rem; }
@@ -851,15 +959,28 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .archive .pill-btn { color: var(--naples); }
 .archive .pill-btn.is-on { color: var(--slate); }
 
-.filters { flex-direction: column; gap: 0.9rem; margin-bottom: 2rem; }
-.filters__row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-.filters__label { color: var(--band-muted); min-width: 5.5rem; }
-.filters__chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+/* Filtros: cada grupo es una fila (rótulo + chips que envuelven, sin scroll oculto).
+   Los dos grupos fluyen juntos: en escritorio caben en una sola línea y, cuando
+   hay más chips o menos ancho, el segundo baja solo. El rótulo comparte fila con
+   sus chips en vez de ocupar una propia. */
+.archive__tools { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; flex-wrap: wrap; }
+.filters { flex-flow: row wrap; align-items: flex-start; gap: 0.6rem 2.5rem; margin-bottom: 1.75rem; }
+.filters__row { display: flex; align-items: flex-start; gap: 0.75rem; min-width: 0; }
+.filters__label { color: var(--band-muted); flex: none; min-width: 4.4rem; min-height: 2.5rem; display: flex; align-items: center; }
+.filters__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; min-width: 0; }
+.filters .pill-btn { min-height: 2.5rem; padding: 0 0.95rem; font-size: 0.88rem; }
 .fchip__c { font-weight: 500; font-variant-numeric: tabular-nums; }
 .fchip--focus { color: var(--sage) !important; box-shadow: none; outline: 1.5px dashed var(--band-muted); outline-offset: -1.5px; }
 .fchip--focus.is-on { background: var(--naples); color: var(--slate) !important; outline: 0; box-shadow: inset 0 0 0 1.5px var(--naples); }
-.fchip--focus:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
-.filters__count { color: var(--band-muted); font-size: 0.9rem; }
+/* Al pasar el puntero la tinta llena el chip de naples, pero el color de arriba
+   es !important y el texto quedaba sage sobre naples: 1,4:1. Mismo trato que el
+   chip activo, que ya estaba bien. */
+.fchip--focus:hover, .fchip--focus:focus-visible { color: var(--slate) !important; }
+/* Y un anillo de foco propio: el punteado de 1,5px es el mismo que tiene en
+   reposo, asi que con teclado no se distinguia cual estaba enfocado. */
+.fchip--focus:focus-visible { outline: 3px solid var(--slate); outline-offset: -3px; }
+.filters__count { color: var(--band-muted); font-size: 0.95rem; flex: 1 1 0; min-width: 0; }
+.archive__tools .view-switch { margin-left: auto; }
 
 .arc-list { border-bottom: 1px solid var(--band-line); }
 .arc-item[hidden] { display: none; }
@@ -871,7 +992,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   padding: 1.35rem 0.75rem;
   border-top: 1px solid var(--band-line);
   text-decoration: none; color: inherit;
-  transition: background-color var(--t-ui) var(--ease-ui);
+  transition: background-color var(--t-ui) var(--ease);
 }
 .arc-row:hover { background: var(--band-hover); }
 .arc-row:focus-visible { outline-offset: -3px; }
@@ -888,19 +1009,37 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   width: 86%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
   border-radius: 8px; background: var(--ph);
   box-shadow: 0 0 0 1.5px var(--naples);
-  transition: scale 0.32s var(--ease-out);
+  transition: scale 0.32s var(--ease);
 }
 .arc-row__m {
   position: absolute; right: 0; bottom: 0;
   width: 30%; height: auto; aspect-ratio: 390 / 844; object-fit: cover; object-position: top;
   border-radius: 9px; background: var(--ph);
   border: 3px solid var(--naples);
-  transition: translate 0.32s var(--ease-out);
+  transition: translate 0.32s var(--ease);
 }
 .arc-row:hover .arc-row__d { scale: 1.04; }
 .arc-row:hover .arc-row__m { translate: 0 -6px; }
-.arc-row__go { grid-area: go; font-size: 1.6rem; font-weight: 800; color: var(--coral); text-align: right; transition: translate 0.24s var(--ease-out); }
+.arc-row__go { grid-area: go; font-size: 1.6rem; font-weight: 800; color: var(--coral); text-align: right; transition: translate 0.24s var(--ease); }
 .arc-row:hover .arc-row__go { translate: 0.25rem -0.25rem; }
+
+/* ── Atenuar los hermanos ──────────────────────────────────────────────
+   Medido en buck.co: al entrar el puntero a la lista, las filas que no
+   se apuntan bajan de contraste y la apuntada queda sola. El efecto no
+   está en la que mirás, está en las otras.
+   Solo con puntero fino: en una pantalla táctil no hay "la otra fila".
+   El valor de --atenuado está elegido para que el texto atenuado siga
+   pasando 4.5:1 contra el fondo; si lo bajás, verificá el contraste. */
+@media (hover: hover) and (pointer: fine) {
+  .arc-list { --atenuado: 0.62; }
+  .arc-list:hover .arc-row { opacity: var(--atenuado); }
+  .arc-list:hover .arc-row:hover,
+  .arc-list .arc-row:focus-visible { opacity: 1; }
+}
+.arc-row { transition: background-color var(--t-ui) var(--ease), opacity 0.18s var(--ease); }
+@media (prefers-reduced-motion: reduce) {
+  .arc-row { transition: none; }
+}
 
 /* Vista grilla */
 .arc-list.is-grid {
@@ -927,14 +1066,11 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .arc-list.is-grid .arc-row__type { display: block; }
 }
 @media (max-width: 700px) {
-  .filters__row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-  .filters__chips {
-    flex-wrap: nowrap; overflow-x: auto;
-    width: calc(100% + var(--gutter)); padding: 0.2rem var(--gutter) 0.4rem 0.2rem; margin-left: -0.2rem;
-    scroll-snap-type: x proximity; scrollbar-width: none;
-  }
-  .filters__chips::-webkit-scrollbar { display: none; }
-  .filters__chips > * { flex: none; scroll-snap-align: start; }
+  .filters__row { width: 100%; gap: 0.5rem; }
+  .filters__label { min-width: 3.4rem; font-size: 0.7rem; letter-spacing: 0.05em; }
+  .filters .pill-btn { padding: 0 0.7rem; font-size: 0.82rem; }
+  .filters__chips { gap: 0.35rem; }
+  .archive__head { margin-bottom: 1.25rem; }
   .arc-row { grid-template-columns: 3.9rem minmax(0, 1fr); grid-template-areas: "thumbs main"; padding: 1rem 0.25rem; }
   .arc-row__num { display: none; }
   .arc-row__thumbs { width: 3.9rem; aspect-ratio: auto; }
@@ -963,12 +1099,13 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .skills-col li { padding: 0.55rem 0; border-bottom: 1.5px solid var(--line); font-weight: 500; }
 
 .xp {
+  position: relative;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--s-4);
   width: min(100% - 2 * var(--gutter), var(--max-w)); margin-inline: auto;
   padding-top: var(--s-6);
   align-items: start;
 }
-.xp__when { justify-self: start; padding: 0.5rem 0.9rem; border-radius: 999px; background: var(--sage); color: var(--slate); rotate: -1.5deg; }
+.xp__when { justify-self: start; padding: 0.5rem 0.9rem; border-radius: 999px; background: var(--sage); color: var(--slate); rotate: -1.5deg; box-shadow: inset 0 0 0 2px var(--slate); }
 .xp__role { font-size: var(--display-md); font-weight: 900; font-stretch: 118%; text-transform: uppercase; line-height: 1; margin-bottom: var(--s-3); }
 .xp__list li { padding: var(--s-2) 0 var(--s-2) var(--s-4); border-top: 2px solid var(--line); position: relative; }
 .xp__list li::before {
@@ -980,6 +1117,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .skills-grid { gap: var(--s-5) var(--s-3); }
   .xp { grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
 }
+/* Seis columnas entran en dos filas parejas de tres: con auto-fit entraban cinco
+   y "En formación" quedaba sola abajo, dejando un hueco muerto. */
+@media (min-width: 701px)  { .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .skills-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* ---------- Footer ---------- */
 .footer {
@@ -997,7 +1138,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .footer__cta { display: flex; align-items: baseline; gap: 0.05em; text-decoration: none; width: 100%; overflow: hidden; }
 .footer__cta-text { font-size: var(--display-xl); display: inline-block; }
 .footer__cta-text .char { display: inline-block; }
-.footer__cta-arrow { font-size: var(--display-lg); font-weight: 900; transition: transform 0.3s var(--ease-pop); }
+.footer__cta-arrow { font-size: var(--display-lg); font-weight: 900; transition: transform 0.3s var(--ease); }
 .footer__cta:hover .footer__cta-arrow,
 .footer__cta:focus-visible .footer__cta-arrow { transform: translate(0.14em, -0.14em) rotate(8deg); }
 
@@ -1009,11 +1150,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   padding: 0 1.1rem; border-radius: 999px;
   font-weight: 800; text-decoration: none;
   box-shadow: inset 0 0 0 2px var(--slate);
-  transition: background-color var(--t-ui), color var(--t-ui), scale var(--t-press) var(--ease-ui);
+  transition: background-color var(--t-ui), color var(--t-ui), scale var(--t-press) var(--ease);
 }
 .footer__links a:active { scale: 0.96; }
 .footer__links a:hover, .footer__links a:focus-visible { background: var(--slate); color: var(--naples); }
-.footer :focus-visible { outline-color: var(--slate); }
 .footer__base {
   display: flex; justify-content: space-between; gap: var(--s-2); flex-wrap: wrap;
   border-top: 1.5px solid var(--slate);
@@ -1040,7 +1180,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   overflow: hidden;
 }
 .pd::backdrop { background: rgba(10, 31, 29, 0.74); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
-.pd[open] { animation: popIn 0.32s var(--ease-out); }
+.pd[open] { animation: popIn 0.32s var(--ease); }
 .pd__inner {
   display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   height: min(100dvh - 2rem - 6px, 52rem - 6px);
@@ -1099,7 +1239,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
-  .rv { opacity: 1 !important; transform: none !important; scale: none !important; }
+  .rv { opacity: 1 !important; transform: none !important; scale: none !important; filter: none !important; }
   .js .manifesto__text .word { --ink: 1; }
   /* Entrada del hero: sin animación, todo en su estado final (el retardo seguiría ocultándolo) */
   .js .hero__top > *, .js .hero__badge, .js .hero__stats .stat, .js .hero__intro, .js .nav, .js .hero__strip,
@@ -1110,11 +1250,736 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    Lo que está lejos de la pantalla no se dibuja ni se mide hasta acercarse: la primera carga
    pinta antes y las imágenes de los casos esperan su turno. contain-intrinsic-size reserva
    un alto aproximado y después recuerda el real (auto), así el scroll no salta. */
-.case    { content-visibility: auto; contain-intrinsic-size: auto 1700px; overflow-clip-margin: 4rem; }
-.archive { content-visibility: auto; contain-intrinsic-size: auto 1250px; }
-.skills  { content-visibility: auto; contain-intrinsic-size: auto 3200px; }
-.cv-all .case, .cv-all .archive, .cv-all .skills { content-visibility: visible; }
+.case    { content-visibility: auto; contain-intrinsic-size: auto 700px; overflow-clip-margin: 4rem; }
+.archive { content-visibility: auto; contain-intrinsic-size: auto 1200px; }
+.skills  { content-visibility: auto; contain-intrinsic-size: auto 1290px; }
+.experience { content-visibility: auto; contain-intrinsic-size: auto 1300px; }
+.cv-all .case, .cv-all .archive, .cv-all .skills, .cv-all .experience { content-visibility: visible; }
 @media (min-width: 701px) {
-  .case   { contain-intrinsic-size: auto 1100px; }
-  .skills { contain-intrinsic-size: auto 2000px; }
+  .case   { contain-intrinsic-size: auto 730px; }
+  .skills { contain-intrinsic-size: auto 900px; }
+  .experience { contain-intrinsic-size: auto 1250px; }
+  .archive { contain-intrinsic-size: auto 1030px; }
+}
+/* En escritorio los casos son mucho mas bajos que en tablet: el alto reservado
+   se mide por content-box y los tres casos miden 995, 764 y 707 a 1440px. */
+@media (min-width: 1024px) {
+  .case { contain-intrinsic-size: auto 520px; }
+  .archive { contain-intrinsic-size: auto 1090px; }
+  /* Experiencia y Skills tambien cambian mucho entre tablet y escritorio:
+     Experiencia pasa de 980 a 1040 y Skills de 985 a 776 (content-box). */
+  .experience { contain-intrinsic-size: auto 1280px; }
+  .skills { contain-intrinsic-size: auto 715px; }
+}
+
+/* ═════════ 05 · CAPA INMERSIVA (2026) ═════════
+   Todo lo que sigue se apoya en las mismas reglas del resto del sitio:
+   solo transform/translate/scale/opacity/clip-path (compositor), animaciones
+   atadas al scroll con animation-timeline cuando el navegador la soporta
+   (las hace el propio navegador, sin JS y sin retraso), y estado final visible
+   cuando no hay soporte, no hay JS o se pidió "reducir movimiento". */
+
+/* ---------- Botones líquidos ----------
+   La tinta entra desde donde está el puntero (js/motion.js escribe --mx/--my) y
+   se abre con clip-path: ellipse(). Los dos radios crecen desfasados, así el
+   borde ondula como líquido en vez de ser un círculo. clip-path se compone en el
+   compositor: no repinta ni mide el layout.
+   El texto va por encima (z-index) y el relleno viejo (background) queda intacto,
+   así que sin soporte de clip-path el botón se comporta como antes. */
+.btn, .pill-btn, .footer__links a {
+  position: relative;
+  isolation: isolate;
+}
+/* isolation crea el contexto de apilado propio del boton, para que el z-index
+   negativo de la tinta no se escape detras de lo que haya abajo. */
+.btn, .pill-btn, .footer__links a { overflow: hidden; isolation: isolate; }
+.btn > *, .pill-btn > *, .footer__links a > * { position: relative; z-index: 1; }
+
+/* La tinta va en z-index -1, no 0. Con 0 se pintaba ARRIBA del texto suelto:
+   el orden de pintado deja el texto en linea debajo de cualquier descendiente
+   posicionado con z-index 0 o auto, y la regla de arriba solo protege a los
+   hijos que son elementos. Los rotulos sin <span> (CV espanol, Copiar email,
+   los chips de filtro) desaparecian al pasar el puntero o al recibir foco.
+   Con -1 la tinta queda encima del fondo del boton y debajo del texto, que es
+   lo que hace falta, y ya no depende de como este escrito el markup. */
+.btn::before, .pill-btn::before, .footer__links a::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--liq, var(--coral));
+  clip-path: ellipse(0% 0% at var(--mx, 50%) var(--my, 50%));
+  pointer-events: none;
+}
+/* 9 fotogramas: el radio horizontal va adelante y el vertical lo persigue, así el
+   frente ondula. Los pasos están repartidos parejo en el espacio y la curva de
+   tiempo (no expo) hace que el barrido se vea, en vez de completarse al instante. */
+@keyframes liquid-in {
+  0%   { clip-path: ellipse(0%    0%    at var(--mx, 50%) var(--my, 50%)); }
+  12%  { clip-path: ellipse(20%   26%   at var(--mx, 50%) var(--my, 50%)); }
+  25%  { clip-path: ellipse(42%   36%   at var(--mx, 50%) var(--my, 50%)); }
+  38%  { clip-path: ellipse(60%   56%   at var(--mx, 50%) var(--my, 50%)); }
+  50%  { clip-path: ellipse(80%   66%   at var(--mx, 50%) var(--my, 50%)); }
+  62%  { clip-path: ellipse(98%   84%   at var(--mx, 50%) var(--my, 50%)); }
+  75%  { clip-path: ellipse(116%  96%   at var(--mx, 50%) var(--my, 50%)); }
+  88%  { clip-path: ellipse(134%  118%  at var(--mx, 50%) var(--my, 50%)); }
+  100% { clip-path: ellipse(152%  140%  at var(--mx, 50%) var(--my, 50%)); }
+}
+@keyframes liquid-out {
+  from { clip-path: ellipse(152% 140% at var(--mx, 50%) var(--my, 50%)); }
+  to   { clip-path: ellipse(0%   0%   at var(--mx, 50%) var(--my, 50%)); }
+}
+.js .btn:hover::before, .js .btn:focus-visible::before, .js .btn:active::before,
+.js .pill-btn:hover::before, .js .pill-btn:focus-visible::before, .js .pill-btn:active::before,
+.js .footer__links a:hover::before, .js .footer__links a:focus-visible::before, .js .footer__links a:active::before {
+  animation: liquid-in 0.34s var(--ease) forwards;
+}
+/* Al salir el puntero la tinta se retira: .is-liq-out lo pone motion.js, así la
+   salida no se dispara en la primera carga ni al perder el foco por teclado. */
+.js .btn.is-liq-out::before, .js .pill-btn.is-liq-out::before, .js .footer__links a.is-liq-out::before {
+  animation: liquid-out 0.22s var(--ease) forwards;
+}
+/* Cada botón elige su tinta, respetando el contraste que ya tenía en hover */
+.btn            { --liq: var(--coral); }
+.btn:hover,  .btn:focus-visible  { color: var(--slate); }
+.btn--ghost     { --liq: var(--sage); }
+.pill-btn       { --liq: var(--coral); }
+/* Vale para todos los pill-btn, no solo los del archivo: el "Copiar email" del
+   pie quedaba naples sobre la tinta coral, 1,9:1, ilegible al pasar el puntero. */
+.pill-btn:hover, .pill-btn:focus-visible { color: var(--slate); }
+.fchip--focus   { --liq: var(--naples); }
+.footer__links a { --liq: var(--slate); }
+.footer__links a:hover, .footer__links a:focus-visible { color: var(--naples); }
+/* El sólido del hover ya no hace falta: lo trae la tinta (y sin JS sigue estando) */
+/* El chip activo queda afuera: su tinta es transparente, asi que sacarle el
+   fondo lo dejaba hueco, con texto slate sobre la banda slate. */
+.js .btn--ghost:hover, .js .btn--ghost:focus-visible,
+.js .footer__links a:hover, .js .footer__links a:focus-visible,
+.js .archive .pill-btn:hover:not(.is-on),
+.js .archive .pill-btn:focus-visible:not(.is-on) { background: transparent; }
+.js .btn--ghost:hover, .js .btn--ghost:focus-visible { box-shadow: 4px 4px 0 var(--fg); }
+/* El estado activo del chip no es un hover: queda sólido */
+.pill-btn.is-on, .fchip--focus.is-on { --liq: transparent; }
+
+/* Imán: motion.js acerca el botón al puntero con transform (propiedad distinta
+   de `translate`, que es la que usa el hover de CSS: no se pisan). */
+.btn, .pill-btn { will-change: auto; }
+.js .btn.is-magnet, .js .pill-btn.is-magnet { will-change: transform; }
+
+/* ---------- Roll del rótulo en los .btn sólidos ----------
+   Medido en toss.im ("Download App"): el rótulo sube 16 px, se desenfoca 4 px y
+   se disuelve mientras una copia ocupa su lugar; el fondo del botón no cambia.
+   La ida dura 0,3 s y la vuelta 1,2 s: esa asimetría es lo que lo hace ver bien.
+   La copia (.roll__in) la genera motion.js y va aria-hidden. Solo transform,
+   opacity y filter. Sin hover (táctil) no se dispara, y con "reducir movimiento"
+   motion.js ni la genera (y acá queda oculta por si la preferencia cambia). */
+.roll__in { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .roll { display: block; position: relative; }
+  .js .roll__out { display: block; }
+  .js .roll__in {
+    display: block; position: absolute; inset: 0;
+    pointer-events: none; user-select: none;
+    opacity: 0; transform: translateY(16px); filter: blur(4px);
+  }
+  .js .roll__out, .js .roll__in {
+    transition: transform 1.2s var(--ease), opacity 1.2s var(--ease), filter 1.2s var(--ease);
+  }
+  .js .btn:focus-visible .roll__out {
+    opacity: 0; transform: translateY(-16px); filter: blur(4px); transition-duration: 0.3s;
+  }
+  .js .btn:focus-visible .roll__in {
+    opacity: 1; transform: none; filter: none; transition-duration: 0.3s;
+  }
+  @media (hover: hover) {
+    .js .btn:hover .roll__out {
+      opacity: 0; transform: translateY(-16px); filter: blur(4px); transition-duration: 0.3s;
+    }
+    .js .btn:hover .roll__in {
+      opacity: 1; transform: none; filter: none; transition-duration: 0.3s;
+    }
+  }
+}
+
+/* ---------- Skills: iconos que se dibujan y lista que reacciona ---------- */
+.sk-ico {
+  width: 1.15em; height: 1.15em; flex: none;
+  fill: none; stroke: currentColor;
+  stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round;
+  transition: rotate 0.3s var(--ease), scale 0.3s var(--ease);
+}
+.skills-col:hover .sk-ico, .skills-col:focus-within .sk-ico { rotate: -12deg; scale: 1.18; }
+
+/* El trazo se dibuja solo cuando la columna entra en pantalla. Sin soporte
+   (o con "reducir movimiento") el icono ya está dibujado. */
+@keyframes sk-draw { from { stroke-dashoffset: 42; } to { stroke-dashoffset: 0; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .sk-ico > * {
+      stroke-dasharray: 42;
+      animation: sk-draw 1s var(--ease) both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+  }
+}
+
+/* Cada habilidad reacciona al puntero: marcador que se abre y texto que avanza */
+.skills-col li {
+  position: relative;
+  padding-left: 0;
+  transition: padding-left var(--t-ui) var(--ease), color var(--t-ui);
+}
+.skills-col li::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  width: 0.5rem; height: 0.5rem; border-radius: 50%;
+  background: var(--coral);
+  translate: -0.1rem -50%;
+  scale: 0;
+  transition: scale 0.26s var(--ease-pop);
+}
+.skills-col li:hover { padding-left: 1.1rem; }
+.skills-col li:hover::before { scale: 1; }
+
+/* ---------- Experiencia: riel con progreso atado al scroll ---------- */
+.xp-track {
+  position: relative;
+  width: min(100% - 2 * var(--gutter), var(--max-w)); margin-inline: auto;
+}
+/* Riel tenue de fondo */
+.xp-track::before {
+  content: ""; position: absolute; z-index: 0;
+  left: 0; top: var(--s-5); bottom: var(--s-4);
+  width: 3px; border-radius: 3px;
+  background: var(--rule);
+}
+/* Progreso: se llena con el scroll. transform-origin arriba, solo scaleY. */
+.xp-track::after {
+  content: ""; position: absolute; z-index: 1;
+  left: 0; top: var(--s-5); bottom: var(--s-4);
+  width: 3px; border-radius: 3px;
+  background: var(--coral);
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+}
+@keyframes xp-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .xp-track::after {
+      animation: xp-fill linear both;
+      animation-timeline: view();
+      animation-range: entry 60% exit 35%;
+    }
+  }
+}
+/* Sin animación atada al scroll el riel queda entero (no a medias) */
+@supports not (animation-timeline: view()) { .xp-track::after { transform: scaleY(1); } }
+
+.xp-track .xp { padding-left: calc(var(--s-3) + 0.75rem); }
+/* Nodo de cada etapa, sobre el riel */
+.xp__when { position: relative; z-index: 2; }
+.xp__when::before {
+  content: ""; position: absolute;
+  left: calc((var(--s-3) + 0.75rem) * -1 - 0.33rem); top: 50%;
+  width: 1.05rem; height: 1.05rem; border-radius: 50%;
+  translate: 0 -50%;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 3px var(--fg);
+  rotate: 1.5deg; /* compensa la rotación del chip */
+}
+/* El nodo se enciende al llegar a su etapa */
+@keyframes xp-node { to { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); scale: 1.15; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .xp__when::before {
+      animation: xp-node 0.01s var(--ease) both;
+      animation-timeline: view();
+      animation-range: entry 85% entry 100%;
+    }
+  }
+}
+@media (max-width: 700px) {
+  .xp-track .xp { padding-left: var(--s-3); }
+  .xp__when::before { left: calc(var(--s-3) * -1 - 0.33rem); }
+}
+
+/* ── Experiencia: el titulo se fija mientras dura su bloque ─────────────
+   Cada .xp es la caja contenedora del sticky, asi que el chip y el titulo
+   se sueltan solos cuando entra el siguiente, sin JS ni listeners.
+   El punto del riel viaja con el chip: marca por donde vas dentro de la
+   etapa. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Solo desde 701px. Abajo de eso la grilla colapsa a UNA columna, asi que
+       el chip y el titulo caen uno sobre otro y los dos sticky se pisan: en
+       celular el chip tapaba el titulo del puesto. Ahi no hay dos columnas
+       que mantener alineadas, asi que no hay nada que fijar. */
+    /* Solo desde 701px. Abajo de eso la grilla colapsa a UNA columna, asi que
+       el chip y el titulo caen uno sobre otro y los dos sticky se pisan: en
+       celular el chip tapaba el titulo del puesto.
+       Y se fija SOLO el chip, no el titulo. El chip vive en su propia
+       columna, asi que nada le pasa por debajo. El titulo comparte columna
+       con la lista: fijado, tapaba sus propios puntos al pasar. */
+    @media (min-width: 701px) {
+      .xp__when {
+        position: sticky;
+        top: calc(var(--nav-h) + var(--s-3));
+      }
+    }
+    /* El asentamiento. Fijar en seco se siente duro, asi que al entrar el
+       bloque el chip y el titulo llegan desde un poco abajo, se pasan apenas
+       y vuelven. Va ligado al scroll, no a un temporizador: si frenas a mitad,
+       la animacion frena con vos. */
+    /* Recorrido para que el sticky se sienta, pero proporcional al contenido.
+       Con una altura minima fija (probé 54vh) las etapas de pocas líneas
+       quedaban con un vacío grande y el chip se fijaba SOLO, sin su texto al
+       lado: se leía como un error. Con relleno abajo cada etapa tiene su
+       tramo de scroll y el chip nunca queda huérfano. */
+    @media (min-width: 701px) {
+      .xp { padding-bottom: clamp(2.5rem, 8vh, 6rem); }
+    }
+    .xp__centinela { position: absolute; top: 0; left: 0; width: 1px; height: 1px; }
+    /* El rebote va al fijarse, no al entrar: con view() la animacion terminaba
+       mucho antes de que el bloque llegara a la linea de pegado, y el chip se
+       clavaba en seco. Lo dispara el centinela de motion.js. */
+    .xp.is-fijada .xp__when { animation: xp-rebote 0.46s var(--ease-pop) both; }
+  }
+}
+@keyframes xp-rebote {
+  0%   { translate: 0 7px;  scale: 0.955; rotate: -1.5deg; }
+  55%  { translate: 0 -3px; scale: 1.035; rotate: -0.4deg; }
+  78%  { translate: 0 1px;  scale: 0.992; rotate: -1.9deg; }
+  100% { translate: 0 0;    scale: 1;     rotate: -1.5deg; }
+}
+@keyframes xp-rebote-sutil {
+  0%   { translate: 0 6px; opacity: 0.55; }
+  58%  { translate: 0 -2px; opacity: 1; }
+  80%  { translate: 0 1px; }
+  100% { translate: 0 0; }
+}
+
+/* ── Deriva ligada al scroll ───────────────────────────────────────────
+   Medido: el archivo respondia al scroll en 0 de 94 elementos visibles, el
+   pie en 0 de 60 y la parte baja de Skills en 1 de 91. Estaban muertos.
+
+   La clave es que el recorrido cubra el paso COMPLETO (cover), no solo la
+   entrada: con entry el bloque llega, se acomoda y despues queda clavado,
+   que es justo la sensacion de pagina estatica. Con cover el elemento sigue
+   respondiendo mientras lo estas leyendo.
+
+   Un mismo gesto en los cuatro lugares: llega desde abajo y a la izquierda,
+   se asienta, y sigue subiendo apenas. Amplitud chica a proposito: 26px de
+   recorrido total. Mas que eso marea y se nota el truco.
+   Cada elemento tiene su propia linea de tiempo, asi que el escalonado sale
+   solo. Solo translate y opacity: corre en el compositor. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .arc-row,
+    .js .skills-col,
+    .js .case__solved li {
+      animation: deriva linear both;
+      animation-timeline: view(block);
+      animation-range: cover 0% cover 100%;
+    }
+    .js .footer__cta,
+    .js .footer__links {
+      animation: deriva-pie linear both;
+      animation-timeline: view(block);
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@keyframes deriva {
+  0%   { translate: -12px 18px; opacity: 0.3; }
+  26%  { translate: 0 6px;      opacity: 1; }
+  100% { translate: 0 -8px;     opacity: 1; }
+}
+@keyframes deriva-pie {
+  0%   { translate: 0 26px; scale: 0.985; opacity: 0.35; }
+  30%  { translate: 0 6px;  scale: 1;     opacity: 1; }
+  100% { translate: 0 -10px; scale: 1;    opacity: 1; }
+}
+
+/* ---------- Progreso de lectura en la nav ---------- */
+.nav::after {
+  content: ""; position: absolute; z-index: 1;
+  left: 1.1rem; right: 1.1rem; bottom: 0; height: 2px;
+  border-radius: 2px; background: var(--coral);
+  transform-origin: 0 50%; transform: scaleX(0);
+  pointer-events: none;
+}
+@keyframes nav-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@supports (animation-timeline: scroll(root)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .nav::after { animation: nav-progress linear both; animation-timeline: scroll(root); }
+  }
+}
+
+/* ---------- Profundidad en los casos ----------
+   El texto deriva apenas en contra de la captura pegajosa: da relieve sin mover
+   nada del layout. Usa `translate`, que no choca con el `transform` del reveal. */
+@keyframes case-drift { from { translate: 0 20px; } to { translate: 0 -20px; } }
+@supports (animation-timeline: view()) {
+  @media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+    .js .case__info {
+      animation: case-drift linear both;
+      animation-timeline: view();
+      animation-range: entry 25% exit 75%;
+    }
+  }
+}
+
+/* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
+  .js .btn--ghost:hover, .js .btn--ghost:focus-visible { background: var(--sage); }
+  .js .footer__links a:hover, .js .footer__links a:focus-visible { background: var(--slate); }
+  .js .archive .pill-btn:hover, .js .archive .pill-btn:focus-visible { background: var(--coral); }
+  .sk-ico > * { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  .xp-track::after { transform: scaleY(1); }
+  .xp__when::before { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); }
+  .nav::after { display: none; }
+  .case__info { translate: none !important; }
+}
+
+/* ---------- Salida del hero y deriva de los títulos gigantes ----------
+   Atadas al scroll con animation-timeline: las resuelve el navegador, sin JS.
+   El hero espera a .rv-ready para no pisar el reveal de las letras, que hasta
+   ese momento mantiene las líneas en opacity: 0. */
+@keyframes hero-exit  { to { translate: 0 -12%; opacity: 0.28; } }
+@keyframes giant-pan  { from { translate: -2.5% 0; } to { translate: 2.5% 0; } }
+
+@supports (animation-timeline: view()) {
+  @media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .js.rv-ready .hero__title {
+      animation: hero-exit linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 92%;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Solo el contenedor: las letras siguen usando transform para el reveal. */
+    .js .giant-title {
+      animation: giant-pan linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__title, .giant-title { translate: none !important; opacity: 1 !important; }
+}
+
+/* ═════════ 06 · PROFUNDIDAD EN LOS CASOS ═════════
+   La seccion de proyectos ocupa casi toda la pagina, asi que es donde el scroll
+   tiene que notarse. Todo atado a animation-timeline y en el compositor. */
+
+/* La captura se descubre de abajo hacia arriba a medida que entra.
+   Va sobre .shot-btn, que ya recorta y no lleva la sombra dura: asi el barrido
+   no come la sombra. El `round` conserva el radio del marco. */
+/* El número del caso se mueve en contra de la captura */
+@keyframes num-drift { from { translate: 0 14px; } to { translate: 0 -14px; } }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .case__num {
+      animation: num-drift linear both;
+      animation-timeline: --case;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+/* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
+  .js .btn--ghost:hover, .js .btn--ghost:focus-visible { background: var(--sage); }
+  .js .footer__links a:hover, .js .footer__links a:focus-visible { background: var(--slate); }
+  .js .archive .pill-btn:hover, .js .archive .pill-btn:focus-visible { background: var(--coral); }
+  .sk-ico > * { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  .xp-track::after { transform: scaleY(1); }
+  .xp__when::before { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); }
+  .nav::after { display: none; }
+  .case__info { translate: none !important; }
+}
+
+/* ---------- Salida del hero y deriva de los títulos gigantes ----------
+   Atadas al scroll con animation-timeline: las resuelve el navegador, sin JS.
+   El hero espera a .rv-ready para no pisar el reveal de las letras, que hasta
+   ese momento mantiene las líneas en opacity: 0. */
+@keyframes hero-exit  { to { translate: 0 -12%; opacity: 0.28; } }
+@keyframes giant-pan  { from { translate: -2.5% 0; } to { translate: 2.5% 0; } }
+
+@supports (animation-timeline: view()) {
+  @media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .js.rv-ready .hero__title {
+      animation: hero-exit linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 92%;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Solo el contenedor: las letras siguen usando transform para el reveal. */
+    .js .giant-title {
+      animation: giant-pan linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__title, .giant-title { translate: none !important; opacity: 1 !important; }
+}
+
+/* ═════════ 06 · PROFUNDIDAD EN LOS CASOS ═════════
+   La seccion de proyectos ocupa casi toda la pagina, asi que es donde el scroll
+   tiene que notarse. Todo atado a animation-timeline y en el compositor. */
+
+/* La captura se descubre de abajo hacia arriba a medida que entra.
+   Va sobre .shot-btn, que ya recorta y no lleva la sombra dura: asi el barrido
+   no come la sombra. El `round` conserva el radio del marco. */
+/* El numero del caso se mueve en contra de la captura */
+@keyframes num-drift { from { translate: 0 14px; } to { translate: 0 -14px; } }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .case__num {
+      animation: num-drift linear both;
+      animation-timeline: --case;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case__num { translate: none !important; }
+}
+
+/* ═════════ 07 · ERGONOMÍA DE LECTURA ═════════
+   Medido con navegador: la página ocupaba 15,2 pantallas en celular, Skills sola
+   5,2, y en escritorio el 57-69% de cada celda de Skills quedaba en blanco. */
+
+/* ---------- Skills en chips ----------
+   35 ítems en columnas de una línea cada uno desperdiciaban casi dos tercios del
+   ancho. En chips, el mismo contenido fluye y ocupa la mitad del alto. */
+/* Las habilidades envuelven en horizontal para no gastar una fila cada una,
+   pero sin pastilla: eran 45 contornos con el mismo peso y se leia como un
+   muro. El ancla es el encabezado de cada grupo, que si lleva relleno. El
+   detalle se escanea, no se lee uno por uno. */
+.skills-col ul { display: flex; flex-wrap: wrap; gap: 0.2rem 0.75rem; }
+.skills-col li {
+  padding: 0.26rem 0;
+  border-bottom: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 0.9rem; font-weight: 500; line-height: 1.3;
+  transition: box-shadow var(--t-ui) var(--ease), color var(--t-ui) var(--ease),
+              background-color var(--t-ui) var(--ease);
+}
+/* El marcador de punto de la versión anterior ya no aplica a un chip */
+.skills-col li::before { content: none; }
+/* Un punto chico separa, sin encerrar. No va en el primero de cada fila. */
+.skills-col li + li::after { content: none; }
+.skills-col li:not(:last-child) {
+  position: relative; padding-right: 0.75rem;
+}
+.skills-col li:not(:last-child)::after {
+  content: ""; position: absolute; right: 0; top: 50%;
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--line); translate: 0 -50%;
+}
+/* Al apuntar se subraya, no se rellena: el coral queda reservado para los
+   resultados de los casos. Si todo puede ponerse coral, el coral no dice nada. */
+.skills-col li:hover, .skills-col li:focus-within {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+/* "En formación" lo distingue su encabezado. Antes cada item llevaba ademas
+   un anillo coral; sin la pastilla ese anillo quedaba alrededor de texto
+   pelado y se leia como un error, y gastaba el coral que ahora significa
+   resultado. */
+
+/* ---------- "Qué resolví": los dos primeros y el resto en el lugar ----------
+   <details> nativo: anda sin JS y el navegador ya le da teclado y lectura. */
+/* ── Tarjeta de caso: primero poco, al abrir todo ──────────────────────
+   Antes cada tarjeta apilaba 12 bloques en celular (captura, numero, titulo,
+   badge, bajada, 3 tags, parrafo, lista, caja de resultado, stack y tres
+   botones) y ademas el modal repetia casi lo mismo al hacer clic.
+
+   Ahora de entrada solo hay cuatro cosas, en orden de protagonismo: la
+   captura, el numero y el titulo, una linea de que es, y el resultado. Lo
+   primero y lo ultimo son lo que se recuerda, asi que el resultado es lo
+   ultimo y es lo unico coral de la tarjeta. El resto se abre en el lugar. */
+.case__detalle { margin-top: var(--s-4); }
+.case__abrir {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  cursor: pointer; list-style: none;
+  font-family: var(--sans); font-size: 0.9rem; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.6rem 1.1rem; border-radius: 999px;
+  box-shadow: inset 0 0 0 2px var(--line);
+  transition: background-color var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease);
+}
+.case__abrir::-webkit-details-marker { display: none; }
+.case__abrir-ico {
+  font-weight: 700; font-size: 1.1em; line-height: 1;
+  transition: rotate 0.3s var(--ease);
+}
+.case__detalle[open] .case__abrir-ico { rotate: 45deg; }
+.case__abrir:hover, .case__abrir:focus-visible { box-shadow: inset 0 0 0 2px var(--fg); }
+.case__cuerpo {
+  display: grid; gap: var(--s-4);
+  padding-top: var(--s-4);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .case__detalle[open] .case__cuerpo { animation: abrir-caso 0.4s var(--ease) both; }
+}
+@keyframes abrir-caso {
+  from { opacity: 0; translate: 0 -10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* ---------- Largo de línea ----------
+   A 768 px el texto de los casos corría a 80-92 caracteres y en 1440 los ítems de
+   Experiencia llegaban a 101. Lo cómodo es 45-75. En los anchos donde ya entraban
+   estos topes no hacen nada, porque la columna es más angosta que el tope. */
+.case__context, .case__solved li, .case__note { max-width: 58ch; }
+@media (min-width: 1024px) { .xp__list { max-width: 56ch; } }
+
+/* Experiencia: el alto lo marcaba el padding, no el texto */
+.xp__list li { padding-top: 0.42rem; padding-bottom: 0.42rem; }
+.xp__list li::before { top: 0.75rem; }
+
+/* ---------- Cabecera del caso en una sola línea ----------
+   Antes eran tres bloques apilados antes del título: número + sello, etiquetas y
+   subtítulo. Ahora el número y el título van juntos arriba (que es lo que se
+   escanea) y todo lo demás envuelve en una sola línea, sin perder información. */
+.case__head { align-items: baseline; gap: 0.75rem; }
+.case__head .case__title { margin: 0; }
+.case__meta {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 0.45rem 0.6rem;
+  margin-top: 0.6rem;
+}
+.case__meta .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.case__meta .case__kicker { color: var(--muted); }
+/* El número comparte renglón con el título en vez de empujarlo abajo */
+/* 0.55 dejaba el numero en 2,99:1 a 390 px, justo abajo del 3:1 que pide el
+   texto grande. 0.62 lo sube a 3,4 sin que deje de leerse como secundario. */
+.case__head .case__num { font-size: clamp(1.4rem, 5vw, 2.2rem); line-height: 1; opacity: 0.62; }
+
+
+/* ---------- Menos líneas ----------
+   Dentro de un caso se veían: la regla de 3 px del caso, otra de 2 px sobre
+   "Qué resolví" y una línea debajo de cada punto. Son 6 reglas por caso, 18 en
+   la página, más 8 en Experiencia. El orden lo da el espacio y la numeración,
+   no hace falta dibujar cada separación. */
+.case__solved li { border-bottom: 0; padding: 0.55rem 0; }
+.case__solved ol { border-top-width: 2px; }
+.xp__list li { border-top: 0; }
+/* Sin la línea, el renglón de cada ítem lo marca su propia flecha */
+.xp__list li { padding-left: var(--s-4); }
+.xp__list li::before { top: 0.55rem; }
+.xp__list { display: grid; gap: 0.15rem; }
+
+/* ---------- Cada proyecto es un bloque, no un tramo de columna ----------
+   Hero, manifiesto y proyectos eran siete pantallas seguidas del mismo fondo,
+   separadas solo por una regla: por eso se perdía la sensación de secciones y
+   cada caso se sentía interminable. Ahora cada caso tiene su propio piso, su
+   borde y su sombra dura, y se separan por aire en vez de por líneas. */
+.case {
+  border-top: 0;
+  background: var(--surface);
+  background-image: var(--paper-grain), var(--paper-fibers);
+  box-shadow: inset 0 0 0 3px var(--line), 8px 8px 0 var(--shadow);
+  border-radius: var(--r-lg);
+  padding-inline: clamp(1.1rem, 3.5vw, 3rem);
+  padding-block: clamp(2.2rem, 5vw, 4rem);
+  margin-bottom: var(--s-5);
+  /* overflow queda visible: la captura de escritorio es sticky dentro del caso */
+}
+.case:last-of-type { margin-bottom: 0; }
+/* El bloque de color detrás de la captura ya no necesita salirse tanto */
+.case__media::before { inset: 10% 10% 1.5rem -1.5%; }
+.case:nth-of-type(even) .case__media::before { inset: 10% 10% 1.5rem -1.5%; }
+
+/* ---------- Escala de espacios ----------
+   Medido: 18 valores verticales distintos, y el mismo 72 px hacía cuatro
+   trabajos diferentes. Peor: había más aire entre filas de Skills (72) que
+   entre tarjetas de proyecto (48), o sea que la página agrupaba al revés.
+   Un solo valor por función, con los tokens que ya existen. */
+.case { margin-bottom: var(--s-4); }          /* entre tarjetas: 32 -> era 48 suelto */
+.work .case:first-of-type { margin-top: var(--s-4); }
+.skills-grid { row-gap: var(--s-5); }         /* filas de Skills: menos que entre secciones */
+.xp { padding-top: var(--s-5); }              /* filas de Experiencia: igual que Skills */
+
+/* ---------- Jerarquía tipográfica ----------
+   Medido: "Skills" salía a 282 px y el nombre del hero a 175. Una lista de chips
+   era el elemento más grande de la página. Pasa porque el ajuste al ancho estira
+   las palabras cortas: "Skills" tiene 6 letras y "Proyectos" 9. El tope
+   data-fit-max lo corrige sin tocar el motor de ajuste.
+
+   Y Experiencia, que es lo que mira un reclutador, tenía el encabezado más chico
+   de la página (41,6 px), más chico que los roles que cuelgan de él (48 px). */
+.xp__role {
+  font-size: clamp(1.2rem, 2.5vw, 2.05rem);
+  font-weight: 800;
+  font-stretch: 90%;
+}
+/* La empresa deja de ser la línea más débil del bloque */
+.xp__when { font-weight: 800; }
+
+/* Los títulos de caso pasan al lado condensado del eje de ancho de Archivo.
+   El sistema ya usa el ancho por rol (80 etiquetas, 90 tags, 100 texto, 118
+   roles, 125 display) pero nunca el lado angosto en tamaños grandes: todo lo
+   grande era ancho y pesado. Condensado para los casos y expandido para las
+   secciones vuelve el contraste intencional.
+   Ojo: el mínimo real es 75%. El 62% solo existe en el archivo de rango
+   extendido, que no cubre las letras latinas básicas. */
+.case__title { font-stretch: 78%; font-weight: 800; }
+
+/* ---------- Arreglos de la auditoría visual ---------- */
+
+/* La nav desbordaba entre 421 y 499 px: el único punto que ocultaba los links
+   era max-width 420, así que en un celular de 430 (iPhone Pro Max) el botón de
+   idioma quedaba fuera de la pantalla. */
+@media (max-width: 500px) {
+  .nav { padding-left: 0.9rem; gap: 0.25rem; }
+  .nav__link--hide-xs { display: none; }
+}
+
+/* En tema oscuro el hover del desplegable ponía fondo sage con texto naples:
+   1.4:1, ilegible. El texto pasa a slate, como en el resto de fondos claros. */
+.case__more > summary:hover, .case__more > summary:focus-visible { color: var(--slate); }
+
+/* Los puntos de la línea de tiempo no caían sobre el riel: .xp traía su propio
+   ancho y margin-inline:auto dentro de .xp-track, que ya está indentado, así que
+   se sumaban dos gutters. El desvío crecía con el ancho (21 px a 390, 73 a 1920). */
+.xp-track .xp { width: 100%; margin-inline: 0; }
+
+/* Los separadores del marquee eran slate sobre slate: invisibles en claro. */
+.marquee--ink .marquee__track { color: var(--ink-fg); }
+
+/* La etiqueta MOBILE tapaba el logo de la captura en celular */
+@media (max-width: 700px) {
+  .shot-m .shot-label { top: auto; bottom: 0.85rem; left: 0.85rem; }
+}
+
+/* ═════════ [rediseno-2026 · estructura] Experiencia como sección propia y modal de capturas ═════════
+   Agregado al final a pedido: no toca ninguna regla anterior. */
+.experience { padding-block: var(--s-6) 0; scroll-margin-top: var(--nav-h); }
+/* Modal: la captura toma casi todo el ancho; la columna de datos queda mínima */
+@media (min-width: 901px) {
+  .pd__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); }
+}
+
+/* ═════════ [rediseno-2026 · nav] Link a Experiencia y arreglo del desborde en 501–504 px ═════════
+   Medido con navegador (espacio libre = ancho de la nav menos lo que ocupan logo, links y botones):
+   · Con Proyectos + Skills + Contacto la nav ya desbordaba 1,6 px a 501 px en español
+     (el corte de .nav__link--hide-xs estaba en 500 y esos tres links necesitan ~503). Corte a 519.
+   · Con Experiencia como cuarto link, los cuatro entran sin desborde desde 629 px (es) y 603 px (en).
+     Se oculta por debajo de 660 px para dejar ~35 px de aire en español. Mismo criterio que los otros
+     dos: en angostos la nav conserva Contacto. El texto no se acorta: sigue siendo la palabra completa. */
+@media (max-width: 519px) {
+  .nav__link--hide-xs { display: none; }
+}
+@media (max-width: 659px) {
+  .nav__link--hide-sm { display: none; }
 }
