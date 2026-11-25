@@ -1256,6 +1256,41 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .btn, .pill-btn { will-change: auto; }
 .js .btn.is-magnet, .js .pill-btn.is-magnet { will-change: transform; }
 
+/* ---------- Roll del rótulo en los .btn sólidos ----------
+   Medido en toss.im ("Download App"): el rótulo sube 16 px, se desenfoca 4 px y
+   se disuelve mientras una copia ocupa su lugar; el fondo del botón no cambia.
+   La ida dura 0,3 s y la vuelta 1,2 s: esa asimetría es lo que lo hace ver bien.
+   La copia (.roll__in) la genera motion.js y va aria-hidden. Solo transform,
+   opacity y filter. Sin hover (táctil) no se dispara, y con "reducir movimiento"
+   motion.js ni la genera (y acá queda oculta por si la preferencia cambia). */
+.roll__in { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .roll { display: block; position: relative; }
+  .js .roll__out { display: block; }
+  .js .roll__in {
+    display: block; position: absolute; inset: 0;
+    pointer-events: none; user-select: none;
+    opacity: 0; transform: translateY(16px); filter: blur(4px);
+  }
+  .js .roll__out, .js .roll__in {
+    transition: transform 1.2s var(--ease), opacity 1.2s var(--ease), filter 1.2s var(--ease);
+  }
+  .js .btn:focus-visible .roll__out {
+    opacity: 0; transform: translateY(-16px); filter: blur(4px); transition-duration: 0.3s;
+  }
+  .js .btn:focus-visible .roll__in {
+    opacity: 1; transform: none; filter: none; transition-duration: 0.3s;
+  }
+  @media (hover: hover) {
+    .js .btn:hover .roll__out {
+      opacity: 0; transform: translateY(-16px); filter: blur(4px); transition-duration: 0.3s;
+    }
+    .js .btn:hover .roll__in {
+      opacity: 1; transform: none; filter: none; transition-duration: 0.3s;
+    }
+  }
+}
+
 /* ---------- Skills: iconos que se dibujan y lista que reacciona ---------- */
 .sk-ico {
   width: 1.15em; height: 1.15em; flex: none;

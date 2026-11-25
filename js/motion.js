@@ -486,6 +486,39 @@
     if (el) liqLeave(el);
   }, { passive: true });
 
+  /* ---------- Roll del rótulo (solo los .btn sólidos "Ver en vivo") ----------
+     El rótulo real sube y se disuelve; una segunda copia ocupa su lugar. La
+     copia se genera acá y no en el HTML: así i18n sigue escribiendo un solo
+     texto y la copia se vuelve a armar a partir de él cada vez que cambia el
+     idioma. Va aria-hidden: para un lector de pantalla el botón dice lo mismo. */
+
+  const ROLL = '.btn:not(.btn--ghost) [data-i18n="btn.live"]';
+
+  function buildRolls() {
+    $$(ROLL).forEach(label => {
+      // El rótulo y su copia comparten una caja (.roll): la copia se apoya sobre
+      // el rótulo con inset:0 y las dos se alinean sin depender del flex del botón.
+      let box = label.parentElement;
+      if (!box.classList.contains('roll')) {
+        box = document.createElement('span');
+        box.className = 'roll';
+        label.before(box);
+        box.appendChild(label);
+        label.classList.add('roll__out');
+      }
+      box.querySelectorAll(':scope > .roll__in').forEach(n => n.remove());
+      const copy = document.createElement('span');
+      copy.className = 'roll__in';
+      copy.setAttribute('aria-hidden', 'true');
+      copy.textContent = label.textContent;
+      box.appendChild(copy);
+    });
+  }
+
+  buildRolls();
+  // app.js dispara jsf:lang después de reescribir los textos: la copia nace del texto ya traducido.
+  window.addEventListener('jsf:lang', buildRolls);
+
   /* ---------- Imán (solo puntero fino, con GSAP ya cargado) ----------
      El botón se acerca al puntero hasta 4 px y vuelve con un resorte corto.
      Escribe `transform`, que es otra propiedad que el `translate` del hover de
