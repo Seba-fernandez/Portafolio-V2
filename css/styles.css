@@ -956,10 +956,16 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .archive .pill-btn { color: var(--naples); }
 .archive .pill-btn.is-on { color: var(--slate); }
 
-.filters { flex-direction: column; gap: 0.9rem; margin-bottom: 2rem; }
-.filters__row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-.filters__label { color: var(--band-muted); min-width: 5.5rem; }
-.filters__chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+/* Filtros: cada grupo es una fila (rótulo + chips que envuelven, sin scroll oculto).
+   Los dos grupos fluyen juntos: en escritorio caben en una sola línea y, cuando
+   hay más chips o menos ancho, el segundo baja solo. El rótulo comparte fila con
+   sus chips en vez de ocupar una propia. */
+.archive__tools { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; flex-wrap: wrap; }
+.filters { flex-flow: row wrap; align-items: flex-start; gap: 0.6rem 2.5rem; margin-bottom: 1.75rem; }
+.filters__row { display: flex; align-items: flex-start; gap: 0.75rem; min-width: 0; }
+.filters__label { color: var(--band-muted); flex: none; min-width: 4.4rem; min-height: 2.5rem; display: flex; align-items: center; }
+.filters__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; min-width: 0; }
+.filters .pill-btn { min-height: 2.5rem; padding: 0 0.95rem; font-size: 0.88rem; }
 .fchip__c { font-weight: 500; font-variant-numeric: tabular-nums; }
 .fchip--focus { color: var(--sage) !important; box-shadow: none; outline: 1.5px dashed var(--band-muted); outline-offset: -1.5px; }
 .fchip--focus.is-on { background: var(--naples); color: var(--slate) !important; outline: 0; box-shadow: inset 0 0 0 1.5px var(--naples); }
@@ -970,7 +976,8 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* Y un anillo de foco propio: el punteado de 1,5px es el mismo que tiene en
    reposo, asi que con teclado no se distinguia cual estaba enfocado. */
 .fchip--focus:focus-visible { outline: 3px solid var(--slate); outline-offset: -3px; }
-.filters__count { color: var(--band-muted); font-size: 0.9rem; }
+.filters__count { color: var(--band-muted); font-size: 0.95rem; flex: 1 1 0; min-width: 0; }
+.archive__tools .view-switch { margin-left: auto; }
 
 .arc-list { border-bottom: 1px solid var(--band-line); }
 .arc-item[hidden] { display: none; }
@@ -1056,14 +1063,11 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .arc-list.is-grid .arc-row__type { display: block; }
 }
 @media (max-width: 700px) {
-  .filters__row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-  .filters__chips {
-    flex-wrap: nowrap; overflow-x: auto;
-    width: calc(100% + var(--gutter)); padding: 0.2rem var(--gutter) 0.4rem 0.2rem; margin-left: -0.2rem;
-    scroll-snap-type: x proximity; scrollbar-width: none;
-  }
-  .filters__chips::-webkit-scrollbar { display: none; }
-  .filters__chips > * { flex: none; scroll-snap-align: start; }
+  .filters__row { width: 100%; gap: 0.5rem; }
+  .filters__label { min-width: 3.4rem; font-size: 0.7rem; letter-spacing: 0.05em; }
+  .filters .pill-btn { padding: 0 0.7rem; font-size: 0.82rem; }
+  .filters__chips { gap: 0.35rem; }
+  .archive__head { margin-bottom: 1.25rem; }
   .arc-row { grid-template-columns: 3.9rem minmax(0, 1fr); grid-template-areas: "thumbs main"; padding: 1rem 0.25rem; }
   .arc-row__num { display: none; }
   .arc-row__thumbs { width: 3.9rem; aspect-ratio: auto; }
@@ -1244,7 +1248,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    pinta antes y las imágenes de los casos esperan su turno. contain-intrinsic-size reserva
    un alto aproximado y después recuerda el real (auto), así el scroll no salta. */
 .case    { content-visibility: auto; contain-intrinsic-size: auto 1400px; overflow-clip-margin: 4rem; }
-.archive { content-visibility: auto; contain-intrinsic-size: auto 1250px; }
+.archive { content-visibility: auto; contain-intrinsic-size: auto 1200px; }
 .skills  { content-visibility: auto; contain-intrinsic-size: auto 1470px; }
 .experience { content-visibility: auto; contain-intrinsic-size: auto 1300px; }
 .cv-all .case, .cv-all .archive, .cv-all .skills, .cv-all .experience { content-visibility: visible; }
@@ -1252,11 +1256,13 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .case   { contain-intrinsic-size: auto 1150px; }
   .skills { contain-intrinsic-size: auto 1000px; }
   .experience { contain-intrinsic-size: auto 1250px; }
+  .archive { contain-intrinsic-size: auto 1030px; }
 }
 /* En escritorio los casos son mucho mas bajos que en tablet: el alto reservado
    se mide por content-box y los tres casos miden 995, 764 y 707 a 1440px. */
 @media (min-width: 1024px) {
   .case { contain-intrinsic-size: auto 850px; }
+  .archive { contain-intrinsic-size: auto 1090px; }
   /* Experiencia y Skills tambien cambian mucho entre tablet y escritorio:
      Experiencia pasa de 980 a 1040 y Skills de 985 a 776 (content-box). */
   .experience { contain-intrinsic-size: auto 1280px; }
