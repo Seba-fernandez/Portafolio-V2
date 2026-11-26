@@ -21,6 +21,17 @@
   let hasGsap = false;
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
+  /* Loops de CSS (cintas, sello giratorio, punto): pausan fuera de pantalla desde el
+     arranque, sin esperar a GSAP ni al primer scroll. Se observa el contenedor y el
+     CSS pausa al hijo que anima. */
+  const loops = $$('.marquee, .hero__strip, .band, .badge, .dot');
+  if (loops.length) {
+    const loopIO = new IntersectionObserver(entries => entries.forEach(e => {
+      e.target.classList.toggle('is-off', !e.isIntersecting);
+    }), { rootMargin: '80px' });
+    loops.forEach(el => loopIO.observe(el));
+  }
+
   /* ── Experiencia: avisar cuando una etapa queda fijada ────────────────
      El sticky no tiene evento propio y las animaciones ligadas al scroll
      terminan mucho antes de que el bloque llegue a la linea de pegado. Un
@@ -424,13 +435,12 @@
     }
 
     // Cintas: se inclinan apenas con la velocidad del scroll y vuelven firmes enseguida.
-    // Solo se tocan las que están en pantalla; las de afuera además pausan su animación.
+    // Solo se tocan las que están en pantalla (la pausa de su animación la hace el observer de loops).
     const skewed = $$('.marquee, .hero__strip, .band');
     if (skewed.length) {
       const setters = new Map(skewed.map(m => [m, gsap.quickSetter(m, 'skewX', 'deg')]));
       const onScreen = new Set();
       const vis = new IntersectionObserver(entries => entries.forEach(e => {
-        e.target.classList.toggle('is-off', !e.isIntersecting);
         if (e.isIntersecting) onScreen.add(e.target);
         else { onScreen.delete(e.target); setters.get(e.target)(0); }
       }));
@@ -439,6 +449,7 @@
       let target = 0, current = 0;
       ScrollTrigger.create({ onUpdate(self) { target = clamp(self.getVelocity() / -500); } });
       gsap.ticker.add(() => {
+        if (!onScreen.size) return;
         target *= 0.7;
         current += (target - current) * 0.5;
         if (Math.abs(current) < 0.02 && Math.abs(target) < 0.02) {

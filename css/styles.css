@@ -453,8 +453,9 @@ p { text-wrap: pretty; }
     .js .wave__path { stroke-dasharray: 1; animation: wave-draw linear both; animation-timeline: view(); animation-range: entry 5% cover 50%; }
   }
 }
-/* Las cintas fuera de pantalla no se animan (motion.js marca .is-off) */
-.is-off .marquee__track, .is-off .band__track, .is-off.hero__strip .hero__strip-inner { animation-play-state: paused; }
+/* Cintas, sello y punto fuera de pantalla no se animan (motion.js marca .is-off desde el arranque) */
+.is-off .marquee__track, .is-off .band__track, .is-off.hero__strip .hero__strip-inner,
+.badge.is-off .badge__spin, .dot.is-off::after { animation-play-state: paused; }
 
 /* Cintas que se inclinan con la velocidad del scroll: capa propia, sin repintar */
 .marquee, .band, .hero__strip { will-change: transform; }
@@ -1173,7 +1174,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   box-shadow: 8px 8px 0 var(--coral);
   overflow: hidden;
 }
-.pd::backdrop { background: rgba(10, 31, 29, 0.74); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+.pd::backdrop { background: rgba(10, 31, 29, 0.82); }
 .pd[open] { animation: popIn 0.32s var(--ease); }
 .pd__inner {
   display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
