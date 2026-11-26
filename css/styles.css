@@ -464,6 +464,10 @@ p { text-wrap: pretty; }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .case { view-timeline: --case block; }
+  }
+  /* Solo >700px: en movil el telefono llena .case__media (overflow:hidden, fondo --ph) y trasladarlo
+     hasta 44px dejaba al descubierto una franja de fondo arriba de la captura. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 701px) {
     .js .shot-d { animation: px-d linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
     .js .shot-m { animation: px-m linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
   }
