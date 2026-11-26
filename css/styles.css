@@ -1431,7 +1431,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    (o con "reducir movimiento") el icono ya está dibujado. */
 @keyframes sk-draw { from { stroke-dashoffset: 42; } to { stroke-dashoffset: 0; } }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) and (min-width: 901px) {
     .js .sk-ico > * {
       stroke-dasharray: 42;
       animation: sk-draw 1s var(--ease) both;
@@ -1589,8 +1589,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    recorrido total. Mas que eso marea y se nota el truco.
    Cada elemento tiene su propia linea de tiempo, asi que el escalonado sale
    solo. Solo translate y opacity: corre en el compositor. */
+/* Solo escritorio con puntero fino: en teléfono 40 filas con su propia línea de tiempo suman ~40 capas
+   y cuestan CPU en cada scroll; ahí las filas quedan quietas y visibles. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) and (min-width: 901px) {
     .js .arc-row,
     .js .skills-col,
     .js .case__solved li {
@@ -1646,66 +1648,6 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   }
 }
 
-/* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
-  .js .btn--ghost:hover, .js .btn--ghost:focus-visible { background: var(--sage); }
-  .js .footer__links a:hover, .js .footer__links a:focus-visible { background: var(--slate); }
-  .js .archive .pill-btn:hover, .js .archive .pill-btn:focus-visible { background: var(--coral); }
-  .sk-ico > * { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
-  .xp-track::after { transform: scaleY(1); }
-  .xp__when::before { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); }
-  .nav::after { display: none; }
-  .case__info { translate: none !important; }
-}
-
-/* ---------- Salida del hero y deriva de los títulos gigantes ----------
-   Atadas al scroll con animation-timeline: las resuelve el navegador, sin JS.
-   El hero espera a .rv-ready para no pisar el reveal de las letras, que hasta
-   ese momento mantiene las líneas en opacity: 0. */
-@keyframes hero-exit  { to { translate: 0 -12%; opacity: 0.28; } }
-@keyframes giant-pan  { from { translate: -2.5% 0; } to { translate: 2.5% 0; } }
-
-@supports (animation-timeline: view()) {
-  @media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-    .js.rv-ready .hero__title {
-      animation: hero-exit linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 92%;
-    }
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    /* Solo el contenedor: las letras siguen usando transform para el reveal. */
-    .js .giant-title {
-      animation: giant-pan linear both;
-      animation-timeline: view();
-      animation-range: cover 0% cover 100%;
-    }
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero__title, .giant-title { translate: none !important; opacity: 1 !important; }
-}
-
-/* ═════════ 06 · PROFUNDIDAD EN LOS CASOS ═════════
-   La seccion de proyectos ocupa casi toda la pagina, asi que es donde el scroll
-   tiene que notarse. Todo atado a animation-timeline y en el compositor. */
-
-/* La captura se descubre de abajo hacia arriba a medida que entra.
-   Va sobre .shot-btn, que ya recorta y no lleva la sombra dura: asi el barrido
-   no come la sombra. El `round` conserva el radio del marco. */
-/* El número del caso se mueve en contra de la captura */
-@keyframes num-drift { from { translate: 0 14px; } to { translate: 0 -14px; } }
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .js .case__num {
-      animation: num-drift linear both;
-      animation-timeline: --case;
-      animation-range: cover 0% cover 100%;
-    }
-  }
-}
 /* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
 @media (prefers-reduced-motion: reduce) {
   .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
