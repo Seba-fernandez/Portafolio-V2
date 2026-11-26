@@ -631,6 +631,9 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 }
 [data-theme="dark"] .avail { background: var(--naples); color: var(--slate); }
 .hero__coords { color: var(--muted); }
+/* Hora de Córdoba: el espacio se reserva desde el HTML (mismo ancho con tabulares), y queda invisible hasta que app.js la escribe. */
+.hero__time { font-variant-numeric: tabular-nums; visibility: hidden; }
+.hero__time.is-on { visibility: visible; }
 
 .hero__badge { position: absolute; right: var(--gutter); top: calc(var(--nav-h) + 0.75rem); z-index: 2; width: clamp(6.5rem, 10vw, 8.5rem); }
 .hero__badge circle { fill: var(--coral); stroke: var(--slate); stroke-width: 3; }

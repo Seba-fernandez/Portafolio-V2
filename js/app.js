@@ -261,6 +261,35 @@
 
   window.JSFi18n = { t, get lang() { return lang; } };
 
+  /* ---------- Hora de Córdoba en vivo ----------
+     Un solo timer: se alinea al próximo minuto exacto y sigue cada 60 s. Con la pestaña oculta no corre. */
+
+  const clockEl = document.getElementById('cbaTime');
+  if (clockEl) {
+    let fmt = null;
+    try {
+      fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Argentina/Cordoba', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+    } catch { /* sin Intl/zona: queda oculto */ }
+    if (fmt) {
+      let clockTimer = 0;
+      const paint = () => {
+        const hm = fmt.format(new Date());
+        if (clockEl.dateTime !== hm) { clockEl.dateTime = hm; clockEl.textContent = ' · ' + hm; }
+        clockEl.classList.add('is-on');
+      };
+      const tick = () => {
+        paint();
+        clockTimer = setTimeout(tick, 60000 - (Date.now() % 60000) + 20);
+      };
+      const stop = () => { clearTimeout(clockTimer); clockTimer = 0; };
+      tick();
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop();
+        else if (!clockTimer) tick();
+      });
+    }
+  }
+
   /* ---------- Copiar email ---------- */
 
   const EMAIL = 'jsebasferna@gmail.com';
