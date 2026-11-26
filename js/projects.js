@@ -113,6 +113,29 @@
     fCount.innerHTML = `${esc(UI[lang].none)} <button class="pill-btn" type="button" data-reset>${esc(UI[lang].reset)}</button>`;
   }
 
+  /* Entrada barata de las filas (CSS, 180 ms, solo opacity + translate): alterna entre dos clases
+     con el mismo gesto para reiniciar la animación sin forzar layout. Reemplaza a la View Transition,
+     que fotografiaba toda la página y costaba 70-190 ms por clic. Sin movimiento si el usuario lo pide. */
+  function swapIn() {
+    if (reduceMotion) return;
+    const a = list.classList.contains('is-swap-a');
+    list.classList.remove('is-swap-a', 'is-swap-b');
+    list.classList.add(a ? 'is-swap-b' : 'is-swap-a');
+  }
+
+  /* ScrollTrigger.refresh mide toda la página: se hace después de pintar el cambio, en un momento
+     libre, y varios clics seguidos se juntan en una sola medición. */
+  let refreshQueued = false;
+  function deferRefresh() {
+    if (!window.ScrollTrigger || refreshQueued) return;
+    refreshQueued = true;
+    requestAnimationFrame(() => {
+      const go = () => { refreshQueued = false; window.ScrollTrigger.refresh(); };
+      if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 400 });
+      else setTimeout(go, 100);
+    });
+  }
+
   function applyFilters() {
     const run = () => {
       let shown = 0;
@@ -124,9 +147,9 @@
       renderChips();
       renderCount(shown);
     };
-    if (document.startViewTransition && !reduceMotion) document.startViewTransition(run);
-    else run();
-    if (window.ScrollTrigger) requestAnimationFrame(() => window.ScrollTrigger.refresh());
+    run();
+    swapIn();
+    deferRefresh();
   }
 
   fType.addEventListener('click', e => {
@@ -162,10 +185,10 @@
         b.setAttribute('aria-pressed', on);
       });
     };
-    if (animate && document.startViewTransition && !reduceMotion) document.startViewTransition(run);
-    else run();
+    run();
+    if (animate) swapIn();
     store.set('jsf-view', view);
-    if (window.ScrollTrigger) requestAnimationFrame(() => window.ScrollTrigger.refresh());
+    deferRefresh();
   }
   viewBtns.forEach(b => b.addEventListener('click', () => setView(b.dataset.view, true)));
   setView(store.get('jsf-view') === 'grid' ? 'grid' : 'list', false);

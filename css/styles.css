@@ -1038,6 +1038,16 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .arc-row { transition: none; }
 }
 
+/* Entrada de filas al filtrar o cambiar de vista (projects.js alterna is-swap-a/b para reiniciarla).
+   Solo opacity + translate en los hijos: la fila ya lleva la deriva por scroll. Sin fill hacia delante,
+   así el hover de los hijos sigue mandando. */
+@media (prefers-reduced-motion: no-preference) {
+  .arc-list.is-swap-a .arc-row > * { animation: arc-in 180ms var(--ease); }
+  .arc-list.is-swap-b .arc-row > * { animation: arc-in-b 180ms var(--ease); }
+}
+@keyframes arc-in   { from { opacity: 0; translate: 0 10px; } }
+@keyframes arc-in-b { from { opacity: 0; translate: 0 10px; } }
+
 /* Vista grilla */
 .arc-list.is-grid {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
