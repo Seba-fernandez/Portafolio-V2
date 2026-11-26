@@ -184,6 +184,7 @@
 
   function setShot(s) {
     shot = s;
+    $('.pd__stage').dataset.shot = s;
     dImg.hidden = s !== 'd';
     mWrap.hidden = s !== 'm';
     shotBtns.forEach(b => {
@@ -228,11 +229,11 @@
 
     $('.pd__stage').style.setProperty('--ph', p.placeholder);
     mWrap.style.setProperty('--ph', p.placeholder);
-    dImg.sizes = '(min-width: 901px) 70vw, 100vw';
+    dImg.sizes = '(min-width: 1024px) 55vw, 100vw';
     dImg.srcset = srcset(id, 'd', D_W);
     dImg.src = `img/p/${id}-d-1440.webp`;
     dImg.alt = UI[lang].desk + L(p.alt);
-    mImg.sizes = '(min-width: 901px) 18rem, 60vw';
+    mImg.sizes = '(min-width: 1024px) 20rem, 60vw';
     mImg.srcset = srcset(id, 'm', M_W);
     mImg.src = `img/p/${id}-m-780.webp`;
     mImg.alt = UI[lang].mob + L(p.alt);
@@ -244,6 +245,7 @@
     $('[data-step="1"] .pd__step-name').textContent = L(next.name);
     $('.pd__info').scrollTop = 0;
     $('.pd__inner').scrollTop = 0;
+    $('.pd__stage').scrollTop = 0;
   }
 
   function open(id, pref) {
@@ -296,10 +298,10 @@
     if (!id || warmed.has(id)) return;
     warmed.add(id);
     const d = new Image();
-    d.sizes = '(min-width: 901px) 70vw, 100vw';
+    d.sizes = '(min-width: 1024px) 55vw, 100vw';
     d.srcset = srcset(id, 'd', D_W);
     const m = new Image();
-    m.sizes = '(min-width: 901px) 18rem, 60vw';
+    m.sizes = '(min-width: 1024px) 20rem, 60vw';
     m.srcset = srcset(id, 'm', M_W);
   }
   document.addEventListener('pointerover', e => warm(e.target.closest?.('[data-open]')?.dataset.open), { passive: true });

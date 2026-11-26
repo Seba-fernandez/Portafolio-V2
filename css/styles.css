@@ -1165,8 +1165,8 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* ---------- Modal de proyecto ---------- */
 .pd {
   margin: auto; padding: 0;
-  width: min(100% - 2rem, 76rem);
-  max-height: min(100dvh - 2rem, 52rem);
+  width: min(100% - 2rem, 90rem);
+  max-height: min(100dvh - 2rem, 56rem);
   max-width: none;
   background: var(--bg); color: var(--fg);
   border: 3px solid var(--line);
@@ -1177,39 +1177,47 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .pd::backdrop { background: rgba(10, 31, 29, 0.82); }
 .pd[open] { animation: popIn 0.32s var(--ease); }
 .pd__inner {
-  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  height: min(100dvh - 2rem - 6px, 52rem - 6px);
+  display: grid; grid-template-columns: minmax(0, 62fr) minmax(26rem, 38fr);
+  height: min(100dvh - 2rem - 6px, 56rem - 6px);
 }
 .pd__gallery {
   background: #0A1F1D; color: var(--naples);
-  padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; min-height: 0;
+  padding: 1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; min-height: 0;
 }
 .pd__switch { display: flex; gap: 0.5rem; }
-.pd__stage { flex: 1; min-height: 0; display: grid; place-items: center; }
+.pd__stage {
+  flex: 1; min-height: 0; display: block;
+  overflow-y: auto; overscroll-behavior: contain; border-radius: var(--r-sm);
+}
+.pd__stage[data-shot="m"] { display: grid; place-items: center; }
 .pd__d {
-  width: 100%; height: auto; max-height: 100%;
+  display: block; width: 100%; height: auto;
   aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
   border-radius: var(--r-sm); background: var(--ph, var(--slate));
 }
 .pd__d[hidden] { display: none; }
 .pd .phone { border-color: var(--naples); box-shadow: none; }
-.pd__m { width: auto; height: 100%; max-height: 40rem; aspect-ratio: 390 / 858; }
+.pd__m { width: auto; height: min(100%, 44rem); max-height: none; margin-inline: auto; aspect-ratio: 390 / 858; }
 .pd__m[hidden] { display: none; }
 .pd__m img { height: 100%; width: auto; aspect-ratio: 390 / 844; }
 .pd__info {
   overflow-y: auto; overscroll-behavior: contain;
-  padding: 1.75rem 1.75rem 1.25rem;
+  padding: 1.75rem 2rem 0;
   display: flex; flex-direction: column; gap: 1rem;
 }
 .pd__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-.pd__title { font-size: clamp(2rem, 3.4vw, 3rem); }
+.pd__title { font-size: clamp(2rem, 2.6vw, 3.25rem); text-wrap: balance; }
 .pd .case__context { font-size: 1rem; }
-.pd__nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: 1rem; border-top: 2px solid var(--line); }
+.pd__nav {
+  display: flex; justify-content: space-between; gap: 1rem; margin-top: auto; padding: 1rem 0;
+  border-top: 2px solid var(--line);
+  position: sticky; bottom: 0; background: var(--bg);
+}
 .pd__step { min-height: 2.75rem; font-weight: 800; text-align: left; line-height: 1.2; max-width: 48%; }
 .pd__step--next { text-align: right; margin-left: auto; }
 .pd__step:hover .pd__step-name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .pd {
     width: 100%; max-height: none; height: 100dvh;
     border: 0; border-radius: 0; box-shadow: none;
@@ -1221,6 +1229,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .pd__close { position: absolute; top: max(0.85rem, env(safe-area-inset-top)); right: var(--gutter); color: var(--naples); background: #0A1F1D; z-index: 2; }
   .pd__m { height: min(56vh, 30rem); }
   .pd__info { overflow: visible; padding: 1.5rem var(--gutter) max(1.5rem, env(safe-area-inset-bottom)); }
+  .pd__nav { position: static; padding: 1rem 0 0; }
 }
 
 /* ---------- Sin motion ---------- */
@@ -1953,10 +1962,6 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* ═════════ [rediseno-2026 · estructura] Experiencia como sección propia y modal de capturas ═════════
    Agregado al final a pedido: no toca ninguna regla anterior. */
 .experience { padding-block: var(--s-6) 0; scroll-margin-top: var(--nav-h); }
-/* Modal: la captura toma casi todo el ancho; la columna de datos queda mínima */
-@media (min-width: 901px) {
-  .pd__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); }
-}
 
 /* ═════════ [rediseno-2026 · nav] Link a Experiencia y arreglo del desborde en 501–504 px ═════════
    Medido con navegador (espacio libre = ancho de la nav menos lo que ocupan logo, links y botones):
@@ -1971,3 +1976,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 @media (max-width: 659px) {
   .nav__link--hide-sm { display: none; }
 }
+
+/* Modal: "Qué resolví" heredaba la deriva atada al scroll de las tarjetas y quedaba
+   a medio desvanecer dentro del panel. En el modal las filas son estáticas. */
+.js .pd .case__solved li { animation: none; opacity: 1; translate: none; }
