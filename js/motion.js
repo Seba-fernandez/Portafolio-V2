@@ -32,6 +32,48 @@
     loops.forEach(el => loopIO.observe(el));
   }
 
+  /* ── Captura que se recorre ───────────────────────────────────────────
+     Las capturas son 16:10 (no hay capturas largas), así que en vez de scrollearlas el cuadro se acerca
+     (scale 1.08, por CSS) y la imagen se desplaza hasta ±3% en sentido contrario al puntero, para
+     asomarse al borde que se mira. Solo escribe `translate` en la <img> (el parallax usa el del <figure>,
+     no se pisan), con la transición de CSS suavizando. El rectángulo se lee una vez al entrar (y otra
+     tras un scroll), y las escrituras van en un rAF. Sin GSAP, sin puntero fino o con reduced motion: nada. */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const PAN = 3; // % del tamaño de la imagen; el zoom da 4% de margen por lado
+    let cur = null, img = null, rect = null, dirty = false, raf = 0, nx = 0, ny = 0;
+    const write = () => {
+      raf = 0;
+      if (!img) return;
+      img.style.translate = (-nx * PAN).toFixed(2) + '% ' + (-ny * PAN).toFixed(2) + '%';
+    };
+    const aim = (x, y) => {
+      if (dirty || !rect) { rect = cur.getBoundingClientRect(); dirty = false; }
+      nx = Math.max(-1, Math.min(1, ((x - rect.left) / rect.width) * 2 - 1));
+      ny = Math.max(-1, Math.min(1, ((y - rect.top) / rect.height) * 2 - 1));
+      if (!raf) raf = requestAnimationFrame(write);
+    };
+    const leave = () => {
+      if (!cur) return;
+      cur.classList.remove('is-pan');
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      img.style.translate = '';
+      cur = img = rect = null;
+    };
+    document.addEventListener('pointerover', e => {
+      if (e.pointerType === 'touch' || !e.target.closest) return;
+      const btn = e.target.closest('.shot-d .shot-btn');
+      if (btn === cur) return;
+      leave();
+      if (!btn) return;
+      cur = btn; img = btn.querySelector('img'); rect = null; dirty = true;
+      btn.classList.add('is-pan');
+      aim(e.clientX, e.clientY);
+    }, { passive: true });
+    document.addEventListener('pointermove', e => { if (cur) aim(e.clientX, e.clientY); }, { passive: true });
+    window.addEventListener('scroll', () => { if (cur) dirty = true; }, { passive: true });
+    document.addEventListener('mouseleave', leave);
+  }
+
   /* ── Experiencia: avisar cuando una etapa queda fijada ────────────────
      El sticky no tiene evento propio y las animaciones ligadas al scroll
      terminan mucho antes de que el bloque llegue a la linea de pegado. Un

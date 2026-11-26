@@ -849,6 +849,12 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .shot-btn img { transition: scale 0.4s var(--ease), filter var(--t-ui); }
 .shot-d .shot-btn { overflow: hidden; border-radius: calc(var(--r) - 3px); }
 .shot-d .shot-btn:hover img { scale: 1.025; }
+/* Recorrido con el puntero (motion.js pone .is-pan y escribe `translate` en la imagen). El zoom deja 4% de margen
+   por lado y el desplazamiento llega a 3%, así nunca se ve el borde. will-change solo mientras dura. */
+@media (hover: hover) and (pointer: fine) {
+  .js .shot-d .shot-btn img { transition: scale 0.5s var(--ease), translate 0.35s var(--ease), filter var(--t-ui); }
+  .js .shot-d .shot-btn.is-pan img { scale: 1.08; will-change: scale, translate; }
+}
 .phone.shot-btn { overflow: hidden; }
 .phone.shot-btn:hover img { scale: 1.03; }
 /* La captura es una foto dentro de un marco gris oscuro: ningún color único
