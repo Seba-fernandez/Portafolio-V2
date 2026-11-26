@@ -101,7 +101,11 @@
   }
 
   themeBtn.addEventListener('click', () => {
+    // El cambio es instantáneo: durante un fotograma se anulan todas las transiciones, así no
+    // se animan (ni se vuelven a rasterizar) cientos de colores a la vez.
+    root.classList.add('is-switching');
     applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('is-switching')));
   });
 
   /* ---------- Idioma ----------

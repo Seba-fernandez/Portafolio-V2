@@ -161,8 +161,10 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   overflow-x: clip;
-  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
+
+/* Cambio de tema: app.js pone esta clase un par de fotogramas para que nada se anime al intercambiar colores */
+.is-switching *, .is-switching *::before, .is-switching *::after { transition: none !important; }
 
 ::selection { background: var(--coral); color: var(--slate); }
 
