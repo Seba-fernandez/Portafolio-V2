@@ -350,7 +350,7 @@ p { text-wrap: pretty; }
 
 /* ---------- Cursor (solo puntero fino) ---------- */
 .cursor { display: none; }
-@media (pointer: fine) and (min-width: 901px) {
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
   .js .cursor {
     display: block; position: fixed; top: -8px; left: -8px;
     width: 16px; height: 16px; border-radius: 50%;
@@ -368,6 +368,20 @@ p { text-wrap: pretty; }
      leyendo y el gesto queda igual. Los aros se escalan con el elemento:
      1.5px pasan a 3.9px a 2,6x. */
   .js .cursor.is-hot { background: transparent; }
+  /* Rótulo ("Ver caso" / "Abrir"): el punto se vacía y aparece una píldora con el mismo lenguaje (pizarra + aro naples,
+     legible sobre amarillo, pizarra y salmón). Solo scale y opacity: nada cambia de tamaño en el layout. */
+  .js .cursor.is-label { background: transparent; box-shadow: none; }
+  .js .cursor__pill {
+    position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+    display: flex; align-items: center; height: 2.1rem; padding: 0 1rem;
+    border-radius: 999px; white-space: nowrap;
+    background: var(--slate); color: var(--naples);
+    box-shadow: 0 0 0 1.5px var(--naples);
+    font-size: 0.78rem; font-weight: 700; font-stretch: 80%; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1;
+    scale: 0.2; opacity: 0;
+    transition: scale 0.2s var(--ease), opacity 0.2s var(--ease);
+  }
+  .js .cursor.is-label .cursor__pill { scale: 1; opacity: 1; }
 }
 
 /* ---------- Fit-text ---------- */

@@ -139,6 +139,8 @@
     'projects.featured': 'featured',
     'projects.live': 'live',
     'tag.live': 'Live',
+    'cursor.case': 'View case',
+    'cursor.open': 'Open',
     'projects.title': 'Projects',
     'label.desktop': 'Desktop',
     'label.mobile': 'Mobile',
@@ -224,6 +226,8 @@
   Object.assign(ES, {
     'theme.toDark': 'Cambiar a modo oscuro',
     'theme.toLight': 'Cambiar a modo claro',
+    'cursor.case': 'Ver caso',
+    'cursor.open': 'Abrir',
     'footer.copied': 'Copiado ✓',
     'mail.close': 'Cerrar',
     'footer.toast': 'Email copiado: jsebasferna@gmail.com ✓',
