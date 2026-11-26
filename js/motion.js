@@ -178,9 +178,9 @@
   /* ---------- Motor de apariciones ---------- */
 
   // Duración de cada tipo (ms), para limpiar las clases al terminar.
-  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 700 };
+  const DUR = { base: 420, down: 420, media: 520, stamp: 260, char: 700, pop: 760 };
   // Paso entre elementos que entran juntos en pantalla.
-  const STEP = { base: 40, down: 40, media: 70, stamp: 26 };
+  const STEP = { base: 40, down: 40, media: 70, stamp: 26, pop: 0 };
   const MAX_DELAY = 280;
 
   const pending = new Map(); // elemento → { kind, show }
@@ -321,6 +321,7 @@
   // Casos destacados: texto en cascada, chips como sellos
   const narrow = window.matchMedia('(max-width: 700px)').matches;
   $$('.case').forEach(c => {
+    rv(c, 'pop'); // la tarjeta entera entra con un pop (CSS: scale 0.86 -> 1 con rebote)
     const info = c.querySelector('.case__info');
     if (info) {
       $$(':scope > *', info).forEach(el => {
