@@ -13,7 +13,8 @@ clear user flows as implementation criteria.
 
 Vanilla **HTML5 · CSS3 · JavaScript ES6+**, with [GSAP](https://gsap.com) + ScrollTrigger
 for motion over **native scrolling**. Animation libraries are vendored locally (`js/vendor/`);
-Archivo is loaded from Google Fonts. No framework and no dependencies: the only build step is
+Archivo is self-hosted (`fonts/*.woff2`, variable, no Google Fonts request). The paper texture is
+pre-rendered WebP tiles (`img/tex/`), not a live SVG filter. No framework and no dependencies: the only build step is
 `scripts/build.mjs`, which Vercel runs on every deploy (see Deploy).
 
 ## Structure
@@ -32,7 +33,7 @@ Archivo is loaded from Google Fonts. No framework and no dependencies: the only 
 │   ├── app.js              # Floating nav, theme, ES/EN i18n, contact panel
 │   ├── projects.js         # Archive filters, list/grid view, project dialog
 │   ├── render-projects.mjs # Shared renderer used by the build script and the panel
-│   └── motion.js           # GSAP layer: kinetic type, parallax, reveals
+│   └── motion.js           # Reveals, hover pan on screenshots; GSAP layer (loaded lazily): scroll, cursor
 ├── img/p/                  # Project screenshots, desktop + mobile, responsive WebP
 └── og-2026-11.png          # 1200×630 social preview (real capture of the site; new name = fresh preview on WhatsApp/LinkedIn)
 ```
@@ -82,8 +83,12 @@ screenshots — no backend, no extra services.
   comes back on scroll up or focus.
 - **Dark / light mode** — the Wada combination simply inverts. No flash on load, preference persisted.
 - **ES / EN** — UI strings live in `app.js`, project content in `data/projects.json`.
-- **Motion with guardrails** — GSAP loads deferred; if it fails the page works fully static.
+- **Motion with guardrails** — GSAP is downloaded on the first real interaction (scroll, pointer, key), not on load; if it fails the page works fully static.
   `prefers-reduced-motion` disables everything kinetic. Split text keeps an `sr-only` copy.
+- **Small interactions** (fine pointer + hover only, all off under `prefers-reduced-motion`):
+  the cursor turns into a "View case" pill over featured cases and "Open" over archive rows
+  (ES/EN); desktop screenshots zoom to 1.08 and pan up to 3% with the pointer (`translate` on the
+  image only). The hero shows live Córdoba time (`Intl`, updates on the minute, paused when the tab is hidden).
 - **Contact panel that never dead-ends** — Gmail, Outlook web, local mail app or copy address.
 
 ## Design notes
