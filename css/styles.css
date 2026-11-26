@@ -1807,34 +1807,27 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    captura, el numero y el titulo, una linea de que es, y el resultado. Lo
    primero y lo ultimo son lo que se recuerda, asi que el resultado es lo
    ultimo y es lo unico coral de la tarjeta. El resto se abre en el lugar. */
-.case__detalle { margin-top: var(--s-4); }
-.case__abrir {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  cursor: pointer; list-style: none;
-  font-family: var(--sans); font-size: 0.9rem; font-weight: 800;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 0.6rem 1.1rem; border-radius: 999px;
-  box-shadow: inset 0 0 0 2px var(--line);
-  transition: background-color var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease);
-}
-.case__abrir::-webkit-details-marker { display: none; }
+/* ── Entrar al caso ────────────────────────────────────────────────────
+   Primero esto fue un acordeon que se abria en el lugar. Entrar al detalle
+   es lo mas importante de la seccion y un desplegable chico no se siente
+   como entrar: el detalle completo vive en el dialogo, y aca queda la
+   puerta. La tarjeta sigue mostrando solo titular, una linea y resultado. */
+.case__actions--entrada { margin-top: var(--s-4); }
 .case__abrir-ico {
-  font-weight: 700; font-size: 1.1em; line-height: 1;
-  transition: rotate 0.3s var(--ease);
+  font-weight: 700; font-size: 1.05em; line-height: 1;
+  transition: translate 0.3s var(--ease);
 }
-.case__detalle[open] .case__abrir-ico { rotate: 45deg; }
-.case__abrir:hover, .case__abrir:focus-visible { box-shadow: inset 0 0 0 2px var(--fg); }
-.case__cuerpo {
-  display: grid; gap: var(--s-4);
-  padding-top: var(--s-4);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .case__detalle[open] .case__cuerpo { animation: abrir-caso 0.4s var(--ease) both; }
-}
-@keyframes abrir-caso {
-  from { opacity: 0; translate: 0 -10px; }
-  to   { opacity: 1; translate: 0 0; }
-}
+.case__abrir:hover .case__abrir-ico,
+.case__abrir:focus-visible .case__abrir-ico { translate: 0.3rem 0; }
+
+/* ── El dialogo es el caso completo ────────────────────────────────────
+   Ya no repite la tarjeta: la tarjeta de afuera no cuenta nada de esto. */
+.pd__kicker { color: var(--muted); }
+.pd__solved { display: grid; gap: 0.75rem; }
+.pd__solved-list { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+.pd__solved-list li { display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start; }
+.pd .case__note { margin-top: 0; }
+.pd__stack { display: grid; gap: 0.5rem; }
 
 /* ---------- Largo de línea ----------
    A 768 px el texto de los casos corría a 80-92 caracteres y en 1440 los ítems de
