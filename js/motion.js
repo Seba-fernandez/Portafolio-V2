@@ -573,13 +573,14 @@
   window.addEventListener('jsf:lang', buildRolls);
 
   /* ---------- Imán (solo puntero fino, con GSAP ya cargado) ----------
-     El botón se acerca al puntero hasta 4 px y vuelve con un resorte corto.
+     El botón se acerca al puntero hasta 8 px y vuelve con un resorte corto.
      Escribe `transform`, que es otra propiedad que el `translate` del hover de
      CSS: los dos se componen y ninguno pisa al otro. */
 
   let cursorListo = false;
   let magnet = null;
-  const MAG = 4;
+  const MAG = 8;
+  const PULL = 0.35;
 
   function setupMagnet() {
     if (!hasGsap || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -604,8 +605,8 @@
       const cy = r.top + r.height / 2;
       const q = get(el);
       const move = (ev) => {
-        q.x(gsap.utils.clamp(-MAG, MAG, (ev.clientX - cx) / (r.width / 2) * MAG));
-        q.y(gsap.utils.clamp(-MAG, MAG, (ev.clientY - cy) / (r.height / 2) * MAG));
+        q.x(gsap.utils.clamp(-MAG, MAG, (ev.clientX - cx) * PULL));
+        q.y(gsap.utils.clamp(-MAG, MAG, (ev.clientY - cy) * PULL));
       };
       const off = (ev) => {
         if (el.contains(ev.relatedTarget)) return;
