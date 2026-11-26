@@ -306,7 +306,8 @@ p { text-wrap: pretty; }
 }
 .marquee__track--reverse { animation-direction: reverse; }
 .marquee__track i { font-style: normal; }
-@keyframes marquee { to { transform: translateX(-50%); } }
+/* `translate` (no `transform`): motion.js inclina la pista con skewX y no debe pelear con la animación */
+@keyframes marquee { to { translate: -50% 0; } }
 
 .marquee--ink {
   background: var(--band-bg);
@@ -458,8 +459,8 @@ p { text-wrap: pretty; }
 .is-off .marquee__track, .is-off .band__track, .is-off.hero__strip .hero__strip-inner,
 .badge.is-off .badge__spin, .dot.is-off::after { animation-play-state: paused; }
 
-/* Cintas que se inclinan con la velocidad del scroll: capa propia, sin repintar */
-.marquee, .band, .hero__strip { will-change: transform; }
+/* Cintas que se inclinan con la velocidad del scroll: la capa propia es la pista de texto, no el contenedor con papel */
+.band__track, .hero__strip-inner { will-change: transform; }
 
 /* ---------- Teléfono (marco de las capturas mobile) ---------- */
 .phone {

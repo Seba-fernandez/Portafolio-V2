@@ -436,9 +436,12 @@
 
     // Cintas: se inclinan apenas con la velocidad del scroll y vuelven firmes enseguida.
     // Solo se tocan las que están en pantalla (la pausa de su animación la hace el observer de loops).
+    // La inclinación va en la pista de texto (sin papel; su animación usa `translate`, no `transform`),
+    // no en el contenedor texturizado: así la textura no se vuelve a rasterizar en cada fotograma.
     const skewed = $$('.marquee, .hero__strip, .band');
     if (skewed.length) {
-      const setters = new Map(skewed.map(m => [m, gsap.quickSetter(m, 'skewX', 'deg')]));
+      const trackOf = m => m.querySelector('.marquee__track, .band__track, .hero__strip-inner') || m;
+      const setters = new Map(skewed.map(m => [m, gsap.quickSetter(trackOf(m), 'skewX', 'deg')]));
       const onScreen = new Set();
       const vis = new IntersectionObserver(entries => entries.forEach(e => {
         if (e.isIntersecting) onScreen.add(e.target);
