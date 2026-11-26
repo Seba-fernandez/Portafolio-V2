@@ -419,6 +419,17 @@ p { text-wrap: pretty; }
 }
 .rv--char.is-in { transform: none; filter: blur(0); }
 .rv.is-in  { opacity: 1; transform: none; }
+/* Pop del caso entero: de chico a su tamano con un pequeno rebote. Usa `scale` (propiedad individual),
+   asi no choca con el transform del reveal ni con el translate del parallax; no toca el layout.
+   Solo existe con .js (motion.js pone .rv) y sin reduced-motion: sin JS la tarjeta se ve normal. */
+@media (prefers-reduced-motion: no-preference) {
+  .case.rv--pop {
+    transform: none; scale: 0.86; transform-origin: 50% 50%;
+    transition: opacity 0.32s var(--ease), scale 0.72s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: var(--d, 0ms);
+  }
+  .case.rv--pop.is-in { scale: 1; }
+}
 .rv-now, .rv-now::before { transition: none !important; }
 
 /* El bloque de color detrás de las capturas se apoya primero, después las capturas encima */
@@ -464,6 +475,10 @@ p { text-wrap: pretty; }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .case { view-timeline: --case block; }
+  }
+  /* Solo >700px: en movil el telefono llena .case__media (overflow:hidden, fondo --ph) y trasladarlo
+     hasta 44px dejaba al descubierto una franja de fondo arriba de la captura. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 701px) {
     .js .shot-d { animation: px-d linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
     .js .shot-m { animation: px-m linear both; animation-timeline: --case; animation-range: cover 0% cover 100%; }
   }
