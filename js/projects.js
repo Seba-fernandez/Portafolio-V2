@@ -197,9 +197,34 @@
     const p = byId[id];
     current = id;
     $('.pd__title').textContent = L(p.name);
-    // Una sola línea de contexto: el kicker. El texto largo ya está en la tarjeta.
-    $('.pd__context').textContent = L(p.kicker);
+    // El modal ES el detalle: la tarjeta de afuera muestra solo el titular, una
+    // linea y el resultado. Todo lo demas vive aca.
+    $('.pd__kicker').textContent = L(p.kicker);
+    $('.pd__context').textContent = L(p.context);
+
+    const puntos = (p.solved && L(p.solved)) || [];
+    $('.pd__solved').hidden = !puntos.length;
+    $('.pd__solved-n').textContent = puntos.length ? ` · ${puntos.length}` : '';
+    $('.pd__solved-list').innerHTML = puntos
+      .map((t, j) => `<li><span class="case__n" aria-hidden="true">${String(j + 1).padStart(2, '0')}</span><span></span></li>`)
+      .join('');
+    $('.pd__solved-list').querySelectorAll('li > span:last-child')
+      .forEach((el, j) => { el.textContent = puntos[j]; });
+
+    const nota = p.note ? L(p.note) : '';
+    $('.pd__note').hidden = !nota;
+    $('.pd__note').textContent = nota;
+
+    const stack = p.stack || [];
+    $('.pd__stack').hidden = !stack.length;
+    $('.pd__stack-list').innerHTML = stack.map(() => '<li></li>').join('');
+    $('.pd__stack-list').querySelectorAll('li')
+      .forEach((el, j) => { el.textContent = stack[j]; });
+
     $('.pd__live').href = p.live;
+    const code = $('.pd__code');
+    code.hidden = !p.code;
+    if (p.code) code.href = p.code;
 
     $('.pd__stage').style.setProperty('--ph', p.placeholder);
     mWrap.style.setProperty('--ph', p.placeholder);

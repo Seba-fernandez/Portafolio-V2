@@ -118,32 +118,12 @@ export function renderProjects(html, data) {
             <span class="case__num" aria-hidden="true">${num(i)}</span>
             <h3 class="case__title" id="t-${p.id}" data-pf="${p.id}:name">${esc(L(p.name))}</h3>
           </div>${kicker}${note}
-          <details class="case__detalle">
-            <summary class="case__abrir">
+          <div class="case__actions case__actions--entrada">
+            <button class="btn case__abrir" type="button" data-open="${p.id}">
               <span data-i18n="btn.case">Ver el caso</span>${who}
-              <span class="case__abrir-ico" aria-hidden="true">+</span>
-            </summary>
-            <div class="case__cuerpo">
-              <div class="case__meta">${badge}
-                <ul class="tags" aria-label="Etiquetas" data-i18n-aria="aria.tags">${tagsFor(p, false)}</ul>
-              </div>
-              <p class="case__context" data-pf="${p.id}:context">${esc(L(p.context))}</p>
-              <div class="case__solved">
-                <p class="tag tag--ink"><span data-i18n="label.solved">Qué resolví</span>&nbsp;· ${p.solved.es.length}</p>
-                <ol>
-                ${solved}
-                </ol>
-              </div>
-              <div class="case__stack">
-                <span class="label" aria-hidden="true">Stack</span>
-                <ul class="stack" aria-label="Tecnologías" data-i18n-aria="aria.stack">${(p.stack || []).map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
-              </div>
-              <div class="case__actions">
-                <a class="btn" href="${esc(p.live)}" target="_blank" rel="noopener"><span data-i18n="btn.live">Ver en vivo ↗</span>${who}</a>${code}
-                <button class="btn btn--ghost" type="button" data-open="${p.id}"><span data-i18n="btn.shots">Ver capturas</span>${who}</button>
-              </div>
-            </div>
-          </details>
+              <span class="case__abrir-ico" aria-hidden="true">→</span>
+            </button>
+          </div>
         </div>
       </article>`;
   }
