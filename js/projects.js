@@ -113,6 +113,29 @@
     fCount.innerHTML = `${esc(UI[lang].none)} <button class="pill-btn" type="button" data-reset>${esc(UI[lang].reset)}</button>`;
   }
 
+  /* Entrada barata de las filas (CSS, 180 ms, solo opacity + translate): alterna entre dos clases
+     con el mismo gesto para reiniciar la animación sin forzar layout. Reemplaza a la View Transition,
+     que fotografiaba toda la página y costaba 70-190 ms por clic. Sin movimiento si el usuario lo pide. */
+  function swapIn() {
+    if (reduceMotion) return;
+    const a = list.classList.contains('is-swap-a');
+    list.classList.remove('is-swap-a', 'is-swap-b');
+    list.classList.add(a ? 'is-swap-b' : 'is-swap-a');
+  }
+
+  /* ScrollTrigger.refresh mide toda la página: se hace después de pintar el cambio, en un momento
+     libre, y varios clics seguidos se juntan en una sola medición. */
+  let refreshQueued = false;
+  function deferRefresh() {
+    if (!window.ScrollTrigger || refreshQueued) return;
+    refreshQueued = true;
+    requestAnimationFrame(() => {
+      const go = () => { refreshQueued = false; window.ScrollTrigger.refresh(); };
+      if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 400 });
+      else setTimeout(go, 100);
+    });
+  }
+
   function applyFilters() {
     const run = () => {
       let shown = 0;
@@ -124,9 +147,9 @@
       renderChips();
       renderCount(shown);
     };
-    if (document.startViewTransition && !reduceMotion) document.startViewTransition(run);
-    else run();
-    if (window.ScrollTrigger) requestAnimationFrame(() => window.ScrollTrigger.refresh());
+    run();
+    swapIn();
+    deferRefresh();
   }
 
   fType.addEventListener('click', e => {
@@ -162,10 +185,10 @@
         b.setAttribute('aria-pressed', on);
       });
     };
-    if (animate && document.startViewTransition && !reduceMotion) document.startViewTransition(run);
-    else run();
+    run();
+    if (animate) swapIn();
     store.set('jsf-view', view);
-    if (window.ScrollTrigger) requestAnimationFrame(() => window.ScrollTrigger.refresh());
+    deferRefresh();
   }
   viewBtns.forEach(b => b.addEventListener('click', () => setView(b.dataset.view, true)));
   setView(store.get('jsf-view') === 'grid' ? 'grid' : 'list', false);
@@ -184,6 +207,7 @@
 
   function setShot(s) {
     shot = s;
+    $('.pd__stage').dataset.shot = s;
     dImg.hidden = s !== 'd';
     mWrap.hidden = s !== 'm';
     shotBtns.forEach(b => {
@@ -228,11 +252,11 @@
 
     $('.pd__stage').style.setProperty('--ph', p.placeholder);
     mWrap.style.setProperty('--ph', p.placeholder);
-    dImg.sizes = '(min-width: 901px) 70vw, 100vw';
+    dImg.sizes = '(min-width: 1024px) 55vw, 100vw';
     dImg.srcset = srcset(id, 'd', D_W);
     dImg.src = `img/p/${id}-d-1440.webp`;
     dImg.alt = UI[lang].desk + L(p.alt);
-    mImg.sizes = '(min-width: 901px) 18rem, 60vw';
+    mImg.sizes = '(min-width: 1024px) 20rem, 60vw';
     mImg.srcset = srcset(id, 'm', M_W);
     mImg.src = `img/p/${id}-m-780.webp`;
     mImg.alt = UI[lang].mob + L(p.alt);
@@ -244,6 +268,7 @@
     $('[data-step="1"] .pd__step-name').textContent = L(next.name);
     $('.pd__info').scrollTop = 0;
     $('.pd__inner').scrollTop = 0;
+    $('.pd__stage').scrollTop = 0;
   }
 
   function open(id, pref) {
@@ -296,10 +321,10 @@
     if (!id || warmed.has(id)) return;
     warmed.add(id);
     const d = new Image();
-    d.sizes = '(min-width: 901px) 70vw, 100vw';
+    d.sizes = '(min-width: 1024px) 55vw, 100vw';
     d.srcset = srcset(id, 'd', D_W);
     const m = new Image();
-    m.sizes = '(min-width: 901px) 18rem, 60vw';
+    m.sizes = '(min-width: 1024px) 20rem, 60vw';
     m.srcset = srcset(id, 'm', M_W);
   }
   document.addEventListener('pointerover', e => warm(e.target.closest?.('[data-open]')?.dataset.open), { passive: true });

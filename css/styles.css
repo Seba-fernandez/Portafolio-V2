@@ -92,13 +92,14 @@
   --r:    16px;
   --r-lg: 24px;
 
-  /* Papel: grano fino tipo imprenta + fibras muy suaves. SVG en línea (<1 KB),
-     va como fondo de cada superficie: nada de capas fijas que traben el scroll. */
-  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.18 0 0 0 0 0.17 0 0 0 0.5 -0.24'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  --paper-fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035 0.22' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.18 0 0 0 0 0.17 0 0 0 0.24 -0.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  /* Papel: grano fino tipo imprenta. Mosaicos WebP (12 + 7 KB) horneados desde el
+     antiguo feTurbulence.
+     Va como fondo de cada superficie: nada de capas fijas que traben el scroll. */
+  --paper-grain: url("../img/tex/paper-grain.webp"); /* 220px, prerenderizado: el feTurbulence en vivo se rasterizaba en cada capa */
+  --paper-fibers: url("../img/tex/paper-fibers.webp"); /* 600x120 (antes 600x600): son vetas horizontales, el patron no se nota al repetirse */
   --paper: var(--paper-grain), var(--paper-fibers);
   /* Sobre fondos oscuros el grano va claro y más tenue */
-  --paper-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.98 0 0 0 0 0.9 0 0 0 0 0.63 0 0 0 0.36 -0.16'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --paper-dark: url("../img/tex/paper-dark.webp");
 
   /* Movimiento: un solo lenguaje para toda la página.
      Recorridos cortos, arranque firme y asentado breve, como tinta que se apoya en papel. */
@@ -160,8 +161,10 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   overflow-x: clip;
-  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
+
+/* Cambio de tema: app.js pone esta clase un par de fotogramas para que nada se anime al intercambiar colores */
+.is-switching *, .is-switching *::before, .is-switching *::after { transition: none !important; }
 
 ::selection { background: var(--coral); color: var(--slate); }
 
@@ -305,7 +308,8 @@ p { text-wrap: pretty; }
 }
 .marquee__track--reverse { animation-direction: reverse; }
 .marquee__track i { font-style: normal; }
-@keyframes marquee { to { transform: translateX(-50%); } }
+/* `translate` (no `transform`): motion.js inclina la pista con skewX y no debe pelear con la animación */
+@keyframes marquee { to { translate: -50% 0; } }
 
 .marquee--ink {
   background: var(--band-bg);
@@ -346,22 +350,38 @@ p { text-wrap: pretty; }
 
 /* ---------- Cursor (solo puntero fino) ---------- */
 .cursor { display: none; }
-@media (pointer: fine) and (min-width: 901px) {
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
   .js .cursor {
     display: block; position: fixed; top: -8px; left: -8px;
     width: 16px; height: 16px; border-radius: 50%;
-    background: var(--naples); mix-blend-mode: difference;
+    /* Sin mix-blend-mode (obligaba a mezclar toda la capa en cada movimiento): relleno pizarra con
+       doble aro, uno pizarra por dentro y otro naples por fuera, así se lee sobre amarillo, pizarra y salmón. */
+    background: var(--slate);
+    box-shadow: inset 0 0 0 1.5px var(--slate), 0 0 0 1.5px var(--naples);
     pointer-events: none; z-index: 500;
-    transition: background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+    opacity: 0;
+    transition: opacity 0.2s var(--ease), background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
   }
+  .js .cursor.is-live { opacity: 1; }
   /* Sobre un elemento interactivo el punto crece a 2,6x. Lleno, ese disco de
-     42px tapaba el rotulo de los botones chicos e invertia el texto por el
-     mix-blend-mode. Vaciado, el texto se sigue leyendo y el gesto queda igual.
-     El borde se escala con el elemento: 1.5px pasan a 3.9px a 2,6x. */
-  .js .cursor.is-hot {
-    background: transparent;
-    box-shadow: inset 0 0 0 1.5px var(--naples);
+     42px tapaba el rotulo de los botones chicos. Vaciado, el texto se sigue
+     leyendo y el gesto queda igual. Los aros se escalan con el elemento:
+     1.5px pasan a 3.9px a 2,6x. */
+  .js .cursor.is-hot { background: transparent; }
+  /* Rótulo ("Ver caso" / "Abrir"): el punto se vacía y aparece una píldora con el mismo lenguaje (pizarra + aro naples,
+     legible sobre amarillo, pizarra y salmón). Solo scale y opacity: nada cambia de tamaño en el layout. */
+  .js .cursor.is-label { background: transparent; box-shadow: none; }
+  .js .cursor__pill {
+    position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+    display: flex; align-items: center; height: 2.1rem; padding: 0 1rem;
+    border-radius: 999px; white-space: nowrap;
+    background: var(--slate); color: var(--naples);
+    box-shadow: 0 0 0 1.5px var(--naples);
+    font-size: 0.78rem; font-weight: 700; font-stretch: 80%; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1;
+    scale: 0.2; opacity: 0;
+    transition: scale 0.2s var(--ease), opacity 0.2s var(--ease);
   }
+  .js .cursor.is-label .cursor__pill { scale: 1; opacity: 1; }
 }
 
 /* ---------- Fit-text ---------- */
@@ -451,11 +471,12 @@ p { text-wrap: pretty; }
     .js .wave__path { stroke-dasharray: 1; animation: wave-draw linear both; animation-timeline: view(); animation-range: entry 5% cover 50%; }
   }
 }
-/* Las cintas fuera de pantalla no se animan (motion.js marca .is-off) */
-.is-off .marquee__track, .is-off .band__track, .is-off.hero__strip .hero__strip-inner { animation-play-state: paused; }
+/* Cintas, sello y punto fuera de pantalla no se animan (motion.js marca .is-off desde el arranque) */
+.is-off .marquee__track, .is-off .band__track, .is-off.hero__strip .hero__strip-inner,
+.badge.is-off .badge__spin, .dot.is-off::after { animation-play-state: paused; }
 
-/* Cintas que se inclinan con la velocidad del scroll: capa propia, sin repintar */
-.marquee, .band, .hero__strip { will-change: transform; }
+/* Cintas que se inclinan con la velocidad del scroll: la capa propia es la pista de texto, no el contenedor con papel */
+.band__track, .hero__strip-inner { will-change: transform; }
 
 /* ---------- Teléfono (marco de las capturas mobile) ---------- */
 .phone {
@@ -624,6 +645,9 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 }
 [data-theme="dark"] .avail { background: var(--naples); color: var(--slate); }
 .hero__coords { color: var(--muted); }
+/* Hora de Córdoba: el espacio se reserva desde el HTML (mismo ancho con tabulares), y queda invisible hasta que app.js la escribe. */
+.hero__time { font-variant-numeric: tabular-nums; visibility: hidden; }
+.hero__time.is-on { visibility: visible; }
 
 .hero__badge { position: absolute; right: var(--gutter); top: calc(var(--nav-h) + 0.75rem); z-index: 2; width: clamp(6.5rem, 10vw, 8.5rem); }
 .hero__badge circle { fill: var(--coral); stroke: var(--slate); stroke-width: 3; }
@@ -825,6 +849,12 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .shot-btn img { transition: scale 0.4s var(--ease), filter var(--t-ui); }
 .shot-d .shot-btn { overflow: hidden; border-radius: calc(var(--r) - 3px); }
 .shot-d .shot-btn:hover img { scale: 1.025; }
+/* Recorrido con el puntero (motion.js pone .is-pan y escribe `translate` en la imagen). El zoom deja 4% de margen
+   por lado y el desplazamiento llega a 3%, así nunca se ve el borde. will-change solo mientras dura. */
+@media (hover: hover) and (pointer: fine) {
+  .js .shot-d .shot-btn img { transition: scale 0.5s var(--ease), translate 0.35s var(--ease), filter var(--t-ui); }
+  .js .shot-d .shot-btn.is-pan img { scale: 1.08; will-change: scale, translate; }
+}
 .phone.shot-btn { overflow: hidden; }
 .phone.shot-btn:hover img { scale: 1.03; }
 /* La captura es una foto dentro de un marco gris oscuro: ningún color único
@@ -833,18 +863,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    nativo en modo de alto contraste forzado. */
 .shot-btn { position: relative; }
 /* El anillo iba como box-shadow inset, que se pinta con el fondo del boton y
-   quedaba DEBAJO de la <img>: con teclado no se veia foco en ninguna de las 6
-   capturas. Ahora va en un ::after por encima de la imagen. El outline
-   transparente se queda para el modo de alto contraste forzado. */
-.shot-btn:focus-visible {
-  outline: 3px solid transparent;
-  outline-offset: -3px;
-}
-.shot-btn:focus-visible::after {
-  content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 3px var(--bg), inset 0 0 0 6px var(--fg);
-}
+   quedaba DEBAJO de la <img>, y el ::after que lo reemplazo tampoco se veia en
+   la pagina. Ahora es un outline real por fuera, como el del telefono. */
+.shot-btn:focus-visible { outline: 3px solid var(--fg); outline-offset: 4px; }
+.shot-btn:focus-visible::after { display: none; }
 /* El telefono es distinto: tiene marco propio y la etiqueta MOBILE encima, asi
    que un anillo por dentro queda tapado en dos de los cuatro lados. Va por
    fuera, donde nada lo cubre. */
@@ -1041,6 +1063,16 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .arc-row { transition: none; }
 }
 
+/* Entrada de filas al filtrar o cambiar de vista (projects.js alterna is-swap-a/b para reiniciarla).
+   Solo opacity + translate en los hijos: la fila ya lleva la deriva por scroll. Sin fill hacia delante,
+   así el hover de los hijos sigue mandando. */
+@media (prefers-reduced-motion: no-preference) {
+  .arc-list.is-swap-a .arc-row > * { animation: arc-in 180ms var(--ease); }
+  .arc-list.is-swap-b .arc-row > * { animation: arc-in-b 180ms var(--ease); }
+}
+@keyframes arc-in   { from { opacity: 0; translate: 0 10px; } }
+@keyframes arc-in-b { from { opacity: 0; translate: 0 10px; } }
+
 /* Vista grilla */
 .arc-list.is-grid {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1170,8 +1202,8 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* ---------- Modal de proyecto ---------- */
 .pd {
   margin: auto; padding: 0;
-  width: min(100% - 2rem, 76rem);
-  max-height: min(100dvh - 2rem, 52rem);
+  width: min(100% - 2rem, 90rem);
+  max-height: min(100dvh - 2rem, 56rem);
   max-width: none;
   background: var(--bg); color: var(--fg);
   border: 3px solid var(--line);
@@ -1179,42 +1211,51 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   box-shadow: 8px 8px 0 var(--coral);
   overflow: hidden;
 }
-.pd::backdrop { background: rgba(10, 31, 29, 0.74); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+.pd::backdrop { background: rgba(10, 31, 29, 0.82); }
 .pd[open] { animation: popIn 0.32s var(--ease); }
 .pd__inner {
-  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  height: min(100dvh - 2rem - 6px, 52rem - 6px);
+  display: grid; grid-template-columns: minmax(0, 62fr) minmax(26rem, 38fr);
+  height: min(100dvh - 2rem - 6px, 56rem - 6px);
 }
 .pd__gallery {
   background: #0A1F1D; color: var(--naples);
-  padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; min-height: 0;
+  padding: 1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; min-height: 0;
 }
 .pd__switch { display: flex; gap: 0.5rem; }
-.pd__stage { flex: 1; min-height: 0; display: grid; place-items: center; }
+.pd__stage {
+  flex: 1; min-height: 0; display: grid; place-items: center;
+  overflow: hidden; border-radius: var(--r-sm); container-type: size;
+}
+.pd__stage[data-shot="m"] { display: grid; place-items: center; }
 .pd__d {
-  width: 100%; height: auto; max-height: 100%;
-  aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
+  /* entra completa: el ancho que permite el alto disponible, sin pasar el ancho */
+  display: block; width: min(100cqw, 160cqh); height: auto;
+  aspect-ratio: 16 / 10; object-fit: cover;
   border-radius: var(--r-sm); background: var(--ph, var(--slate));
 }
 .pd__d[hidden] { display: none; }
 .pd .phone { border-color: var(--naples); box-shadow: none; }
-.pd__m { width: auto; height: 100%; max-height: 40rem; aspect-ratio: 390 / 858; }
+.pd__m { width: auto; height: min(100%, 44rem); max-height: none; margin-inline: auto; aspect-ratio: 390 / 858; }
 .pd__m[hidden] { display: none; }
 .pd__m img { height: 100%; width: auto; aspect-ratio: 390 / 844; }
 .pd__info {
   overflow-y: auto; overscroll-behavior: contain;
-  padding: 1.75rem 1.75rem 1.25rem;
+  padding: 1.75rem 2rem 0;
   display: flex; flex-direction: column; gap: 1rem;
 }
 .pd__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-.pd__title { font-size: clamp(2rem, 3.4vw, 3rem); }
+.pd__title { font-size: clamp(2rem, 2.6vw, 3.25rem); text-wrap: balance; }
 .pd .case__context { font-size: 1rem; }
-.pd__nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: 1rem; border-top: 2px solid var(--line); }
+.pd__nav {
+  display: flex; justify-content: space-between; gap: 1rem; margin-top: auto; padding: 1rem 0;
+  border-top: 2px solid var(--line);
+  position: sticky; bottom: 0; background: var(--bg);
+}
 .pd__step { min-height: 2.75rem; font-weight: 800; text-align: left; line-height: 1.2; max-width: 48%; }
 .pd__step--next { text-align: right; margin-left: auto; }
 .pd__step:hover .pd__step-name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .pd {
     width: 100%; max-height: none; height: 100dvh;
     border: 0; border-radius: 0; box-shadow: none;
@@ -1222,10 +1263,12 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .pd__inner { display: block; height: 100dvh; overflow-y: auto; overscroll-behavior: contain; }
   .pd__gallery { padding: 1rem var(--gutter) 1.25rem; padding-top: max(1rem, env(safe-area-inset-top)); }
   .pd__switch { padding-right: 3.5rem; }
-  .pd__stage { flex: none; min-height: 0; }
+  .pd__stage { flex: none; min-height: 0; display: block; overflow: visible; container-type: normal; }
+  .pd__d { width: 100%; }
   .pd__close { position: absolute; top: max(0.85rem, env(safe-area-inset-top)); right: var(--gutter); color: var(--naples); background: #0A1F1D; z-index: 2; }
   .pd__m { height: min(56vh, 30rem); }
   .pd__info { overflow: visible; padding: 1.5rem var(--gutter) max(1.5rem, env(safe-area-inset-bottom)); }
+  .pd__nav { position: static; padding: 1rem 0 0; }
 }
 
 /* ---------- Sin motion ---------- */
@@ -1411,7 +1454,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    (o con "reducir movimiento") el icono ya está dibujado. */
 @keyframes sk-draw { from { stroke-dashoffset: 42; } to { stroke-dashoffset: 0; } }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) and (min-width: 901px) {
     .js .sk-ico > * {
       stroke-dasharray: 42;
       animation: sk-draw 1s var(--ease) both;
@@ -1569,8 +1612,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    recorrido total. Mas que eso marea y se nota el truco.
    Cada elemento tiene su propia linea de tiempo, asi que el escalonado sale
    solo. Solo translate y opacity: corre en el compositor. */
+/* Solo escritorio con puntero fino: en teléfono 40 filas con su propia línea de tiempo suman ~40 capas
+   y cuestan CPU en cada scroll; ahí las filas quedan quietas y visibles. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) and (min-width: 901px) {
     .js .arc-row,
     .js .skills-col,
     .js .case__solved li {
@@ -1626,66 +1671,6 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   }
 }
 
-/* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
-  .js .btn--ghost:hover, .js .btn--ghost:focus-visible { background: var(--sage); }
-  .js .footer__links a:hover, .js .footer__links a:focus-visible { background: var(--slate); }
-  .js .archive .pill-btn:hover, .js .archive .pill-btn:focus-visible { background: var(--coral); }
-  .sk-ico > * { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
-  .xp-track::after { transform: scaleY(1); }
-  .xp__when::before { background: var(--coral); box-shadow: inset 0 0 0 3px var(--slate); }
-  .nav::after { display: none; }
-  .case__info { translate: none !important; }
-}
-
-/* ---------- Salida del hero y deriva de los títulos gigantes ----------
-   Atadas al scroll con animation-timeline: las resuelve el navegador, sin JS.
-   El hero espera a .rv-ready para no pisar el reveal de las letras, que hasta
-   ese momento mantiene las líneas en opacity: 0. */
-@keyframes hero-exit  { to { translate: 0 -12%; opacity: 0.28; } }
-@keyframes giant-pan  { from { translate: -2.5% 0; } to { translate: 2.5% 0; } }
-
-@supports (animation-timeline: view()) {
-  @media (min-height: 640px) and (prefers-reduced-motion: no-preference) {
-    .js.rv-ready .hero__title {
-      animation: hero-exit linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 92%;
-    }
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    /* Solo el contenedor: las letras siguen usando transform para el reveal. */
-    .js .giant-title {
-      animation: giant-pan linear both;
-      animation-timeline: view();
-      animation-range: cover 0% cover 100%;
-    }
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero__title, .giant-title { translate: none !important; opacity: 1 !important; }
-}
-
-/* ═════════ 06 · PROFUNDIDAD EN LOS CASOS ═════════
-   La seccion de proyectos ocupa casi toda la pagina, asi que es donde el scroll
-   tiene que notarse. Todo atado a animation-timeline y en el compositor. */
-
-/* La captura se descubre de abajo hacia arriba a medida que entra.
-   Va sobre .shot-btn, que ya recorta y no lleva la sombra dura: asi el barrido
-   no come la sombra. El `round` conserva el radio del marco. */
-/* El número del caso se mueve en contra de la captura */
-@keyframes num-drift { from { translate: 0 14px; } to { translate: 0 -14px; } }
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .js .case__num {
-      animation: num-drift linear both;
-      animation-timeline: --case;
-      animation-range: cover 0% cover 100%;
-    }
-  }
-}
 /* ---------- Sin motion: la capa inmersiva queda quieta ---------- */
 @media (prefers-reduced-motion: reduce) {
   .btn::before, .pill-btn::before, .footer__links a::before { display: none; }
@@ -1958,10 +1943,6 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 /* ═════════ [rediseno-2026 · estructura] Experiencia como sección propia y modal de capturas ═════════
    Agregado al final a pedido: no toca ninguna regla anterior. */
 .experience { padding-block: var(--s-6) 0; scroll-margin-top: var(--nav-h); }
-/* Modal: la captura toma casi todo el ancho; la columna de datos queda mínima */
-@media (min-width: 901px) {
-  .pd__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); }
-}
 
 /* ═════════ [rediseno-2026 · nav] Link a Experiencia y arreglo del desborde en 501–504 px ═════════
    Medido con navegador (espacio libre = ancho de la nav menos lo que ocupan logo, links y botones):
@@ -1976,3 +1957,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 @media (max-width: 659px) {
   .nav__link--hide-sm { display: none; }
 }
+
+/* Modal: "Qué resolví" heredaba la deriva atada al scroll de las tarjetas y quedaba
+   a medio desvanecer dentro del panel. En el modal las filas son estáticas. */
+.js .pd .case__solved li { animation: none; opacity: 1; translate: none; }

@@ -21,6 +21,59 @@
   let hasGsap = false;
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
+  /* Loops de CSS (cintas, sello giratorio, punto): pausan fuera de pantalla desde el
+     arranque, sin esperar a GSAP ni al primer scroll. Se observa el contenedor y el
+     CSS pausa al hijo que anima. */
+  const loops = $$('.marquee, .hero__strip, .band, .badge, .dot');
+  if (loops.length) {
+    const loopIO = new IntersectionObserver(entries => entries.forEach(e => {
+      e.target.classList.toggle('is-off', !e.isIntersecting);
+    }), { rootMargin: '80px' });
+    loops.forEach(el => loopIO.observe(el));
+  }
+
+  /* ── Captura que se recorre ───────────────────────────────────────────
+     Las capturas son 16:10 (no hay capturas largas), así que en vez de scrollearlas el cuadro se acerca
+     (scale 1.08, por CSS) y la imagen se desplaza hasta ±3% en sentido contrario al puntero, para
+     asomarse al borde que se mira. Solo escribe `translate` en la <img> (el parallax usa el del <figure>,
+     no se pisan), con la transición de CSS suavizando. El rectángulo se lee una vez al entrar (y otra
+     tras un scroll), y las escrituras van en un rAF. Sin GSAP, sin puntero fino o con reduced motion: nada. */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const PAN = 3; // % del tamaño de la imagen; el zoom da 4% de margen por lado
+    let cur = null, img = null, rect = null, dirty = false, raf = 0, nx = 0, ny = 0;
+    const write = () => {
+      raf = 0;
+      if (!img) return;
+      img.style.translate = (-nx * PAN).toFixed(2) + '% ' + (-ny * PAN).toFixed(2) + '%';
+    };
+    const aim = (x, y) => {
+      if (dirty || !rect) { rect = cur.getBoundingClientRect(); dirty = false; }
+      nx = Math.max(-1, Math.min(1, ((x - rect.left) / rect.width) * 2 - 1));
+      ny = Math.max(-1, Math.min(1, ((y - rect.top) / rect.height) * 2 - 1));
+      if (!raf) raf = requestAnimationFrame(write);
+    };
+    const leave = () => {
+      if (!cur) return;
+      cur.classList.remove('is-pan');
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      img.style.translate = '';
+      cur = img = rect = null;
+    };
+    document.addEventListener('pointerover', e => {
+      if (e.pointerType === 'touch' || !e.target.closest) return;
+      const btn = e.target.closest('.shot-d .shot-btn');
+      if (btn === cur) return;
+      leave();
+      if (!btn) return;
+      cur = btn; img = btn.querySelector('img'); rect = null; dirty = true;
+      btn.classList.add('is-pan');
+      aim(e.clientX, e.clientY);
+    }, { passive: true });
+    document.addEventListener('pointermove', e => { if (cur) aim(e.clientX, e.clientY); }, { passive: true });
+    window.addEventListener('scroll', () => { if (cur) dirty = true; }, { passive: true });
+    document.addEventListener('mouseleave', leave);
+  }
+
   /* ── Experiencia: avisar cuando una etapa queda fijada ────────────────
      El sticky no tiene evento propio y las animaciones ligadas al scroll
      terminan mucho antes de que el bloque llegue a la linea de pegado. Un
@@ -424,13 +477,15 @@
     }
 
     // Cintas: se inclinan apenas con la velocidad del scroll y vuelven firmes enseguida.
-    // Solo se tocan las que están en pantalla; las de afuera además pausan su animación.
+    // Solo se tocan las que están en pantalla (la pausa de su animación la hace el observer de loops).
+    // La inclinación va en la pista de texto (sin papel; su animación usa `translate`, no `transform`),
+    // no en el contenedor texturizado: así la textura no se vuelve a rasterizar en cada fotograma.
     const skewed = $$('.marquee, .hero__strip, .band');
     if (skewed.length) {
-      const setters = new Map(skewed.map(m => [m, gsap.quickSetter(m, 'skewX', 'deg')]));
+      const trackOf = m => m.querySelector('.marquee__track, .band__track, .hero__strip-inner') || m;
+      const setters = new Map(skewed.map(m => [m, gsap.quickSetter(trackOf(m), 'skewX', 'deg')]));
       const onScreen = new Set();
       const vis = new IntersectionObserver(entries => entries.forEach(e => {
-        e.target.classList.toggle('is-off', !e.isIntersecting);
         if (e.isIntersecting) onScreen.add(e.target);
         else { onScreen.delete(e.target); setters.get(e.target)(0); }
       }));
@@ -439,6 +494,7 @@
       let target = 0, current = 0;
       ScrollTrigger.create({ onUpdate(self) { target = clamp(self.getVelocity() / -500); } });
       gsap.ticker.add(() => {
+        if (!onScreen.size) return;
         target *= 0.7;
         current += (target - current) * 0.5;
         if (Math.abs(current) < 0.02 && Math.abs(target) < 0.02) {
@@ -450,28 +506,48 @@
     }
 
     // Cursor (solo puntero fino): sigue de cerca, sin estela larga
-    if (window.matchMedia('(pointer: fine)').matches) {
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       const cursor = document.querySelector('.cursor');
       if (cursor) {
+        const pill = cursor.querySelector('.cursor__pill');
         const xTo = gsap.quickTo(cursor, 'x', { duration: 0.16, ease: 'power3' });
         const yTo = gsap.quickTo(cursor, 'y', { duration: 0.16, ease: 'power3' });
-        window.addEventListener('pointermove', e => { xTo(e.clientX); yTo(e.clientY); }, { passive: true });
+        let shown = false;
+        window.addEventListener('pointermove', e => {
+          if (e.pointerType === 'touch') return;
+          if (!shown) { gsap.set(cursor, { x: e.clientX, y: e.clientY }); cursor.classList.add('is-live'); shown = true; }
+          xTo(e.clientX); yTo(e.clientY);
+        }, { passive: true });
+
+        // Un solo estado a la vez: '' | 'hot' (botón/enlace) | 'case' | 'open' (rótulo).
+        // Al crecer pasa de disco a anillo: un disco de 42px sobre un boton de 152x48 tapaba el rotulo.
+        // Con rótulo el punto se vacía y la píldora (CSS: scale + opacity) dice a dónde lleva.
         const hot = 'a, button, [data-open]';
-        // Al crecer pasa de disco a anillo: un disco de 42px sobre un boton de
-        // 152x48, con mix-blend-mode difference, invertia el rotulo justo en el
-        // medio y lo dejaba ilegible. Hueco deja ver el texto.
+        const KEY = { case: 'cursor.case', open: 'cursor.open' };
+        let mode = '';
+        const labelText = () => (window.JSFi18n ? window.JSFi18n.t(KEY[mode]) : '');
+        const setMode = next => {
+          if (next === mode) return;
+          const wasHot = mode === 'hot';
+          mode = next;
+          const label = mode === 'case' || mode === 'open';
+          if (label && pill) pill.textContent = labelText();
+          cursor.classList.toggle('is-hot', mode === 'hot');
+          cursor.classList.toggle('is-label', label);
+          if (wasHot !== (mode === 'hot')) gsap.to(cursor, { scale: mode === 'hot' ? 2.6 : 1, duration: 0.2, ease: 'power3.out' });
+        };
+        const modeOf = el => {
+          if (!el || !el.closest) return '';
+          if (el.closest('.arc-row')) return 'open';
+          if (el.closest('.case__media')) return 'case';
+          return el.closest(hot) ? 'hot' : '';
+        };
         document.addEventListener('pointerover', e => {
-          if (e.target.closest(hot)) {
-            cursor.classList.add('is-hot');
-            gsap.to(cursor, { scale: 2.6, duration: 0.2, ease: 'power3.out' });
-          }
+          if (e.pointerType === 'touch') return;
+          setMode(modeOf(e.target));
         }, { passive: true });
-        document.addEventListener('pointerout', e => {
-          if (e.target.closest(hot) && !e.relatedTarget?.closest?.(hot)) {
-            cursor.classList.remove('is-hot');
-            gsap.to(cursor, { scale: 1, duration: 0.2, ease: 'power3.out' });
-          }
-        }, { passive: true });
+        document.addEventListener('mouseleave', () => { cursor.classList.remove('is-live'); shown = false; setMode(''); });
+        window.addEventListener('jsf:lang', () => { if (pill && (mode === 'case' || mode === 'open')) pill.textContent = labelText(); });
       }
     }
   }
@@ -567,13 +643,14 @@
   window.addEventListener('jsf:lang', buildRolls);
 
   /* ---------- Imán (solo puntero fino, con GSAP ya cargado) ----------
-     El botón se acerca al puntero hasta 4 px y vuelve con un resorte corto.
+     El botón se acerca al puntero hasta 8 px y vuelve con un resorte corto.
      Escribe `transform`, que es otra propiedad que el `translate` del hover de
      CSS: los dos se componen y ninguno pisa al otro. */
 
   let cursorListo = false;
   let magnet = null;
-  const MAG = 4;
+  const MAG = 8;
+  const PULL = 0.35;
 
   function setupMagnet() {
     if (!hasGsap || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -598,8 +675,8 @@
       const cy = r.top + r.height / 2;
       const q = get(el);
       const move = (ev) => {
-        q.x(gsap.utils.clamp(-MAG, MAG, (ev.clientX - cx) / (r.width / 2) * MAG));
-        q.y(gsap.utils.clamp(-MAG, MAG, (ev.clientY - cy) / (r.height / 2) * MAG));
+        q.x(gsap.utils.clamp(-MAG, MAG, (ev.clientX - cx) * PULL));
+        q.y(gsap.utils.clamp(-MAG, MAG, (ev.clientY - cy) * PULL));
       };
       const off = (ev) => {
         if (el.contains(ev.relatedTarget)) return;
