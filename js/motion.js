@@ -455,7 +455,13 @@
       if (cursor) {
         const xTo = gsap.quickTo(cursor, 'x', { duration: 0.16, ease: 'power3' });
         const yTo = gsap.quickTo(cursor, 'y', { duration: 0.16, ease: 'power3' });
-        window.addEventListener('pointermove', e => { xTo(e.clientX); yTo(e.clientY); }, { passive: true });
+        let shown = false;
+        window.addEventListener('pointermove', e => {
+          if (e.pointerType === 'touch') return;
+          if (!shown) { gsap.set(cursor, { x: e.clientX, y: e.clientY }); cursor.classList.add('is-live'); shown = true; }
+          xTo(e.clientX); yTo(e.clientY);
+        }, { passive: true });
+        document.addEventListener('mouseleave', () => { cursor.classList.remove('is-live'); shown = false; });
         const hot = 'a, button, [data-open]';
         // Al crecer pasa de disco a anillo: un disco de 42px sobre un boton de
         // 152x48, con mix-blend-mode difference, invertia el rotulo justo en el

@@ -352,8 +352,10 @@ p { text-wrap: pretty; }
     width: 16px; height: 16px; border-radius: 50%;
     background: var(--naples); mix-blend-mode: difference;
     pointer-events: none; z-index: 500;
-    transition: background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+    opacity: 0;
+    transition: opacity 0.2s var(--ease), background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
   }
+  .js .cursor.is-live { opacity: 1; }
   /* Sobre un elemento interactivo el punto crece a 2,6x. Lleno, ese disco de
      42px tapaba el rotulo de los botones chicos e invertia el texto por el
      mix-blend-mode. Vaciado, el texto se sigue leyendo y el gesto queda igual.
