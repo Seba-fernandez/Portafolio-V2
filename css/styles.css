@@ -92,13 +92,14 @@
   --r:    16px;
   --r-lg: 24px;
 
-  /* Papel: grano fino tipo imprenta + fibras muy suaves. SVG en línea (<1 KB),
-     va como fondo de cada superficie: nada de capas fijas que traben el scroll. */
-  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.18 0 0 0 0 0.17 0 0 0 0.5 -0.24'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  --paper-fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035 0.22' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.18 0 0 0 0 0.17 0 0 0 0.24 -0.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  /* Papel: grano fino tipo imprenta. Mosaicos WebP (12 + 7 KB) horneados desde el
+     antiguo feTurbulence.
+     Va como fondo de cada superficie: nada de capas fijas que traben el scroll. */
+  --paper-grain: url("../img/tex/paper-grain.webp"); /* 220px, prerenderizado: el feTurbulence en vivo se rasterizaba en cada capa */
+  --paper-fibers: url("../img/tex/paper-fibers.webp"); /* 600x120 (antes 600x600): son vetas horizontales, el patron no se nota al repetirse */
   --paper: var(--paper-grain), var(--paper-fibers);
   /* Sobre fondos oscuros el grano va claro y más tenue */
-  --paper-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.98 0 0 0 0 0.9 0 0 0 0 0.63 0 0 0 0.36 -0.16'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --paper-dark: url("../img/tex/paper-dark.webp");
 
   /* Movimiento: un solo lenguaje para toda la página.
      Recorridos cortos, arranque firme y asentado breve, como tinta que se apoya en papel. */
