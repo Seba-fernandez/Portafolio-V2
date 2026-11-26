@@ -835,18 +835,10 @@ html.is-locked, html.is-locked body { overflow: hidden; }
    nativo en modo de alto contraste forzado. */
 .shot-btn { position: relative; }
 /* El anillo iba como box-shadow inset, que se pinta con el fondo del boton y
-   quedaba DEBAJO de la <img>: con teclado no se veia foco en ninguna de las 6
-   capturas. Ahora va en un ::after por encima de la imagen. El outline
-   transparente se queda para el modo de alto contraste forzado. */
-.shot-btn:focus-visible {
-  outline: 3px solid transparent;
-  outline-offset: -3px;
-}
-.shot-btn:focus-visible::after {
-  content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 3px var(--bg), inset 0 0 0 6px var(--fg);
-}
+   quedaba DEBAJO de la <img>, y el ::after que lo reemplazo tampoco se veia en
+   la pagina. Ahora es un outline real por fuera, como el del telefono. */
+.shot-btn:focus-visible { outline: 3px solid var(--fg); outline-offset: 4px; }
+.shot-btn:focus-visible::after { display: none; }
 /* El telefono es distinto: tiene marco propio y la etiqueta MOBILE encima, asi
    que un anillo por dentro queda tapado en dos de los cuatro lados. Va por
    fuera, donde nada lo cubre. */
