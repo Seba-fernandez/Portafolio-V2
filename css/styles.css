@@ -354,20 +354,20 @@ p { text-wrap: pretty; }
   .js .cursor {
     display: block; position: fixed; top: -8px; left: -8px;
     width: 16px; height: 16px; border-radius: 50%;
-    background: var(--naples); mix-blend-mode: difference;
+    /* Sin mix-blend-mode (obligaba a mezclar toda la capa en cada movimiento): relleno pizarra con
+       doble aro, uno pizarra por dentro y otro naples por fuera, así se lee sobre amarillo, pizarra y salmón. */
+    background: var(--slate);
+    box-shadow: inset 0 0 0 1.5px var(--slate), 0 0 0 1.5px var(--naples);
     pointer-events: none; z-index: 500;
     opacity: 0;
     transition: opacity 0.2s var(--ease), background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
   }
   .js .cursor.is-live { opacity: 1; }
   /* Sobre un elemento interactivo el punto crece a 2,6x. Lleno, ese disco de
-     42px tapaba el rotulo de los botones chicos e invertia el texto por el
-     mix-blend-mode. Vaciado, el texto se sigue leyendo y el gesto queda igual.
-     El borde se escala con el elemento: 1.5px pasan a 3.9px a 2,6x. */
-  .js .cursor.is-hot {
-    background: transparent;
-    box-shadow: inset 0 0 0 1.5px var(--naples);
-  }
+     42px tapaba el rotulo de los botones chicos. Vaciado, el texto se sigue
+     leyendo y el gesto queda igual. Los aros se escalan con el elemento:
+     1.5px pasan a 3.9px a 2,6x. */
+  .js .cursor.is-hot { background: transparent; }
 }
 
 /* ---------- Fit-text ---------- */
